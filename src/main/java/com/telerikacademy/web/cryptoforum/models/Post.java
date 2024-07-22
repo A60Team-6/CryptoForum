@@ -20,15 +20,16 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
     private String title;
 
     private String content;
 
     private int likes = 0;
+
     private int dislikes = 0;
 
     private Timestamp createdAt;
+
     private Timestamp updatedAt;
 
     public Post() {
