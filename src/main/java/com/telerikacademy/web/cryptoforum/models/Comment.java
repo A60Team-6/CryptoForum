@@ -6,10 +6,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @ManyToOne
@@ -20,11 +22,14 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
-    private LocalDate updateAt;
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
@@ -73,12 +78,12 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdateAt() {
-        return updateAt;
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateAt(LocalDate updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdatedAt(LocalDate updateAt) {
+        this.updatedAt = updateAt;
     }
 
     public Comment getParent() {

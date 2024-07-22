@@ -3,14 +3,16 @@ package com.telerikacademy.web.cryptoforum.models;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "positions")
 public class Position {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 32)
+    @Column(name = "name")
     private String name;
 
     public Position() {

@@ -1,37 +1,58 @@
 package com.telerikacademy.web.cryptoforum.models;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import org.hibernate.annotations.ManyToAny;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "username")
     private String userName;
 
+    @JsonIgnore
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "profile_photo")
     private String profilePhoto;
 
     @ManyToOne
+    @JoinColumn(name = "position_id")
     private Position position;
 
+    @Column(name = "is_blocked")
     private boolean isBlocked;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    private List<Post> posts; //трябва ли да е сет, нужно ли е постовете да са уникални ?
+//    @OneToMany
+//    @JoinColumn(name = "id")
+//    private Set<Post> post;
+//
+//    @OneToOne
+//    @JoinColumn(name = "id")
+//    private Comment comment;
 
     public User() {
     }
@@ -42,14 +63,6 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     public String getFirstName() {
@@ -92,6 +105,13 @@ public class User {
         this.profilePhoto = profilePhoto;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 
     public boolean isBlocked() {
         return isBlocked;
@@ -109,13 +129,13 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+//    public Post getPost() {
+//        return post;
+//    }
+//
+//    public void setPost(Post post) {
+//        this.post = post;
+//    }
 
     @Override
     public boolean equals(Object o) {

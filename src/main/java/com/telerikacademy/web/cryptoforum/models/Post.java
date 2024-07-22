@@ -1,53 +1,63 @@
 package com.telerikacademy.web.cryptoforum.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.security.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "posts")
 public class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "content")
     private String content;
 
-    private int likes = 0;
+    @Column(name = "likes")
+    private int likes;
 
-    private int dislikes = 0;
+    @Column(name = "dislikes")
+    private int dislikes;
 
-    private Timestamp createdAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    private Timestamp updatedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<Comment> comments;
 
     public Post() {
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -59,11 +69,11 @@ public class Post {
         this.title = title;
     }
 
-    public @NotNull User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(@NotNull User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
