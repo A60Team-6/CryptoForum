@@ -1,6 +1,7 @@
 package com.telerikacademy.web.cryptoforum.models;
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import org.hibernate.annotations.ManyToAny;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class User {
 
     private int id;
