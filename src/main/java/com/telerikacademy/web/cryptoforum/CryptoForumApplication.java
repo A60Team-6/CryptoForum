@@ -10,4 +10,5 @@ public class CryptoForumApplication {
         SpringApplication.run(CryptoForumApplication.class, args);
     }
 
+
 }
