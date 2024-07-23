@@ -87,3 +87,11 @@ CREATE TABLE post_reactions
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+
+CREATE TABLE posts_users_likes
+(
+    post_id    INT NOT NULL,
+    user_id     INT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);

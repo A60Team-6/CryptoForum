@@ -1,11 +1,11 @@
 package com.telerikacademy.web.cryptoforum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -38,15 +38,45 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "posts_users_likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoLikedPost;
 
     public Post() {
     }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Set<User> getUsersWhoLikedPost() {
+        return usersWhoLikedPost;
+    }
+
+    public void setUsersWhoLikedPost(Set<User> usersWhoLikedPost) {
+        this.usersWhoLikedPost = usersWhoLikedPost;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {

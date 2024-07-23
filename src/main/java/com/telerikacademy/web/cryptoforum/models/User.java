@@ -24,7 +24,7 @@ public class User {
     private String lastName;
 
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     @JsonIgnore
     @Column(name = "password")
@@ -40,19 +40,13 @@ public class User {
     @JoinColumn(name = "position_id")
     private Position position;
 
+    @JsonIgnore
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
+    @JsonIgnore
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-//    @OneToMany
-//    @JoinColumn(name = "id")
-//    private Set<Post> post;
-//
-//    @OneToOne
-//    @JoinColumn(name = "id")
-//    private Comment comment;
 
     public User() {
     }
@@ -82,11 +76,11 @@ public class User {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public String getPassword() {
@@ -129,13 +123,21 @@ public class User {
         this.createdAt = createdAt;
     }
 
-//    public Post getPost() {
-//        return post;
-//    }
-//
-//    public void setPost(Post post) {
-//        this.post = post;
-//    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Override
     public boolean equals(Object o) {
