@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserRestController {
 
 
     public static final String ERROR_MESSAGE = "You are not authorized to browse user information.";
@@ -25,7 +25,7 @@ public class UserController {
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public UserController(UserService service, AuthenticationHelper authenticationHelper) {
+    public UserRestController(UserService service, AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.authenticationHelper = authenticationHelper;
     }
