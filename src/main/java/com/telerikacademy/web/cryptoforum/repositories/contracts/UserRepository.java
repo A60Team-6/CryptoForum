@@ -20,4 +20,10 @@ public interface UserRepository {
     void createUser(User user);
 
     void updateTo(User user);
+
+    void delete(int id);
+
+    void block(User user);
+
+    void unblock(User user);
 }

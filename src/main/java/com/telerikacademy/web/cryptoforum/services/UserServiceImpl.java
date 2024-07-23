@@ -1,5 +1,6 @@
 package com.telerikacademy.web.cryptoforum.services;
 
+import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
@@ -119,7 +120,52 @@ public class UserServiceImpl implements UserService {
         }
 
         repository.updateTo(userToBeModerator);
+    }
 
+    public void blockUser(User user, int id){
+        PermissionHelper.isAdmin(user, "This user is not an admin!");
+
+        boolean isAlreadyBlocked = false;
+        try {
+            User userToBlock = repository.getById(id);
+            if(userToBlock.isBlocked()){
+                isAlreadyBlocked = true;
+            }
+            userToBlock.setBlocked(true);
+            repository.block(userToBlock);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("User", id);
+        }
+
+        if(isAlreadyBlocked){
+            throw new BlockedException("This user is already blocked!");
+
+        }
+    }
+
+    public void unblockUser(User user, int id){
+        PermissionHelper.isAdmin(user, "This user is not an admin!");
+
+        boolean isAlreadyBlocked = true;
+        try {
+            User userToBlock = repository.getById(id);
+            if(!userToBlock.isBlocked()){
+                isAlreadyBlocked = false;
+            }
+            userToBlock.setBlocked(false);
+            repository.unblock(userToBlock);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("User", id);
+        }
+
+        if(!isAlreadyBlocked){
+            throw new BlockedException("This User is not blocked!");
+        }
+    }
+
+    @Override
+    public void deleteUser(int id){
+        repository.delete(id);
     }
 
 

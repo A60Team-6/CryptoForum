@@ -102,7 +102,7 @@ public class UserRestController {
         try {
             User user = mapperHelper.createUserFromRegistrationDto(registrationDto);
             service.createUser(user);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>("Congratulations! User has been successfully created!",HttpStatus.CREATED);
         }catch (DuplicateEntityException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
@@ -131,7 +131,32 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
             User userToModerator = service.getById(user, userId);
             service.userToBeModerator(user, userToModerator);
-            return new ResponseEntity<>("Congratulations this user is already a moderator!", HttpStatus.OK);
+            return new ResponseEntity<>("Congratulations! This user is already a moderator!", HttpStatus.OK);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id){
+        try{
+            service.deleteUser(id);
+            return new ResponseEntity<>("Congratulations! The user has been deleted successfully!",HttpStatus.OK);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/block")
+    public ResponseEntity<String> blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            service.blockUser(user, id);
+            return new ResponseEntity<>("This user was blocked successfully!", HttpStatus.OK);
         }catch (UnauthorizedOperationException e){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }catch (EntityNotFoundException e){
@@ -140,8 +165,18 @@ public class UserRestController {
     }
 
 
-
-
+    @PutMapping("/{id}/unblock")
+    public ResponseEntity<String> unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            service.unblockUser(user, id);
+            return new ResponseEntity<>("This user was unblocked successfully!", HttpStatus.OK);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
     private static void checkAccessPermissions(int targetUserId, User executingUser) {
         if (!executingUser.getPosition().getName().equals("admin") && executingUser.getId() != targetUserId) {

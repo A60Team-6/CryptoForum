@@ -23,4 +23,10 @@ public interface UserService {
     void updateUser(User user, User userForUpdate);
 
     void userToBeModerator(User user, User userToBeModerator);
+
+    void deleteUser(int id);
+
+    void blockUser(User user, int id);
+
+    void unblockUser(User user, int id);
 }
