@@ -11,5 +11,11 @@ public interface UserRepository {
 
     User getByUsername(String username);
 
+    User getByEmail(String email);
+
     void update(User user);
+
+    User getByFirstName(String firstName);
+
+    void createUser(User user);
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,6 +34,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "profile_photo")
     private String profilePhoto;
 
@@ -49,6 +53,15 @@ public class User {
     private LocalDateTime createdAt;
 
     public User() {
+    }
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getId() {
@@ -73,14 +86,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUserName() {
-        return username;
-    }
-
-    public void setUserName(String userName) {
-        this.username = userName;
     }
 
     public String getPassword() {
