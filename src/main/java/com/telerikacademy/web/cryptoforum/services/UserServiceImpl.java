@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("Beer", "name", user.getUsername());
+            throw new DuplicateEntityException("User", "name", user.getUsername());
         }
 
         repository.createUser(user);
@@ -109,17 +109,40 @@ public class UserServiceImpl implements UserService {
                 isAlreadyUserOrAdmin = false;
             }
         }catch (EntityNotFoundException e){
-            isAlreadyUserOrAdmin = false;
+            throw new EntityNotFoundException("User", userToBeModerator.getId());
         }
 
         if(isAlreadyUserOrAdmin){
-            throw new DuplicateEntityException("User", "username", userToBeModerator.getUsername());
+            throw new UnsupportedOperationException("User is moderator or admin!");
         }else {
             userToBeModerator.getPosition().setName("moderator");
             userToBeModerator.getPosition().setId(2);
         }
 
         repository.updateTo(userToBeModerator);
+    }
+
+    public void userToBeNotModerator(User user, User userToBeNotModerator){
+        PermissionHelper.isAdmin(user, "This user is not an admin!");
+
+        boolean isModerator = true;
+        try {
+            User userFromModerator = repository.getByUsername(userToBeNotModerator.getUsername());
+            if(userFromModerator.getPosition().getName().equals("user") || userFromModerator.getPosition().getName().equals("admin")){
+                isModerator = false;
+            }
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("User", userToBeNotModerator.getId());
+        }
+
+        if(!isModerator){
+            throw new UnsupportedOperationException("User is not moderator!");
+        }else {
+            userToBeNotModerator.getPosition().setName("user");
+            userToBeNotModerator.getPosition().setId(3);
+        }
+
+        repository.updateTo(userToBeNotModerator);
     }
 
     public void blockUser(User user, int id){

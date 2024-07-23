@@ -139,6 +139,20 @@ public class UserRestController {
         }
     }
 
+    @PutMapping("/{userId}/fromModerator")
+    public ResponseEntity<String> updateUserFromModerator(@RequestHeader HttpHeaders headers, @PathVariable int userId){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userFromModerator = service.getById(user, userId);
+            service.userToBeNotModerator(user, userFromModerator);
+            return new ResponseEntity<>("Congratulations! This user is not more a moderator!", HttpStatus.OK);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id){
         try{
