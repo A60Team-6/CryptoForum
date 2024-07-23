@@ -34,7 +34,7 @@ public class UserController {
     public List<User> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.get(user);
+            return service.getAll(user);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -46,7 +46,7 @@ public class UserController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             checkAccessPermissions(id, user);
-            return service.get(id);
+            return service.getById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {

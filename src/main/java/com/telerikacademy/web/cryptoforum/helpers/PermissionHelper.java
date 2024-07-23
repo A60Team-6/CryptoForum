@@ -5,6 +5,7 @@ import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationExcept
 import com.telerikacademy.web.cryptoforum.models.User;
 
 public class PermissionHelper {
+
     public static final String ROLE_ADMIN = "admin";
     private static final String ROLE_MODERATOR = "moderator";
 
