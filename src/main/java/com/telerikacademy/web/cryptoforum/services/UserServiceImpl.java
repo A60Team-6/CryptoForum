@@ -24,20 +24,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> get(User user) {
+    public List<User> getAll(User user) {
         if (user.getPosition().getId() != 1) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MESSAGE);
         }
-        return repository.get();
+        return repository.getAll();
     }
 
     @Override
-    public User get(int id) {
-        return repository.get(id);
+    public User getById(int id) {
+        return repository.getById(id);
     }
 
     @Override
-    public User get(String username) {
-        return repository.get(username);
+    public User getByUsername(String username) {
+        return repository.getByUsername(username);
     }
 }

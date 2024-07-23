@@ -31,10 +31,9 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> get(@RequestHeader HttpHeaders headers) {
+    public List<User> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-
             return service.get(user);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -43,7 +42,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public User get(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             checkAccessPermissions(id, user);
