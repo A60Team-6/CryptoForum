@@ -8,7 +8,7 @@ public interface UserService {
 
     List<User> getAll(User user);
 
-    User getById(int id);
+    User getById(User user, int id);
 
     User getByUsername(String username);
 
@@ -21,4 +21,6 @@ public interface UserService {
     void createUser(User user);
 
     void updateUser(User user, User userForUpdate);
+
+    void userToBeModerator(User user, User userToBeModerator);
 }

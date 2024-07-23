@@ -59,8 +59,7 @@ public class UserRestController {
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            checkAccessPermissions(id, user);
-            return service.getById(id);
+            return service.getById(user, id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
@@ -126,7 +125,19 @@ public class UserRestController {
         }
     }
 
-
+    @PutMapping("/{userId}/toModerator")
+    public ResponseEntity<String> updateUserToModerator(@RequestHeader HttpHeaders headers, @PathVariable int userId){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToModerator = service.getById(user, userId);
+            service.userToBeModerator(user, userToModerator);
+            return new ResponseEntity<>("Congratulations this user is already a moderator!", HttpStatus.OK);
+        }catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
 
 

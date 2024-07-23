@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
-
+    public User getById(User user, int id) {
+        PermissionHelper.isAdmin(user, "This user is not an admin!");
         return repository.getById(id);
     }
 
@@ -96,6 +96,30 @@ public class UserServiceImpl implements UserService {
         }
 
         repository.update(userForUpdate);
+    }
+
+    public void userToBeModerator(User user, User userToBeModerator){
+        PermissionHelper.isAdmin(user, "This user is not an admin!");
+
+        boolean isAlreadyUserOrAdmin = true;
+        try {
+            User userToModerator = repository.getByUsername(userToBeModerator.getUsername());
+            if(!userToModerator.getPosition().getName().equals("admin") && !userToModerator.getPosition().getName().equals("moderator")){
+                isAlreadyUserOrAdmin = false;
+            }
+        }catch (EntityNotFoundException e){
+            isAlreadyUserOrAdmin = false;
+        }
+
+        if(isAlreadyUserOrAdmin){
+            throw new DuplicateEntityException("User", "username", userToBeModerator.getUsername());
+        }else {
+            userToBeModerator.getPosition().setName("moderator");
+            userToBeModerator.getPosition().setId(2);
+        }
+
+        repository.updateTo(userToBeModerator);
+
     }
 
 
