@@ -45,7 +45,7 @@ public class MapperHelper {
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
         user.setPosition(positionService.getPositionById(3));
-        user.setPhoneNumber(null);
+//        user.setPhoneNumber(null);
         user.setProfilePhoto(null);
         user.setBlocked(false);
         user.setCreatedAt(LocalDateTime.now());
