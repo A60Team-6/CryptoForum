@@ -5,6 +5,7 @@ import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationExcept
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.Comment;
+import com.telerikacademy.web.cryptoforum.models.FilteredCommentOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
@@ -19,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -77,5 +80,17 @@ public class CommentRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
+
+    @GetMapping
+    public List<Comment> getAllComments(@RequestParam(required = false) String content,
+                                        @RequestParam(required = false) String createBefore,
+                                        @RequestParam(required = false) String createAfter,
+                                        @RequestParam(required = false) String sortBy,
+                                        @RequestParam(required = false) String sortOrder){
+
+
+        FilteredCommentOptions filteredCommentOptions = new FilteredCommentOptions(content, createBefore, createAfter, sortBy, sortOrder);
+        return commentService.getAll(filteredCommentOptions);
     }
 }

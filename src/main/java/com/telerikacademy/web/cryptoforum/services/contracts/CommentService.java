@@ -1,9 +1,9 @@
 package com.telerikacademy.web.cryptoforum.services.contracts;
 
-import com.telerikacademy.web.cryptoforum.models.Comment;
-import com.telerikacademy.web.cryptoforum.models.Post;
-import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface CommentService {
 
@@ -12,5 +12,7 @@ public interface CommentService {
     void createComment(Comment comment, Post post);
 
     void removeComment(Comment comment, Post post, User user);
+
+    List<Comment> getAll(FilteredCommentOptions filteredCommentOptions);
 }
 

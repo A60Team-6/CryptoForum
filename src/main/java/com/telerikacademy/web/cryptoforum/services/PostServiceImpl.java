@@ -63,6 +63,8 @@ public class PostServiceImpl implements PostService {
     public void deletePost(User user, Post post) {
         PermissionHelper.isAdminOrSameUser(user, post.getUser(), "This user is not admin nor owner!");
 
+
+
         repository.deletePost(post.getId());
     }
 
