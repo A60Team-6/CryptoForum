@@ -3,7 +3,9 @@ package com.telerikacademy.web.cryptoforum.services;
 import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
+import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
@@ -28,11 +30,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(User user) {
-        if (user.getPosition().getId() != 1) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERROR_MESSAGE);
-        }
-        return repository.getAll();
+    public List<User> getAll(FilteredUserOptions filteredUserOptions, User user) {
+        PermissionHelper.isAdmin(user, "User is not an admin!");
+        return repository.getAll(filteredUserOptions);
     }
 
     @Override

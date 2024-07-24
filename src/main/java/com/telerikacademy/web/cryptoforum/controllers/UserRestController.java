@@ -7,6 +7,7 @@ import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationExcept
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
+import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.UserDto;
@@ -45,10 +46,18 @@ public class UserRestController {
     }
 
     @GetMapping
-    public List<User> getAll(@RequestHeader HttpHeaders headers) {
+    public List<User> getAll(@RequestHeader HttpHeaders headers,
+                             @RequestParam(required = false) String username,
+                             @RequestParam(required = false) String email,
+                             @RequestParam(required = false) String firstName,
+                             @RequestParam(required = false) String createBefore,
+                             @RequestParam(required = false) String createAfter,
+                             @RequestParam(required = false) String sortBy,
+                             @RequestParam(required = false) String sortOrder){
         try {
+            FilteredUserOptions filterUserOptions = new FilteredUserOptions(username, email, firstName, createBefore, createAfter, sortBy, sortOrder);
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getAll(user);
+            return service.getAll(filterUserOptions, user);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }

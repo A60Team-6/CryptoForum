@@ -1,6 +1,8 @@
 package com.telerikacademy.web.cryptoforum.repositories;
 
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
+import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -9,10 +11,15 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     private final SessionFactory sessionFactory;
 
@@ -22,9 +29,46 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(FilteredUserOptions filteredUserOptions) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User", User.class);
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filteredUserOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getEmail().ifPresent(value -> {
+                filters.add("email like :email");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getFirstName().ifPresent(value -> {
+                filters.add("firstName like :firstname");
+                params.put("firstname", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getCreateBefore().ifPresent(value -> {
+                filters.add("createdAt <= :createBefore");
+                params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+
+            });
+
+            filteredUserOptions.getCreateAfter().ifPresent(value -> {
+                filters.add("createdAt >= :createAfter");
+                params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+            });
+
+            StringBuilder queryString = new StringBuilder("from User");
+            if (!filters.isEmpty()) {
+                queryString.append(" where ")
+                .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(filteredUserOptions));
+
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
             return query.list();
         }
     }
@@ -137,5 +181,34 @@ public class UserRepositoryImpl implements UserRepository {
             session.merge(user);
             session.getTransaction().commit();
         }
+    }
+
+    private String generateOrderBy(FilteredUserOptions filteredUserOptions) {
+        if (filteredUserOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+        switch (filteredUserOptions.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "email":
+                orderBy = "email";
+                break;
+            case "firstName":
+                orderBy = "firstName";
+                break;
+            case "createdAt":
+                orderBy = "createdAt";
+        }
+
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (filteredUserOptions.getSortOrder().isPresent() && filteredUserOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
     }
 }

@@ -1,11 +1,13 @@
 package com.telerikacademy.web.cryptoforum.repositories.contracts;
 
+import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 
 import java.util.List;
 
 public interface UserRepository {
-    List<User> getAll();
+
+    List<User> getAll(FilteredUserOptions filteredUserOptions);
 
     User getById(int id);
 
