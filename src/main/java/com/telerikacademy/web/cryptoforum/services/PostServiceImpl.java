@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -68,5 +69,33 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPostsOfUser(int userId) {
         return List.of();
+    }
+
+    @Override
+    public void likePost(Post post, User user ) {
+        Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
+
+        if(userWhoLikedThePost.contains(user)) {
+            throw new UnsupportedOperationException("You can not like a post twice!");
+        }
+
+        post.setLikes(post.getLikes() + 1);
+        userWhoLikedThePost.add(user);
+
+        repository.updatePost(post);
+    }
+
+    @Override
+    public void removeLike(Post post, User user ) {
+        Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
+
+        if(!userWhoLikedThePost.contains(user)) {
+            throw new UnsupportedOperationException("You can not remove like without like it before!");
+        }
+
+        post.setLikes(post.getLikes() - 1);
+        userWhoLikedThePost.remove(user);
+
+        repository.updatePost(post);
     }
 }

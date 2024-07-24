@@ -4,7 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class RegistrationDto {
+public class
+RegistrationDto {
 
     @NotNull(message = "First name can not be empty!")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols!")

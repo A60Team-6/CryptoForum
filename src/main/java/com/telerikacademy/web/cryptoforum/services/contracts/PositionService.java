@@ -5,4 +5,6 @@ import com.telerikacademy.web.cryptoforum.models.Position;
 public interface PositionService {
 
     Position getPositionById(int id);
+
+
 }

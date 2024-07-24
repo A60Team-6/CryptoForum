@@ -9,8 +9,6 @@ public class CommentDto {
     @Size(max = 500, message = "Maximum comment length is 500 characters.")
     private String content;
 
-    private Integer parentId;
-
     private Integer postId;
 
     public CommentDto() {
@@ -18,10 +16,6 @@ public class CommentDto {
 
     public String getContent() {
         return content;
-    }
-
-    public Integer getParentId() {
-        return parentId;
     }
 
     public Integer getPostId() {

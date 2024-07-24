@@ -50,17 +50,17 @@ VALUES (1, 'The Future of Crypto Trading',
         2, 1);
 
 -- Добавяне на коментари
-INSERT INTO comments (post_id, user_id, content, parent_id)
-VALUES (1, 3, 'Great insights! I’m particularly interested in the section about upcoming technologies.', NULL),
-       (1, 4, 'I agree, the future looks promising. Thanks for sharing this post.', NULL),
-       (2, 5, 'Can you provide more details on technical analysis? It would be helpful.', NULL),
-       (2, 6, 'Yes, a deeper dive into technical analysis would be great.', NULL),
-       (3, 7, 'Security is crucial in crypto trading. Thanks for highlighting these practices.', NULL),
-       (3, 8, 'I found this post very informative. Always good to be aware of potential threats.', NULL),
-       (4, 9, 'Interesting list! I’m excited to see how these cryptocurrencies perform.', NULL),
-       (4, 10, 'I’m curious about the criteria you used to select these top five cryptocurrencies.', NULL),
-       (5, 11, 'Trading bots seem like a good idea. How do I choose the right one?', NULL),
-       (5, 12, 'I’m new to trading bots. Any recommendations for beginners?', NULL);
+INSERT INTO comments (post_id, user_id, content)
+VALUES (1, 3, 'Great insights! I’m particularly interested in the section about upcoming technologies.'),
+       (1, 4, 'I agree, the future looks promising. Thanks for sharing this post.'),
+       (2, 5, 'Can you provide more details on technical analysis? It would be helpful.'),
+       (2, 6, 'Yes, a deeper dive into technical analysis would be great.'),
+       (3, 7, 'Security is crucial in crypto trading. Thanks for highlighting these practices.'),
+       (3, 8, 'I found this post very informative. Always good to be aware of potential threats.'),
+       (4, 9, 'Interesting list! I’m excited to see how these cryptocurrencies perform.'),
+       (4, 10, 'I’m curious about the criteria you used to select these top five cryptocurrencies.'),
+       (5, 11, 'Trading bots seem like a good idea. How do I choose the right one?'),
+       (5, 12, 'I’m new to trading bots. Any recommendations for beginners?');
 
 -- Добавяне на тагове
 INSERT INTO tags (name)

@@ -37,11 +37,6 @@ public class Comment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Comment parent;
-
     public Comment() {
     }
 
@@ -93,13 +88,6 @@ public class Comment {
         this.updatedAt = updateAt;
     }
 
-    public Comment getParent() {
-        return parent;
-    }
-
-    public void setParent(Comment parent) {
-        this.parent = parent;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -99,7 +99,6 @@ public class MapperHelper {
         comment.setContent(commentDto.getContent());
         comment.setPost(post);
         comment.setUser(user);
-        comment.setParent(parentComment);
         comment.setCreatedAt(LocalDateTime.now());
 
         return comment;
