@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user, User userForUpdate){
-        PermissionHelper.isAdminOrSameUser(user, userForUpdate, "This user is not admin nor owner!");
+        PermissionHelper.isAdminOrSameUser(user, userForUpdate, "This user is not admin or owner!");
 
         boolean duplicateExists = true;
         try {

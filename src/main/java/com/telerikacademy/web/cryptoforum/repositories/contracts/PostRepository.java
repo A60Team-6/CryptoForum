@@ -6,4 +6,7 @@ public interface PostRepository {
 
     Post getPostById(int id);
 
+    void createPost(Post post);
+
+    void updatePost(Post postForUpdate);
 }

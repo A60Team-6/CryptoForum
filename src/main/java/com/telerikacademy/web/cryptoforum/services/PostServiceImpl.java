@@ -1,6 +1,10 @@
 package com.telerikacademy.web.cryptoforum.services;
 
+import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,31 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getPostById(int id) {
         return repository.getPostById(id);
+    }
+
+    @Override
+    public void createPost(Post post) {
+        PermissionHelper.isBlocked(post.getUser(), "You are blocked.");
+        boolean duplicateExists = true;
+        try {
+            repository.getPostById(post.getId());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Post", "title", post.getTitle());
+        }
+
+        repository.createPost(post);
+    }
+
+    @Override
+    public void updatePost(User user, Post postForUpdate) {
+        PermissionHelper.isBlocked(user, "You are blocked.");
+        PermissionHelper.isAdminOrSameUser(user, postForUpdate.getUser(), "This user is not admin nor owner!");
+
+        repository.updatePost(postForUpdate);
     }
 
     @Override
