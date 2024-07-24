@@ -1,10 +1,13 @@
 package com.telerikacademy.web.cryptoforum.helpers;
 
+import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.UserDto;
+import com.telerikacademy.web.cryptoforum.repositories.contracts.CommentRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PositionService;
@@ -23,13 +26,15 @@ public class MapperHelper {
     private final UserService userService;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public MapperHelper(PositionService positionService, UserService userService, UserRepository userRepository, PostRepository postRepository) {
+    public MapperHelper(PositionService positionService, UserService userService, UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository) {
         this.positionService = positionService;
         this.userService = userService;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     public User updateUserFromDto(UserDto userDto, int id) {
@@ -77,5 +82,26 @@ public class MapperHelper {
         post.setUpdatedAt(LocalDateTime.now());
 
         return post;
+    }
+
+    public Comment createCommentFromDto(CommentDto commentDto, Post post, User user) {
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getContent());
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setCreatedAt(LocalDateTime.now());
+
+        return comment;
+    }
+
+    public Comment createReplayCommentFromDto(CommentDto commentDto, Post post, User user, Comment parentComment) {
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getContent());
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setParent(parentComment);
+        comment.setCreatedAt(LocalDateTime.now());
+
+        return comment;
     }
 }
