@@ -3,6 +3,7 @@ package com.telerikacademy.web.cryptoforum.services;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
+import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
@@ -20,6 +21,11 @@ public class PostServiceImpl implements PostService {
     @Autowired
     public PostServiceImpl(PostRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions){
+        return repository.getAll(filteredPostsOptions);
     }
 
     @Override

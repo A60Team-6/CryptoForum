@@ -3,6 +3,7 @@ package com.telerikacademy.web.cryptoforum.controllers;
 import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
+import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
@@ -100,10 +101,17 @@ public class PostRestController {
         }
     }
 
-//    @GetMapping
-//    public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
-//                                  @RequestParam()) {
-//        return null;
-//    }
+    @GetMapping
+    public List<Post> getAllPosts(@RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String content,
+                                  @RequestParam(required = false) Integer minLikes,
+                                  @RequestParam(required = false) Integer maxLikes,
+                                  @RequestParam(required = false) String createBefore,
+                                  @RequestParam(required = false) String createAfter,
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String sortOrder) {
+        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(title, content, minLikes, maxLikes, createBefore, createAfter, sortBy, sortOrder);
+        return postService.getAll(filteredPostsOptions);
+    }
 
 }

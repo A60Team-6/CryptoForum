@@ -9,8 +9,6 @@ public class FilteredPostsOptions {
     private Optional<String> content;
     private Optional<Integer> minLikes;
     private Optional<Integer> maxLikes;
-    private Optional<Integer> minDislikes;
-    private Optional<Integer> maxDislikes;
     private Optional<String> createBefore;
     private Optional<String> createAfter;
     private Optional<String> sortBy;
@@ -20,8 +18,6 @@ public class FilteredPostsOptions {
                                 String content,
                                 Integer minLikes,
                                 Integer maxLikes,
-                                Integer minDislikes,
-                                Integer maxDislikes,
                                 String createBefore,
                                 String createAfter,
                                 String sortBy,
@@ -30,13 +26,12 @@ public class FilteredPostsOptions {
         this.content = Optional.ofNullable(content);
         this.minLikes = Optional.ofNullable(minLikes);
         this.maxLikes = Optional.ofNullable(maxLikes);
-        this.minDislikes = Optional.ofNullable(minDislikes);
-        this.maxDislikes = Optional.ofNullable(maxDislikes);
         this.createAfter = Optional.ofNullable(createAfter);
         this.createBefore = Optional.ofNullable(createBefore);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
+
 
     public Optional<String> getTitle() {
         return title;
@@ -52,14 +47,6 @@ public class FilteredPostsOptions {
 
     public Optional<Integer> getMaxLikes() {
         return maxLikes;
-    }
-
-    public Optional<Integer> getMinDislikes() {
-        return minDislikes;
-    }
-
-    public Optional<Integer> getMaxDislikes() {
-        return maxDislikes;
     }
 
     public Optional<String> getCreateBefore() {

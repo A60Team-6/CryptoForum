@@ -111,6 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
     public void delete(int id){
         User userToDelete = getById(id);
         try (Session session = sessionFactory.openSession()) {
@@ -120,6 +121,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
     public void block(User user){
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -128,6 +130,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
     public void unblock(User user){
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
