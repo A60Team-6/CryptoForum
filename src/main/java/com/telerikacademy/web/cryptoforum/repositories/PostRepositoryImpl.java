@@ -2,6 +2,7 @@ package com.telerikacademy.web.cryptoforum.repositories;
 
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -43,6 +44,16 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(postForUpdate);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deletePost(int id) {
+        Post postToDelete = getPostById(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(postToDelete);
             session.getTransaction().commit();
         }
     }

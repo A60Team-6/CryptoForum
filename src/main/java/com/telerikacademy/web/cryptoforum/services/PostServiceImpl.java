@@ -53,6 +53,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void deletePost(User user, Post post) {
+        PermissionHelper.isAdminOrSameUser(user, post.getUser(), "This user is not admin nor owner!");
+
+        repository.deletePost(post.getId());
+    }
+
+    @Override
     public List<Post> getAllPostsOfUser(int userId) {
         return List.of();
     }

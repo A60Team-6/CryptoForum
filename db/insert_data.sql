@@ -81,13 +81,25 @@ VALUES (1, 1),
        (5, 5);
 
 -- Добавяне на реакции на постове
-INSERT INTO post_reactions (post_id, user_id, reaction)
-VALUES (1, 3, 'like'),
-       (1, 4, 'like'),
-       (2, 5, 'dislike'),
-       (3, 7, 'like'),
-       (3, 8, 'like'),
-       (4, 9, 'like'),
-       (4, 10, 'dislike'),
-       (5, 11, 'like'),
-       (5, 12, 'dislike');
+INSERT INTO posts_users_likes (post_id, user_id)
+VALUES (1, 3),
+       (1, 4),
+       (2, 5),
+       (3, 7),
+       (3, 8),
+       (4, 9),
+       (4, 10),
+       (5, 11),
+       (5, 12);
+
+# -- Добавяне на реакции на постове
+# INSERT INTO post_reactions (post_id, user_id, reaction)
+# VALUES (1, 3, 'like'),
+#        (1, 4, 'like'),
+#        (2, 5, 'dislike'),
+#        (3, 7, 'like'),
+#        (3, 8, 'like'),
+#        (4, 9, 'like'),
+#        (4, 10, 'dislike'),
+#        (5, 11, 'like'),
+#        (5, 12, 'dislike');

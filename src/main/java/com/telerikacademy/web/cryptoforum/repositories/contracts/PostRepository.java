@@ -9,4 +9,6 @@ public interface PostRepository {
     void createPost(Post post);
 
     void updatePost(Post postForUpdate);
+
+    void deletePost(int id);
 }

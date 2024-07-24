@@ -1,9 +1,6 @@
 package com.telerikacademy.web.cryptoforum.controllers;
 
-import com.telerikacademy.web.cryptoforum.exceptions.AuthenticationException;
-import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
-import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
-import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.Post;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,7 +54,7 @@ public class PostRestController {
             Post post = mapperHelper.createPostFromDto(postDto, user);
             postService.createPost(post);
 
-            return new ResponseEntity<>("Congratulations, your post has been successfully created.",HttpStatus.OK);
+            return new ResponseEntity<>("Congratulations, your post has been successfully created.", HttpStatus.CREATED);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthenticationException e) {
@@ -72,9 +70,9 @@ public class PostRestController {
     public ResponseEntity<String> updatePost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = mapperHelper.updatePostFromDto(postDto,id);
+            Post post = mapperHelper.updatePostFromDto(postDto, id);
             postService.updatePost(user, post);
-            return new ResponseEntity<>("Your post was successfully updated.",HttpStatus.OK);
+            return new ResponseEntity<>("Your post was successfully updated.", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
@@ -86,8 +84,26 @@ public class PostRestController {
         }
     }
 
-    public List<Post> getAllPost() {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(id);
+            postService.deletePost(user, post);
+            return new ResponseEntity<>("You have successfully deleted the post.", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
+
+//    @GetMapping
+//    public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
+//                                  @RequestParam()) {
+//        return null;
+//    }
 
 }
