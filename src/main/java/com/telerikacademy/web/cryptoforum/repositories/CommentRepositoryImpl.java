@@ -29,4 +29,22 @@ public class CommentRepositoryImpl implements CommentRepository {
             return comment;
         }
     }
+
+    @Override
+    public void createComment(Comment comment){
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(comment);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void removeComment(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(comment);
+            session.getTransaction().commit();
+        }
+    }
 }

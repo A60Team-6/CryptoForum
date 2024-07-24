@@ -2,6 +2,7 @@ package com.telerikacademy.web.cryptoforum.models.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.bind.annotation.PostMapping;
 
 public class CommentDto {
 
@@ -9,6 +10,7 @@ public class CommentDto {
     @Size(max = 500, message = "Maximum comment length is 500 characters.")
     private String content;
 
+    @NotNull
     private Integer postId;
 
     public CommentDto() {
