@@ -54,14 +54,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(User user, Post postForUpdate) {
         PermissionHelper.isBlocked(user, "You are blocked.");
-        PermissionHelper.isAdminOrSameUser(user, postForUpdate.getUser(), "This user is not admin nor owner!");
+        PermissionHelper.isSameUser(user, postForUpdate.getUser(), "This are not post owner!");
 
         repository.updatePost(postForUpdate);
     }
 
     @Override
     public void deletePost(User user, Post post) {
-        PermissionHelper.isAdminOrSameUser(user, post.getUser(), "This user is not admin nor owner!");
+        PermissionHelper.isAdminOrModeratorOrPostCreator(user, post.getUser(), "This user is not admin nor owner!");
 
         repository.deletePost(post.getId());
     }

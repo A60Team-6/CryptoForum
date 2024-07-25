@@ -13,5 +13,7 @@ public interface CommentService {
     void removeComment(Comment comment, Post post, User user);
 
     List<Comment> getAll(FilteredCommentOptions filteredCommentOptions);
+
+    void updateComment(User user, Comment comment);
 }
 

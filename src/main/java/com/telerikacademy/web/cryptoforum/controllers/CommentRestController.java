@@ -1,7 +1,6 @@
 package com.telerikacademy.web.cryptoforum.controllers;
 
-import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
-import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationException;
+import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.Comment;
@@ -91,5 +90,23 @@ public class CommentRestController {
 
         FilteredCommentOptions filteredCommentOptions = new FilteredCommentOptions(content, createBefore, createAfter, sortBy, sortOrder);
         return commentService.getAll(filteredCommentOptions);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateComment(@PathVariable int id,@RequestHeader HttpHeaders headers, @RequestBody CommentDto commentDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Comment comment = mapperHelper.updatedCommentFromDto(commentDto, id);
+            commentService.updateComment(user, comment);
+            return new ResponseEntity<>("Your comment was successfully updated.", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (BlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
     }
 }

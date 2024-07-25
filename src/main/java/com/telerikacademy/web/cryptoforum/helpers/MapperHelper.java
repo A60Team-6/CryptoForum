@@ -91,4 +91,12 @@ public class MapperHelper {
 
         return comment;
     }
+
+    public Comment updatedCommentFromDto(CommentDto commentDto, int id) {
+        Comment comment = commentRepository.getCommentById(id);
+        comment.setContent(commentDto.getContent());
+        comment.setUpdatedAt(LocalDateTime.now());
+
+        return comment;
+    }
 }

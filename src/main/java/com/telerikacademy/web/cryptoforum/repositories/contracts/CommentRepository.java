@@ -14,4 +14,6 @@ public interface CommentRepository {
     void removeComment(Comment comment);
 
     List<Comment> getAll(FilteredCommentOptions filteredCommentOptions);
+
+    void updateComment(Comment comment);
 }

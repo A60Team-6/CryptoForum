@@ -93,6 +93,15 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
+    @Override
+    public void updateComment(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(comment);
+            session.getTransaction().commit();
+        }
+    }
+
     private String generateOrderBy(FilteredCommentOptions filteredCommentsOptions) {
         if (filteredCommentsOptions.getSortBy().isEmpty()) {
             return "";

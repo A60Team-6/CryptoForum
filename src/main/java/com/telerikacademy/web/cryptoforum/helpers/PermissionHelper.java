@@ -72,4 +72,33 @@ public class PermissionHelper {
             throw new UnauthorizedOperationException(message);
         }
     }
+
+    public static void isAdminOrModeratorOrPostCreator(User authenticatedUser, User postCreator, String message) {
+        boolean isAdminOrModeratorOrPostCreator = false;
+
+        if(authenticatedUser.getPosition().getName().equals(POSITION_ADMIN) ||
+                authenticatedUser.getPosition().getName().equals(POSITION_MODERATOR) ||
+                authenticatedUser.equals(postCreator)) {
+            isAdminOrModeratorOrPostCreator = true;
+        }
+
+        if (!isAdminOrModeratorOrPostCreator) {
+            throw new UnauthorizedOperationException(message);
+        }
+    }
+
+    public static void isAdminOrModeratorOrPostOrCommentCreator(User authenticatedUser, User postCreator, User commentCreator, String message) {
+        boolean isAdminOrModeratorOrPostOrCommentCreator = false;
+
+        if(authenticatedUser.getPosition().getName().equals(POSITION_ADMIN) ||
+                authenticatedUser.getPosition().getName().equals(POSITION_MODERATOR) ||
+                authenticatedUser.equals(postCreator) ||
+                authenticatedUser.equals(commentCreator)) {
+            isAdminOrModeratorOrPostOrCommentCreator = true;
+        }
+
+        if (!isAdminOrModeratorOrPostOrCommentCreator) {
+            throw new UnauthorizedOperationException(message);
+        }
+    }
 }

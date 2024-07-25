@@ -34,8 +34,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void removeComment(Comment comment, Post commentedPost, User user) {
-        User postPublicator = commentedPost.getUser();
-        PermissionHelper.isAdminOrSameUser(user, postPublicator, "You can not remove comment, because this is not your post and you are not admin!");
+        User postCreator = commentedPost.getUser();
+        User commentCreator = comment.getUser();
+        PermissionHelper.isAdminOrModeratorOrPostOrCommentCreator(
+                user, postCreator, commentCreator,"You are not eligible for this operation");
         commentedPost.getComments().remove(comment);
         commentRepository.removeComment(comment);
     }
@@ -43,5 +45,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getAll(FilteredCommentOptions filteredCommentOptions) {
         return commentRepository.getAll(filteredCommentOptions);
+    }
+
+    @Override
+    public void updateComment(User user, Comment comment) {
+        PermissionHelper.isBlocked(user, "You are blocked.");
+        PermissionHelper.isSameUser(user, comment.getUser(), "You are not comment owner!");
+
+        commentRepository.updateComment(comment);
     }
 }
