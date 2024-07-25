@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.naming.AuthenticationException;
 import java.util.List;
 
 @RestController
@@ -192,12 +191,6 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    private static void checkAccessPermissions(int targetUserId, User executingUser) {
-        if (!executingUser.getPosition().getName().equals("admin") && executingUser.getId() != targetUserId) {
-            throw new AuthorizationException(ERROR_MESSAGE);
         }
     }
 }
