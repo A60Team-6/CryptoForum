@@ -12,9 +12,7 @@ import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PositionService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -43,9 +41,9 @@ public class MapperHelper {
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
+
         return user;
     }
-
 
     public User createUserFromRegistrationDto(RegistrationDto registrationDto) {
         User user = new User();
@@ -55,10 +53,10 @@ public class MapperHelper {
         user.setPassword(registrationDto.getPassword());
         user.setUsername(registrationDto.getUsername());
         user.setPosition(positionService.getPositionById(3));
-//        user.setPhoneNumber(null);
         user.setProfilePhoto(null);
         user.setBlocked(false);
         user.setCreatedAt(LocalDateTime.now());
+
         return user;
     }
 
@@ -85,16 +83,6 @@ public class MapperHelper {
     }
 
     public Comment createCommentFromDto(CommentDto commentDto, Post post, User user) {
-        Comment comment = new Comment();
-        comment.setContent(commentDto.getContent());
-        comment.setPost(post);
-        comment.setUser(user);
-        comment.setCreatedAt(LocalDateTime.now());
-
-        return comment;
-    }
-
-    public Comment createReplayCommentFromDto(CommentDto commentDto, Post post, User user, Comment parentComment) {
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
         comment.setPost(post);

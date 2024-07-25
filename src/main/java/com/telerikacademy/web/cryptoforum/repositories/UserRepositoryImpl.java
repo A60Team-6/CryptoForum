@@ -1,7 +1,6 @@
 package com.telerikacademy.web.cryptoforum.repositories;
 
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -19,7 +18,6 @@ import java.util.*;
 public class UserRepositoryImpl implements UserRepository {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
 
     private final SessionFactory sessionFactory;
 
@@ -63,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
             StringBuilder queryString = new StringBuilder("from User");
             if (!filters.isEmpty()) {
                 queryString.append(" where ")
-                .append(String.join(" and ", filters));
+                        .append(String.join(" and ", filters));
             }
             queryString.append(generateOrderBy(filteredUserOptions));
 
@@ -99,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    public User getByEmail(String email){
+    public User getByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where email = :email", User.class);
             query.setParameter("email", email);
@@ -113,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    public User getByFirstName(String firstName){
+    public User getByFirstName(String firstName) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where firstName = :firstName", User.class);
             query.setParameter("firstName", firstName);
@@ -147,7 +145,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateTo(User user){
+    public void updateTo(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
@@ -156,7 +154,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(int id){
+    public void delete(int id) {
         User userToDelete = getById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -166,7 +164,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void block(User user){
+    public void block(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
@@ -175,7 +173,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void unblock(User user){
+    public void unblock(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);

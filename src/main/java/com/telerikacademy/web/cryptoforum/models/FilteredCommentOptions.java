@@ -10,9 +10,11 @@ public class FilteredCommentOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-
-    public FilteredCommentOptions(String content, String createBefore, String createAfter, String sortBy,
-                                  String sortOrder){
+    public FilteredCommentOptions(String content,
+                                  String createBefore,
+                                  String createAfter,
+                                  String sortBy,
+                                  String sortOrder) {
         this.content = Optional.ofNullable(content);
         this.createAfter = Optional.ofNullable(createAfter);
         this.createBefore = Optional.ofNullable(createBefore);

@@ -20,9 +20,9 @@ public interface PostService {
 
     void deletePost(User user, Post post);
 
-    void likePost(Post post, User user );
+    void likePost(Post post, User user);
 
-    void removeLike(Post post, User user );
+    void removeLike(Post post, User user);
 
     List<Post> getMostLikedPosts();
 

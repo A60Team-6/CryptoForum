@@ -12,7 +12,13 @@ public class FilteredUserOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-    public FilteredUserOptions(String username, String email, String firstName, String createBefore, String createAfter, String sortBy, String sortOrder) {
+    public FilteredUserOptions(String username,
+                               String email,
+                               String firstName,
+                               String createBefore,
+                               String createAfter,
+                               String sortBy,
+                               String sortOrder) {
         this.username = Optional.ofNullable(username);
         this.email = Optional.ofNullable(email);
         this.firstName = Optional.ofNullable(firstName);
@@ -42,8 +48,12 @@ public class FilteredUserOptions {
         return createAfter;
     }
 
-    public Optional<String> getSortBy() {return sortBy;}
+    public Optional<String> getSortBy() {
+        return sortBy;
+    }
 
-    public Optional<String> getSortOrder() {return sortOrder;}
+    public Optional<String> getSortOrder() {
+        return sortOrder;
+    }
 }
 

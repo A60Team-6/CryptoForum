@@ -1,6 +1,5 @@
 package com.telerikacademy.web.cryptoforum.models;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class FilteredPostsOptions {
@@ -31,7 +30,6 @@ public class FilteredPostsOptions {
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
-
 
     public Optional<String> getTitle() {
         return title;

@@ -3,8 +3,6 @@ package com.telerikacademy.web.cryptoforum.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -87,7 +85,6 @@ public class Comment {
     public void setUpdatedAt(LocalDateTime updateAt) {
         this.updatedAt = updateAt;
     }
-
 
     @Override
     public boolean equals(Object o) {

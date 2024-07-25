@@ -3,8 +3,6 @@ package com.telerikacademy.web.cryptoforum.repositories;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.FilteredCommentOptions;
-import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
-import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,7 +21,6 @@ import java.util.Map;
 public class CommentRepositoryImpl implements CommentRepository {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
 
     private final SessionFactory sessionFactory;
 
@@ -44,7 +41,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public void createComment(Comment comment){
+    public void createComment(Comment comment) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.persist(comment);
@@ -62,8 +59,8 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAll(FilteredCommentOptions filteredCommentOptions){
-        try (Session session = sessionFactory.openSession()){
+    public List<Comment> getAll(FilteredCommentOptions filteredCommentOptions) {
+        try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
@@ -84,7 +81,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             });
 
             StringBuilder queryString = new StringBuilder("from Comment");
-            if(!filters.isEmpty()){
+            if (!filters.isEmpty()) {
                 queryString.append(" where ")
                         .append(String.join(" and ", filters));
             }

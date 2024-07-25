@@ -21,7 +21,6 @@ public class UserDto {
     @Size(min = 8)
     private String password;
 
-
     public UserDto() {
     }
 
@@ -44,7 +43,7 @@ public class UserDto {
         return email;
     }
 
-    public void setEmail (String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -60,7 +59,7 @@ public class UserDto {
         return lastName;
     }
 
-    public void setLastName (String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 }

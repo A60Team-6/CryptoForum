@@ -14,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -120,43 +118,42 @@ public class PostRestController {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostById(id);
             postService.likePost(post, user);
-        }catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PutMapping("/{id}/removeLike")
-    public void removeLike(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public void removeLike(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostById(id);
             postService.removeLike(post, user);
-        }catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/top10MostLikedPosts")
-    public List<Post> getMostLikedPosts(){
+    public List<Post> getMostLikedPosts() {
         return postService.getMostLikedPosts();
     }
 
     @GetMapping("/top10CommentedPosts")
-    public List<Post> getMostCommentedPosts(){
+    public List<Post> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
     }
 
     @GetMapping("/top10MostRecentlyCreated")
-    public List<Post> getMostRecentlyCreated(){
+    public List<Post> getMostRecentlyCreated() {
         return postService.getMostRecentlyCreated();
     }
-
 }

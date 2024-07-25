@@ -2,7 +2,6 @@ package com.telerikacademy.web.cryptoforum.models.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.bind.annotation.PostMapping;
 
 public class CommentDto {
 

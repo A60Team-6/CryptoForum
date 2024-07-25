@@ -3,16 +3,13 @@ package com.telerikacademy.web.cryptoforum.services;
 import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,7 +17,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     public static final String ERROR_MESSAGE = "You are not authorized to browse user information.";
-
 
     private final UserRepository repository;
 
@@ -190,6 +186,4 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int id){
         repository.delete(id);
     }
-
-
 }

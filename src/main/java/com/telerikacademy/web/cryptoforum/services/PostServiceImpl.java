@@ -6,7 +6,6 @@ import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions){
+    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions) {
         return repository.getAll(filteredPostsOptions);
     }
 
@@ -73,10 +72,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void likePost(Post post, User user ) {
+    public void likePost(Post post, User user) {
         Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
 
-        if(userWhoLikedThePost.contains(user)) {
+        if (userWhoLikedThePost.contains(user)) {
             throw new UnsupportedOperationException("You can not like a post twice!");
         }
 
@@ -87,10 +86,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void removeLike(Post post, User user ) {
+    public void removeLike(Post post, User user) {
         Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
 
-        if(!userWhoLikedThePost.contains(user)) {
+        if (!userWhoLikedThePost.contains(user)) {
             throw new UnsupportedOperationException("You can not remove like without like it before!");
         }
 
@@ -101,17 +100,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getMostLikedPosts(){
+    public List<Post> getMostLikedPosts() {
         return repository.getMostLikedPosts();
     }
 
     @Override
-    public List<Post> getMostCommentedPosts(){
+    public List<Post> getMostCommentedPosts() {
         return repository.getMostCommentedPosts();
     }
 
     @Override
-    public List<Post> getMostRecentlyCreated(){
+    public List<Post> getMostRecentlyCreated() {
         return repository.getMostRecentlyCreated();
     }
 }

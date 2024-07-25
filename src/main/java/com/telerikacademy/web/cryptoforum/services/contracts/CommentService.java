@@ -1,7 +1,6 @@
 package com.telerikacademy.web.cryptoforum.services.contracts;
 
 import com.telerikacademy.web.cryptoforum.models.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

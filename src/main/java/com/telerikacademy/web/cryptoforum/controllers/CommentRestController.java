@@ -13,7 +13,6 @@ import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -68,7 +67,7 @@ public class CommentRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable int id, @RequestHeader HttpHeaders headers){
+    public ResponseEntity<String> deleteComment(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Comment comment = getCommentById(id, headers);
@@ -87,7 +86,7 @@ public class CommentRestController {
                                         @RequestParam(required = false) String createBefore,
                                         @RequestParam(required = false) String createAfter,
                                         @RequestParam(required = false) String sortBy,
-                                        @RequestParam(required = false) String sortOrder){
+                                        @RequestParam(required = false) String sortOrder) {
 
 
         FilteredCommentOptions filteredCommentOptions = new FilteredCommentOptions(content, createBefore, createAfter, sortBy, sortOrder);
