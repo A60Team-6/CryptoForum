@@ -4,6 +4,7 @@ import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -143,6 +144,37 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         return orderBy;
+    }
+
+    @Override
+    public List<Post> getMostLikedPosts(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "FROM Post p ORDER BY p.likes DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
+
+    }
+
+    @Override
+    public List<Post> getMostCommentedPosts(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT p FROM Post p LEFT JOIN p.comments c GROUP BY p.id ORDER BY COUNT(c.id) DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getMostRecentlyCreated(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "FROM Post p ORDER BY p.createdAt DESC";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setMaxResults(10);
+            return query.list();
+        }
     }
 
 }

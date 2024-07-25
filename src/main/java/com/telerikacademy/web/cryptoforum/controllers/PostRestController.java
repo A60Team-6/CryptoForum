@@ -144,4 +144,19 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/top10MostLikedPosts")
+    public List<Post> getMostLikedPosts(){
+        return postService.getMostLikedPosts();
+    }
+
+    @GetMapping("/top10CommentedPosts")
+    public List<Post> getMostCommentedPosts(){
+        return postService.getMostCommentedPosts();
+    }
+
+    @GetMapping("/top10MostRecentlyCreated")
+    public List<Post> getMostRecentlyCreated(){
+        return postService.getMostRecentlyCreated();
+    }
+
 }

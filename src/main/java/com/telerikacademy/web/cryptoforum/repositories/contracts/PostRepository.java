@@ -16,4 +16,10 @@ public interface PostRepository {
     void deletePost(int id);
 
     List<Post> getAll(FilteredPostsOptions filteredPostsOptions);
+
+    List<Post> getMostLikedPosts();
+
+    List<Post> getMostCommentedPosts();
+
+    List<Post> getMostRecentlyCreated();
 }

@@ -6,6 +6,7 @@ import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,6 @@ public class PostServiceImpl implements PostService {
     public void deletePost(User user, Post post) {
         PermissionHelper.isAdminOrSameUser(user, post.getUser(), "This user is not admin nor owner!");
 
-
-
         repository.deletePost(post.getId());
     }
 
@@ -99,5 +98,20 @@ public class PostServiceImpl implements PostService {
         userWhoLikedThePost.remove(user);
 
         repository.updatePost(post);
+    }
+
+    @Override
+    public List<Post> getMostLikedPosts(){
+        return repository.getMostLikedPosts();
+    }
+
+    @Override
+    public List<Post> getMostCommentedPosts(){
+        return repository.getMostCommentedPosts();
+    }
+
+    @Override
+    public List<Post> getMostRecentlyCreated(){
+        return repository.getMostRecentlyCreated();
     }
 }

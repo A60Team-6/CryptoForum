@@ -23,5 +23,11 @@ public interface PostService {
     void likePost(Post post, User user );
 
     void removeLike(Post post, User user );
+
+    List<Post> getMostLikedPosts();
+
+    List<Post> getMostCommentedPosts();
+
+    List<Post> getMostRecentlyCreated();
 }
 
