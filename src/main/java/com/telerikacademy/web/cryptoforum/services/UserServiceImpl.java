@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void blockUser(User user, int id){
-        PermissionHelper.isAdmin(user, "This user is not an admin!");
+        PermissionHelper.isAdminOrModerator(user, "This user is neither admin nor moderator");
 
         boolean isAlreadyBlocked = false;
         try {
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void unblockUser(User user, int id){
-        PermissionHelper.isAdmin(user, "This user is not an admin!");
+        PermissionHelper.isAdminOrModerator(user, "This user is neither admin nor moderator");
 
         boolean isAlreadyBlocked = true;
         try {

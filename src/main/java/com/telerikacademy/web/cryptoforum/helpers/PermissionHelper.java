@@ -60,4 +60,16 @@ public class PermissionHelper {
             throw new UnauthorizedOperationException(message);
         }
     }
+
+    public static void isAdminOrModerator(User authenticatedUser, String message){
+        boolean isModeratorOrAdmin = false;
+
+        if(authenticatedUser.getPosition().getName().equals(ROLE_MODERATOR) || authenticatedUser.getPosition().getName().equals(ROLE_ADMIN)){
+            isModeratorOrAdmin = true;
+        }
+
+        if(!isModeratorOrAdmin){
+            throw new UnauthorizedOperationException(message);
+        }
+    }
 }
