@@ -75,17 +75,6 @@ CREATE TABLE post_tags
     FOREIGN KEY (tag_id) REFERENCES tags (id)
 );
 
-# CREATE TABLE post_reactions
-# (
-#     post_id     INT NOT NULL,
-#     user_id     INT NOT NULL,
-#     reaction    ENUM('like', 'dislike') DEFAULT NULL,
-#     PRIMARY KEY (post_id, user_id),
-#     FOREIGN KEY (post_id) REFERENCES posts (id),
-#     FOREIGN KEY (user_id) REFERENCES users (id)
-# );
-
-
 CREATE TABLE posts_users_likes
 (
     post_id    INT NOT NULL,
