@@ -5,10 +5,14 @@ import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.Tag;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
+import com.telerikacademy.web.cryptoforum.models.dtos.TagDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
+import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,12 +30,16 @@ public class PostRestController {
     private final PostService postService;
     private final MapperHelper mapperHelper;
     private final AuthenticationHelper authenticationHelper;
+    private final TagService tagService;
+
 
     @Autowired
-    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper) {
+    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper, TagService tagService) {
         this.postService = postService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
+        this.tagService = tagService;
+
     }
 
     @GetMapping("/{id}")
@@ -156,4 +164,50 @@ public class PostRestController {
     public List<Post> getMostRecentlyCreated() {
         return postService.getMostRecentlyCreated();
     }
+
+
+    @Transactional
+    @PutMapping("/addTag/{postId}")
+    public ResponseEntity<String> addTagToPost(@PathVariable int postId, @Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostById(postId);
+            Tag tag = mapperHelper.createTagFromDto(tagDto);
+            tagService.addTagToPost(user, post, tag);
+            return new ResponseEntity<>("Congratulations, your tag has been successfully added to the post.", HttpStatus.CREATED);
+        }catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }catch (BlockedException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
+    @Transactional
+    @DeleteMapping("/deleteTag/{postId}/{tagId}")
+    public ResponseEntity<String> removeTagFromPost(@PathVariable int postId,@PathVariable int tagId, @Valid @RequestHeader HttpHeaders headers){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Tag tag = tagService.getById(tagId);
+            Post post = tag.getPosts().stream().filter(p -> p.getId() == postId).findFirst().orElseThrow();
+//            if (post.getId() != postId) {
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong post");
+//            }
+            tagService.removeTagFromPost(user, post, tag);
+            return new ResponseEntity<>("Congratulations, your tag has been successfully removed from the post.", HttpStatus.OK);
+        }catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (DuplicateEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }catch (BlockedException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
+
 }
+

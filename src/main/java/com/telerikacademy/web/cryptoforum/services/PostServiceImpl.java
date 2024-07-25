@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl implements PostService{
 
     private final PostRepository repository;
 
@@ -23,6 +23,7 @@ public class PostServiceImpl implements PostService {
     public PostServiceImpl(PostRepository repository) {
         this.repository = repository;
     }
+
 
     @Override
     public List<Post> getAll(FilteredPostsOptions filteredPostsOptions) {

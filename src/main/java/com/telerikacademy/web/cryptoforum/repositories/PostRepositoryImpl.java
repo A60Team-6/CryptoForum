@@ -3,6 +3,8 @@ package com.telerikacademy.web.cryptoforum.repositories;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.Tag;
+import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -173,5 +175,15 @@ public class PostRepositoryImpl implements PostRepository {
             query.setMaxResults(10);
             return query.list();
         }
+    }
+
+    @Override
+    public void addTagToPost(User user, Post post, Tag tag){
+
+    }
+
+    @Override
+    public void deleteTagFromPost(User user, Post post, Tag tag){
+
     }
 }

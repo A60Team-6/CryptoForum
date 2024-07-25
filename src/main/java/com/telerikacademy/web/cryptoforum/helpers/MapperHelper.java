@@ -2,11 +2,9 @@ package com.telerikacademy.web.cryptoforum.helpers;
 
 import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.Tag;
 import com.telerikacademy.web.cryptoforum.models.User;
-import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.UserDto;
+import com.telerikacademy.web.cryptoforum.models.dtos.*;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.CommentRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -77,7 +75,7 @@ public class MapperHelper {
         Post post = postRepository.getPostById(id);
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setUpdatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());;
 
         return post;
     }
@@ -98,5 +96,12 @@ public class MapperHelper {
         comment.setUpdatedAt(LocalDateTime.now());
 
         return comment;
+    }
+
+    public Tag createTagFromDto(TagDto tagDto){
+        Tag tag = new Tag();
+        tag.setName(tagDto.getTag());
+
+        return tag;
     }
 }

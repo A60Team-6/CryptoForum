@@ -2,6 +2,8 @@ package com.telerikacademy.web.cryptoforum.repositories.contracts;
 
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
+import com.telerikacademy.web.cryptoforum.models.Tag;
+import com.telerikacademy.web.cryptoforum.models.User;
 
 import java.util.List;
 
@@ -22,4 +24,9 @@ public interface PostRepository {
     List<Post> getMostCommentedPosts();
 
     List<Post> getMostRecentlyCreated();
+
+    void addTagToPost(User user, Post post, Tag tag);
+
+    void deleteTagFromPost(User user, Post post, Tag tag);
+
 }
