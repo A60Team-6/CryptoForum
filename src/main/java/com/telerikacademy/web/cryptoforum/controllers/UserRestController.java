@@ -1,9 +1,6 @@
 package com.telerikacademy.web.cryptoforum.controllers;
 
-import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
-import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
-import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationException;
+import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.AdminPhone;
@@ -132,6 +129,8 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }catch (BlockedException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 

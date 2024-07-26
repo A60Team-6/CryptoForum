@@ -63,7 +63,8 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user){
         boolean duplicateExists = true;
         try {
-            repository.getById(user.getId());
+            repository.getByUsername(user.getUsername());
+            repository.getByEmail(user.getEmail());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
@@ -77,11 +78,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user, User userForUpdate){
+        PermissionHelper.isBlocked(user, "User is not blocked!");
         PermissionHelper.isAdminOrSameUser(user, userForUpdate, "This user is not admin or owner!");
 
         boolean duplicateExists = true;
         try {
-            User existingUser = repository.getByUsername(userForUpdate.getUsername());
+            User existingUser = repository.getByEmail(userForUpdate.getEmail());
             if (existingUser.getId() == userForUpdate.getId()) {
                 duplicateExists = false;
             }
@@ -96,6 +98,7 @@ public class UserServiceImpl implements UserService {
         repository.update(userForUpdate);
     }
 
+    @Override
     public void userToBeModerator(User user, User userToBeModerator){
         PermissionHelper.isAdmin(user, "This user is not an admin!");
 

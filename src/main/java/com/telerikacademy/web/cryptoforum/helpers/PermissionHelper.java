@@ -22,7 +22,7 @@ public class PermissionHelper {
 
     public static void isAdminOrSameUser(User authenticatedUser, User user, String message) {
         boolean isAuthorized = false;
-        if (authenticatedUser.getPosition().getName().equals(POSITION_ADMIN) || authenticatedUser.equals(user) || authenticatedUser.getPosition().getName().equals(POSITION_MODERATOR)) {
+        if (authenticatedUser.getPosition().getName().equals(POSITION_ADMIN) || authenticatedUser.equals(user)) {
             isAuthorized = true;
         }
 
