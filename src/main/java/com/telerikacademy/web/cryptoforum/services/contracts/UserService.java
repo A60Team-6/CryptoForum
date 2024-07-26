@@ -1,5 +1,6 @@
 package com.telerikacademy.web.cryptoforum.services.contracts;
 
+import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 
@@ -32,4 +33,5 @@ public interface UserService {
     void blockUser(User user, int id);
 
     void unblockUser(User user, int id);
+
 }

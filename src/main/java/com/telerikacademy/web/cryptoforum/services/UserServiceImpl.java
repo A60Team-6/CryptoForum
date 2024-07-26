@@ -4,6 +4,7 @@ import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
+import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -181,6 +182,8 @@ public class UserServiceImpl implements UserService {
             throw new BlockedException("This User is not blocked!");
         }
     }
+
+
 
     @Override
     public void deleteUser(int id){

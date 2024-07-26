@@ -27,9 +27,9 @@ CREATE TABLE users
 
 CREATE TABLE admin_phones
 (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
     user_id      INT UNIQUE         NOT NULL,
     phone_number VARCHAR(15) UNIQUE DEFAULT NULL,
-    PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 

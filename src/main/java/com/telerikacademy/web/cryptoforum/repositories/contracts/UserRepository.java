@@ -1,5 +1,6 @@
 package com.telerikacademy.web.cryptoforum.repositories.contracts;
 
+import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 
@@ -28,4 +29,6 @@ public interface UserRepository {
     void block(User user);
 
     void unblock(User user);
+
+//    void addPhoneNumber(AdminPhone adminPhone);
 }

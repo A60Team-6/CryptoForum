@@ -1,6 +1,7 @@
 package com.telerikacademy.web.cryptoforum.repositories;
 
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -180,6 +181,8 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
+
 
     private String generateOrderBy(FilteredUserOptions filteredUserOptions) {
         if (filteredUserOptions.getSortBy().isEmpty()) {

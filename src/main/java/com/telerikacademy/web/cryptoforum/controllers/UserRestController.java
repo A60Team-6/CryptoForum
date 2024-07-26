@@ -6,10 +6,14 @@ import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
+import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
+import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.PhoneNumberDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.UserDto;
+import com.telerikacademy.web.cryptoforum.services.contracts.AdminPhoneService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +36,15 @@ public class UserRestController {
 
     private final AuthenticationHelper authenticationHelper;
 
+    private final AdminPhoneService phoneService;
+
     private final MapperHelper mapperHelper;
 
     @Autowired
-    public UserRestController(UserService service, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
+    public UserRestController(UserService service, AuthenticationHelper authenticationHelper, AdminPhoneService phoneService, MapperHelper mapperHelper) {
         this.service = service;
         this.authenticationHelper = authenticationHelper;
+        this.phoneService = phoneService;
         this.mapperHelper = mapperHelper;
     }
 
@@ -188,6 +195,20 @@ public class UserRestController {
             service.unblockUser(user, id);
             return new ResponseEntity<>("This user was unblocked successfully!", HttpStatus.OK);
         } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping("/phone")
+    public ResponseEntity<String> addPhoneNumber(@RequestHeader HttpHeaders headers,@Valid @RequestBody PhoneNumberDto phoneNumberDto) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            AdminPhone adminPhone = mapperHelper.addPhoneFromDto(phoneNumberDto);
+            phoneService.addPhoneNumber(adminPhone, user);
+            return new ResponseEntity<>("Phone number added successfully.", HttpStatus.OK);
+        }catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

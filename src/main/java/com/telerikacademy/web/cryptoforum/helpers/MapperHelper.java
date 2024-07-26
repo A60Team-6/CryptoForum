@@ -1,9 +1,6 @@
 package com.telerikacademy.web.cryptoforum.helpers;
 
-import com.telerikacademy.web.cryptoforum.models.Comment;
-import com.telerikacademy.web.cryptoforum.models.Post;
-import com.telerikacademy.web.cryptoforum.models.Tag;
-import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.*;
 import com.telerikacademy.web.cryptoforum.models.dtos.*;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.CommentRepository;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
@@ -103,5 +100,12 @@ public class MapperHelper {
         tag.setName(tagDto.getTag());
 
         return tag;
+    }
+
+    public AdminPhone addPhoneFromDto(PhoneNumberDto phoneNumberDto) {
+        AdminPhone adminPhone = new AdminPhone();
+        adminPhone.setPhoneNumber(phoneNumberDto.getPhoneNumber());
+
+        return adminPhone;
     }
 }
