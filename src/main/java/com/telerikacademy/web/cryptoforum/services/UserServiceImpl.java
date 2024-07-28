@@ -3,8 +3,8 @@ package com.telerikacademy.web.cryptoforum.services;
 import com.telerikacademy.web.cryptoforum.exceptions.BlockedException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
-import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if(isAlreadyUserOrAdmin){
-            throw new UnsupportedOperationException("User is moderator or admin!");
+            throw new UnauthorizedOperationException("User is moderator or admin!");
         }else {
             userToBeModerator.getPosition().setName("moderator");
             userToBeModerator.getPosition().setId(2);

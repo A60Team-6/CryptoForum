@@ -37,7 +37,26 @@ public class HelperClass {
         mockUser.setUsername("Gotogoto");
         mockUser.setEmail("ggg.ttt@example.com");
         mockUser.setPassword("15975253");
-        mockUser.setPosition(new Position(1, "admin"));        mockUser.setBlocked(false);
+        mockUser.setPosition(new Position(1, "admin"));
+        mockUser.setBlocked(false);
+        mockUser.setProfilePhoto(null);
+        mockUser.setCreatedAt(LocalDateTime.now());
+
+        return mockUser;
+    }
+
+
+    public static User createMockUserModerator(){
+        var mockUser = new User();
+
+        mockUser.setId(3);
+        mockUser.setFirstName("Tea");
+        mockUser.setLastName("Tairovich");
+        mockUser.setUsername("Teattt");
+        mockUser.setEmail("ttt.ttt@example.com");
+        mockUser.setPassword("15874258796345");
+        mockUser.setPosition(new Position(2, "moderator"));
+        mockUser.setBlocked(false);
         mockUser.setProfilePhoto(null);
         mockUser.setCreatedAt(LocalDateTime.now());
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -47,7 +48,31 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<Post> postsOfUser;
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<Comment> commentsOfUser;
+
+
     public User() {
+    }
+
+    public List<Comment> getCommentsOfUser() {
+        return commentsOfUser;
+    }
+
+    public void setCommentsOfUser(List<Comment> commentsOfUser) {
+        this.commentsOfUser = commentsOfUser;
+    }
+
+    public List<Post> getPostsOfUser() {
+        return postsOfUser;
+    }
+
+    public void setPostsOfUser(List<Post> postsOfUser) {
+        this.postsOfUser = postsOfUser;
     }
 
     public int getId() {
