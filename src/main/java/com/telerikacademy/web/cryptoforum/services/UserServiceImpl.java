@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll(FilteredUserOptions filteredUserOptions, User user) {
-        PermissionHelper.isAdmin(user, "User is not an admin!");
+        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
         return repository.getAll(filteredUserOptions);
     }
 
     @Override
     public User getById(User user, int id) {
-        PermissionHelper.isAdmin(user, "This user is not an admin!");
+        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
         return repository.getById(id);
     }
 
@@ -45,17 +45,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username, User user) {
-        PermissionHelper.isAdmin(user, "User is not an admin!");
+        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
         return repository.getByUsername(username);
     }
 
     public User getByEmail(String email, User user){
-        PermissionHelper.isAdmin(user, "User is not an admin!");
+        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
         return repository.getByEmail(email);
     }
 
     public User getByFirstName(String firstName, User user){
-        PermissionHelper.isAdmin(user, "User is not an admin!");
+        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
         return repository.getByFirstName(firstName);
     }
 
@@ -185,8 +185,6 @@ public class UserServiceImpl implements UserService {
             throw new BlockedException("This User is not blocked!");
         }
     }
-
-
 
     @Override
     public void deleteUser(User user, int id){

@@ -193,9 +193,6 @@ public class PostRestController {
             User user = authenticationHelper.tryGetUser(headers);
             Tag tag = tagService.getById(tagId);
             Post post = tag.getPosts().stream().filter(p -> p.getId() == postId).findFirst().orElseThrow();
-//            if (post.getId() != postId) {
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong post");
-//            }
             tagService.removeTagFromPost(user, post, tag);
             return new ResponseEntity<>("Congratulations, your tag has been successfully removed from the post.", HttpStatus.OK);
         }catch (AuthenticationException e){
@@ -208,6 +205,5 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
-
 }
 

@@ -49,10 +49,10 @@ public class User {
     private LocalDateTime createdAt;
 
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> postsOfUser;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentsOfUser;
 
 

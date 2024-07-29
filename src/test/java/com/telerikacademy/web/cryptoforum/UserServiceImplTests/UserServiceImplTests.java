@@ -87,7 +87,6 @@ public class UserServiceImplTests {
 
         Assertions.assertThrows(DuplicateEntityException.class,
                 () -> userService.createUser(testUser));
-
     }
 
     @Test
@@ -98,10 +97,7 @@ public class UserServiceImplTests {
 
         assertThrows(DuplicateEntityException.class,
                 () -> userService.createUser(testUser));
-
     }
-
-
 
     @Test
     public void create_Should_Throw_When_User_NotFound(){
@@ -117,7 +113,6 @@ public class UserServiceImplTests {
         Mockito.verify(mockRepository, Mockito.times(1)).createUser(newUser);
     }
 
-
     @Test
     public void update_Should_Throw_When_UserIsNotCreatorOrAdmin(){
 
@@ -126,9 +121,7 @@ public class UserServiceImplTests {
         notCreator.setId(100);
         notCreator.setUsername("jhgfdsdfghj");
 
-
         assertThrows(UnauthorizedOperationException.class, () -> userService.updateUser(existingUser, notCreator));
-
     }
 
 
@@ -146,7 +139,6 @@ public class UserServiceImplTests {
     @Test
     public void update_Should_Pass_When_EmailIsUnique(){
         var mocksUser = HelperClass.createMockUserUser();
-
 
         Mockito.when(mockRepository.getByEmail(Mockito.anyString())).thenReturn(mocksUser);
 
@@ -177,7 +169,6 @@ public class UserServiceImplTests {
         userToModerate.setUsername("jhgfdsdfghj");
 
         assertThrows(UnauthorizedOperationException.class, () -> userService.userToBeModerator(existingUser, userToModerate));
-
     }
 
     @Test
@@ -193,9 +184,7 @@ public class UserServiceImplTests {
 
         Mockito.when(mockRepository.getByUsername("testUser")).thenReturn(userToBeModerator);
 
-        // Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> userService.userToBeModerator(existingUser, userToBeModerator));
-
     }
 
     @Test
@@ -207,14 +196,10 @@ public class UserServiceImplTests {
         userToBeModerator.setId(100);
         userToBeModerator.setUsername("testUser");
 
-
         Mockito.when(mockRepository.getByUsername("testUser")).thenReturn(userToBeModerator);
 
-        // Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class, () -> userService.userToBeModerator(existingUser, userToBeModerator));
-
     }
-
 
     @Test
     public void update_Should_Throw_When_UserDoesNot_Exist(){
@@ -225,7 +210,6 @@ public class UserServiceImplTests {
         Mockito.when(mockRepository.getByUsername(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> userService.userToBeModerator(otherUser, mocksUser));
-
     }
 
     @Test
@@ -245,8 +229,6 @@ public class UserServiceImplTests {
         Mockito.verify(mockRepository).updateTo(userToBeModerator);
     }
 
-
-
     @Test
     public void updateFromModerator_Should_Throw_When_UserIsNotAdmin(){
 
@@ -259,8 +241,6 @@ public class UserServiceImplTests {
         assertThrows(UnauthorizedOperationException.class, () -> userService.userToBeNotModerator(existingUser, userToModerate));
 
     }
-
-
 
     @Test
     public void updateFromModerator_Should_Throw_When_UserIsUser(){
@@ -294,7 +274,6 @@ public class UserServiceImplTests {
 
     }
 
-
     @Test
     public void updateFrom_Should_Throw_When_UserDoesNot_Exist(){
         var mocksUser = HelperClass.createMockUserUser();
@@ -306,8 +285,6 @@ public class UserServiceImplTests {
         Assertions.assertThrows(EntityNotFoundException.class, () -> userService.userToBeNotModerator(otherUser, mocksUser));
 
     }
-
-
 
     @Test
     public void updateFrom_Moderator_Position_When_UserIsModerator(){
@@ -327,8 +304,6 @@ public class UserServiceImplTests {
         Mockito.verify(mockRepository).updateTo(userToBeModerator);
     }
 
-
-
     @Test
     public void block_Should_Throw_When_UserIsNotAdminOrModerator(){
 
@@ -340,7 +315,6 @@ public class UserServiceImplTests {
         assertThrows(UnauthorizedOperationException.class, () -> userService.blockUser(existingUser, userToModerate.getId()));
 
     }
-
 
     @Test
     public void block_Should_Throw_When_UserDoesNot_Exist(){
@@ -385,7 +359,6 @@ public class UserServiceImplTests {
         Assertions.assertThrows(BlockedException.class, () -> userService.blockUser(existingUser, userToBeModerator.getId()));
     }
 
-
     @Test
     public void unblock_Should_Throw_When_UserIsNotAdminOrModerator(){
 
@@ -409,7 +382,6 @@ public class UserServiceImplTests {
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> userService.unblockUser(otherUser, mocksUser.getId()));
     }
-
 
     @Test
     public void unblock_user_When_UserIsNotBlocked(){
@@ -442,7 +414,6 @@ public class UserServiceImplTests {
         Assertions.assertThrows(BlockedException.class, () -> userService.unblockUser(existingUser, userToBeModerator.getId()));
     }
 
-
     @Test
     public void delete_Should_Throw_When_UserIsNotCreatorOrAdmin(){
 
@@ -451,11 +422,8 @@ public class UserServiceImplTests {
         notCreator.setId(100);
         notCreator.setUsername("jhgfdsdfghj");
 
-
         assertThrows(UnauthorizedOperationException.class, () -> userService.deleteUser(existingUser, notCreator.getId()));
-
     }
-
 
     @Test
     public void delete_user_When_UserExist(){
@@ -470,7 +438,6 @@ public class UserServiceImplTests {
 
         userService.deleteUser(existingUser, 100);
 
- //       Assertions.assertTrue(userToBeModerator.isBlocked());
         Mockito.verify(mockRepository).delete(100);
     }
 }
