@@ -163,9 +163,10 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+    public ResponseEntity<String> deleteUser(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
-            service.deleteUser(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            service.deleteUser(user, id);
             return new ResponseEntity<>("Congratulations! The user has been deleted successfully!", HttpStatus.OK);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

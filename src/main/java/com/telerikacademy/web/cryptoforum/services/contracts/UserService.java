@@ -28,7 +28,7 @@ public interface UserService {
 
     void userToBeNotModerator(User user, User userToBeNotModerator);
 
-    void deleteUser(int id);
+    void deleteUser(User user, int id);
 
     void blockUser(User user, int id);
 

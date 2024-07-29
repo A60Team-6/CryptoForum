@@ -189,7 +189,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteUser(int id){
+    public void deleteUser(User user, int id){
+        User userToDelete = repository.getById(id);
+        PermissionHelper.isAdminOrSameUser(user, userToDelete, "You are not admin or same user!");
+
         repository.delete(id);
     }
 }

@@ -442,4 +442,35 @@ public class UserServiceImplTests {
         Assertions.assertThrows(BlockedException.class, () -> userService.unblockUser(existingUser, userToBeModerator.getId()));
     }
 
+
+    @Test
+    public void delete_Should_Throw_When_UserIsNotCreatorOrAdmin(){
+
+        User existingUser = HelperClass.createMockUserUser();
+        User notCreator = HelperClass.createMockUserUser();
+        notCreator.setId(100);
+        notCreator.setUsername("jhgfdsdfghj");
+
+
+        assertThrows(UnauthorizedOperationException.class, () -> userService.deleteUser(existingUser, notCreator.getId()));
+
+    }
+
+
+    @Test
+    public void delete_user_When_UserExist(){
+        User existingUser = HelperClass.createMockUserAdmin();
+
+        User userToBeModerator = HelperClass.createMockUserUser();
+        userToBeModerator.setId(100);
+        userToBeModerator.setUsername("testUser");
+        userToBeModerator.setBlocked(false);
+
+        Mockito.when(mockRepository.getById(100)).thenReturn(userToBeModerator);
+
+        userService.deleteUser(existingUser, 100);
+
+ //       Assertions.assertTrue(userToBeModerator.isBlocked());
+        Mockito.verify(mockRepository).delete(100);
+    }
 }
