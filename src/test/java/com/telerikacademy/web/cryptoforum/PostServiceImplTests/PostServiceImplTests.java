@@ -12,6 +12,7 @@ import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.PostServiceImpl;
+import jakarta.persistence.PostPersist;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +21,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -146,5 +147,115 @@ public class PostServiceImplTests {
         Mockito.verify(mockRepository, Mockito.times(1)).updatePost(post);
     }
 
+    @Test
+    public void delete_Should_Throw_When_User_IsNot_Moderator_User_Or_PostCreator(){
+        User postCreator = HelperClass.createMockUserUser();
+        User user = HelperClass.createMockUserUser();
+        user.setId(11);
+        user.setUsername("Kiko");
 
+        Post post = HelperClass.createPost();
+
+        post.setUser(postCreator);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class, () -> postService.deletePost(user, post));
+    }
+
+    @Test
+    public void delete_Should_Pass_When_IsValid(){
+        User user = HelperClass.createMockUserUser();
+
+        user.setBlocked(false);
+
+        Post post = HelperClass.createPost();
+
+        post.setUser(user);
+        postService.deletePost(user, post);
+
+        Mockito.verify(mockRepository, Mockito.times(1)).deletePost(post.getId());
+    }
+
+    @Test
+    public void likePost_Should_IncreaseLikes_When_UserLikesForTheFirstTime() {
+
+        Post post = HelperClass.createPost();
+        User user = HelperClass.createMockUserUser();
+        post.setUser(user);
+        post.setUsersWhoLikedPost(new HashSet<>());
+
+        postService.likePost(post, user);
+
+        assertEquals(1, post.getLikes());
+        assertTrue(post.getUsersWhoLikedPost().contains(user));
+        verify(mockRepository, times(1)).updatePost(post);
+    }
+
+    @Test
+    public void likePost_Should_Throw_When_User_Already_Liked(){
+        User user = HelperClass.createMockUserUser();
+        Post post = HelperClass.createPost();
+        post.setUsersWhoLikedPost(new HashSet<>());
+        post.getUsersWhoLikedPost().add(user);
+        post.setLikes(1);
+
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> postService.likePost(post, user));
+    }
+
+
+    @Test
+    public void dislikePost_Should_IncreaseLikes_When_UserLikesForTheFirstTime() {
+
+        Post post = HelperClass.createPost();
+        User user = HelperClass.createMockUserUser();
+        post.setUser(user);
+        post.setUsersWhoLikedPost(new HashSet<>());
+        post.getUsersWhoLikedPost().add(user);
+        post.setLikes(1);
+
+        postService.removeLike(post, user);
+
+        assertEquals(0, post.getLikes());
+        assertFalse(post.getUsersWhoLikedPost().contains(user));
+        verify(mockRepository, times(1)).updatePost(post);
+    }
+
+    @Test
+    public void dislikePost_Should_Throw_When_User_Already_Liked(){
+        User user = HelperClass.createMockUserUser();
+        Post post = HelperClass.createPost();
+        post.setUsersWhoLikedPost(new HashSet<>());
+
+
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> postService.removeLike(post, user));
+    }
+
+    @Test
+    public void get_Should_Return_MostLikedPosts_WhenOptionsAreFulfilled(){
+
+        Post post = HelperClass.createPost();
+
+        Mockito.when(mockRepository.getMostLikedPosts()).thenReturn(List.of(post));
+
+        assertEquals(1, postService.getMostLikedPosts().size());
+    }
+
+    @Test
+    public void get_Should_Return_MostCommentedPosts_WhenOptionsAreFulfilled(){
+
+        Post post = HelperClass.createPost();
+
+        Mockito.when(mockRepository.getMostCommentedPosts()).thenReturn(List.of(post));
+
+        assertEquals(1, postService.getMostCommentedPosts().size());
+    }
+
+    @Test
+    public void get_Should_Return_MostRecentPosts_WhenOptionsAreFulfilled(){
+
+        Post post = HelperClass.createPost();
+
+        Mockito.when(mockRepository.getMostRecentlyCreated()).thenReturn(List.of(post));
+
+        assertEquals(1, postService.getMostRecentlyCreated().size());
+    }
 }
