@@ -40,6 +40,17 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Post getPostByTitle(String title) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, title);
+            if (post == null) {
+                throw new EntityNotFoundException("Post","title", title);
+            }
+            return post;
+        }
+    }
+
+    @Override
     public void createPost(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

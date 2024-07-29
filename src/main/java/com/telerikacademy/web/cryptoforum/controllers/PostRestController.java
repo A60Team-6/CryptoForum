@@ -54,6 +54,18 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/{title}")
+    public Post getPostByTitle(@PathVariable String title, @RequestHeader HttpHeaders headers){
+        try{
+            authenticationHelper.tryGetUser(headers);
+            return postService.getPostByTitle(title);
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<String> createPost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers) {
         try {

@@ -35,20 +35,16 @@ public class PostServiceImpl implements PostService{
         return repository.getPostById(id);
     }
 
+
+    @Override
+    public Post getPostByTitle(String title){
+        return repository.getPostByTitle(title);
+    }
+
+
     @Override
     public void createPost(Post post) {
         PermissionHelper.isBlocked(post.getUser(), "You are blocked.");
-        boolean duplicateExists = true;
-        try {
-            repository.getPostById(post.getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Post", "title", post.getTitle());
-        }
-
         repository.createPost(post);
     }
 

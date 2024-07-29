@@ -2,6 +2,7 @@ package com.telerikacademy.web.cryptoforum;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telerikacademy.web.cryptoforum.models.Position;
+import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 
 import java.time.LocalDateTime;
@@ -61,5 +62,18 @@ public class HelperClass {
         mockUser.setCreatedAt(LocalDateTime.now());
 
         return mockUser;
+    }
+
+    public static Post createPost(){
+        var post = new Post();
+
+        post.setId(1);
+        post.setTitle("Bitcoin");
+        post.setContent("Bitcoins will 63.000 dollars next year.");
+        post.setLikes(0);
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+
+        return post;
     }
 }

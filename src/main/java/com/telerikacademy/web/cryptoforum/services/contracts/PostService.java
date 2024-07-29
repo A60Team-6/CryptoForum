@@ -13,6 +13,8 @@ public interface PostService {
 
     Post getPostById(int id);
 
+    Post getPostByTitle(String title);
+
     void createPost(Post post);
 
     List<Post> getAllPostsOfUser(int userId);
