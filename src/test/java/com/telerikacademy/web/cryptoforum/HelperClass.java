@@ -1,11 +1,13 @@
 package com.telerikacademy.web.cryptoforum;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.Position;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class HelperClass {
 
@@ -71,9 +73,21 @@ public class HelperClass {
         post.setTitle("Bitcoin");
         post.setContent("Bitcoins will 63.000 dollars next year.");
         post.setLikes(0);
+        post.setComments(new ArrayList<Comment>());
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
 
         return post;
+    }
+
+    public static Comment createComment(){
+        var comment = new Comment();
+
+        comment.setId(1);
+        comment.setContent("This is a comment");
+        comment.setCreatedAt(LocalDateTime.now());
+        comment.setUpdatedAt(LocalDateTime.now());
+
+        return comment;
     }
 }
