@@ -96,4 +96,13 @@ public class HelperClass {
 
         return tag;
     }
+
+    public static AdminPhone createAdminPhone(){
+        var adminPhone = new AdminPhone();
+
+        adminPhone.setPhoneId(1);
+        adminPhone.setPhoneNumber("088888888");
+
+        return adminPhone;
+    }
 }
