@@ -1,10 +1,7 @@
 package com.telerikacademy.web.cryptoforum;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.telerikacademy.web.cryptoforum.models.Comment;
-import com.telerikacademy.web.cryptoforum.models.Position;
-import com.telerikacademy.web.cryptoforum.models.Post;
-import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -89,5 +86,14 @@ public class HelperClass {
         comment.setUpdatedAt(LocalDateTime.now());
 
         return comment;
+    }
+
+    public static Tag createTag(){
+        var tag = new Tag();
+
+        tag.setId(1);
+        tag.setName("Tag");
+
+        return tag;
     }
 }

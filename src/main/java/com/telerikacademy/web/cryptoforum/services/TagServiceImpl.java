@@ -52,7 +52,6 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public void deleteTag(Tag tag, User user){
-        PermissionHelper.isBlocked(user, "You are blocked so you can not delete this tag!");
         PermissionHelper.isAdmin(user, "You are not admin or owner of the publication!");
 
         repository.deleteTag(tag);
