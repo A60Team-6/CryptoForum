@@ -1,4 +1,4 @@
-package com.telerikacademy.web.cryptoforum.controllers;
+package com.telerikacademy.web.cryptoforum.controllers.rest;
 
 import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;

@@ -1,11 +1,10 @@
-package com.telerikacademy.web.cryptoforum.controllers;
+package com.telerikacademy.web.cryptoforum.controllers.rest;
 
 import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
-import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.PhoneNumberDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;

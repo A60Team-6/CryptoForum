@@ -1,4 +1,4 @@
-package com.telerikacademy.web.cryptoforum.controllers;
+package com.telerikacademy.web.cryptoforum.controllers.rest;
 
 import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
@@ -52,6 +52,19 @@ public class PostRestController {
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+
+    @GetMapping
+    public List<Post> getAllPosts(@RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String content,
+                                  @RequestParam(required = false) Integer minLikes,
+                                  @RequestParam(required = false) Integer maxLikes,
+                                  @RequestParam(required = false) String createBefore,
+                                  @RequestParam(required = false) String createAfter,
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String sortOrder) {
+        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(title, content, minLikes, maxLikes, createBefore, createAfter, sortBy, sortOrder);
+        return postService.getAll(filteredPostsOptions);
     }
 
     @GetMapping("/{title}")
@@ -119,18 +132,6 @@ public class PostRestController {
         }
     }
 
-    @GetMapping
-    public List<Post> getAllPosts(@RequestParam(required = false) String title,
-                                  @RequestParam(required = false) String content,
-                                  @RequestParam(required = false) Integer minLikes,
-                                  @RequestParam(required = false) Integer maxLikes,
-                                  @RequestParam(required = false) String createBefore,
-                                  @RequestParam(required = false) String createAfter,
-                                  @RequestParam(required = false) String sortBy,
-                                  @RequestParam(required = false) String sortOrder) {
-        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(title, content, minLikes, maxLikes, createBefore, createAfter, sortBy, sortOrder);
-        return postService.getAll(filteredPostsOptions);
-    }
 
     @PutMapping("/{id}/like")
     public void likePost(@RequestHeader HttpHeaders headers, @PathVariable int id) {

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('All Posts')}"></form>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+
+<div class="body-content">
+        <div class="table">
+
+            <div class="row" th:each="post : ${posts}">
+                <div class="cell">
+                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
+                </div>
+                <div class="cell" th:text="${post.content}">Content</div>
+            </div>
+        </div>
+    </div>
+    <h2 th:text="${post.title}">Post Title</h2>
+    <div th:style="text-align">
+        <p class="margin12" th:text="#{post.label.creator}  + ': ' +       ${post.user.firstName + ' ' + post.user.lastName}">Creator</p>
+        <p class="margin12" th:text="#{post.label.content}  + ': ' +       ${post.content}">Content</p>
+        <p class="margin12" th:text="#{post.label.createdAt} + ': ' +      ${post.createdAt}">01.01.1999</p>
+        <p class="margin12" th:text="#{post.label.updatedAt}  + ': ' + ${post.updatedAt}">01.01.1999</p>
+        <p class="margin12" th:text="#{post.label.likes}  + ': ' + ${post.usersWhoLikedPost.size()}">0</p>
+        <p class="margin12" th:text="#{post.label.comments}  + ': '">Comments:</p>
+        <ul class="margin12">
+            <li th:each="comment : ${post.comments}" th:text="${comment.content}"></li>
+        </ul>
+
+    </div>
+</div>
+
+<form th:replace="~{PostForm.html :: footer}"></form>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.telerikacademy.web.cryptoforum.controllers;
+package com.telerikacademy.web.cryptoforum.controllers.rest;
 
 import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
@@ -7,10 +7,7 @@ import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.models.Tag;
 import com.telerikacademy.web.cryptoforum.models.User;
-import com.telerikacademy.web.cryptoforum.models.dtos.RegistrationDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.TagDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

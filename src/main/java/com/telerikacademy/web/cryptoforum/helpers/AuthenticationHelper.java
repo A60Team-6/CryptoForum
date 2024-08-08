@@ -1,9 +1,11 @@
 package com.telerikacademy.web.cryptoforum.helpers;
 
+import com.telerikacademy.web.cryptoforum.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationHelper {
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    public static final String WRONG_USERNAME_OR_PASSWORD = "Wrong username or password";
 
     private static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
 
@@ -58,5 +61,37 @@ public class AuthenticationHelper {
         }
 
         return userInfo.substring(firstSpace + 1);
+    }
+
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getByUsername(username);
+            if(!user.getPassword().equals(password)) {
+                throw new AuthenticationFailureException(WRONG_USERNAME_OR_PASSWORD);
+            }
+            return user;
+        }catch (EntityNotFoundException e){
+            throw new AuthenticationFailureException(WRONG_USERNAME_OR_PASSWORD);
+        }
+    }
+
+    public User tryGetUser(HttpSession session){
+        String currentUser = (String) session.getAttribute("currentUser");
+
+        if(currentUser == null) {
+            throw new AuthenticationFailureException("No user logged in.");
+        }
+
+        return userService.getByUsername(currentUser);
+    }
+
+    public User tryGetCurrentUser(HttpSession session) {
+        String currentUsername = (String) session.getAttribute("currentUser");
+
+        if (currentUsername == null) {
+            throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
+        }
+
+        return userService.getByUsername(currentUsername);
     }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('All Posts')}"></form>
+
+
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+<div class="body-content">
+    <form action="#" th:action="@{/posts}" method="get" th:object="${filterPostOptions}">
+        <label th:text="#{posts.filter.label}">Filter Post Options</label>
+        <br/><br/>
+        <input type="text" placeholder="Post Title" th:field="*{title}"/>
+        <input type="text" placeholder="Post Content" th:field="*{content}"/>
+        <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
+        <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
+
+        <input type="date" placeholder="7.5" th:field="*{createBefore}">
+        <input type="date" placeholder="7.5" th:field="*{createAfter}">
+
+
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+            <option value="title">Title</option>
+            <option value="content">Content</option>
+        </select>
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <br/><br/>
+
+        <input type="submit" value="Search"/>
+    </form>
+
+    <div th:if="${posts.isEmpty()}">
+        <h2 th:text="#{posts.title.empty}">No Beers</h2>
+    </div>
+    <div th:unless="${posts.isEmpty()}">
+        <h2 th:text="#{posts.title}">All Beers</h2>
+
+        <div class="table">
+            <div class="header">
+                <div class="cell" th:text="#{post.label.title}">Title</div>
+                <div class="cell" th:text="#{post.label.content}">Content</div>
+            </div>
+            <div class="row" th:each="post : ${posts}">
+                <div class="cell">
+                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
+                </div>
+                <div class="cell" th:text="${post.content}">Content</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

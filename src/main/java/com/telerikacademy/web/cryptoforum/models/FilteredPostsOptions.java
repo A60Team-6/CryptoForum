@@ -31,6 +31,10 @@ public class FilteredPostsOptions {
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
 
+    public FilteredPostsOptions() {
+        this(null, null, null, null, null, null, null, null);
+    }
+
     public Optional<String> getTitle() {
         return title;
     }
