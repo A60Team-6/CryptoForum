@@ -81,7 +81,7 @@ public class PostMvcController {
     }
 
     @GetMapping("/new")
-    public String shoeNewPostPage(Model model, HttpSession session) {
+    public String showNewPostPage(Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetUser(session);
         }catch (AuthenticationFailureException e){
@@ -179,22 +179,22 @@ public class PostMvcController {
 
 
     @GetMapping("/{id}/delete")
-    public String deleteBeer(@PathVariable int id, Model model, HttpSession session) {
+    public String deletePost(@PathVariable int id, Model model, HttpSession session) {
 
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
         }catch (AuthenticationFailureException e){
-            return "redirect:/login";
+            return "redirect:/auth/login";
         }
         try {
             postService.deletePost(user, postService.getPostById(id));
-            return "redirect:/beers";
+            return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (AuthorizationException e){
+        } catch (AuthorizationException e){
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
         }
