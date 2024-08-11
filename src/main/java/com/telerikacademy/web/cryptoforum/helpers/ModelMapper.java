@@ -1,9 +1,11 @@
 package com.telerikacademy.web.cryptoforum.helpers;
 
+import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.Position;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
+import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegisterDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,18 @@ public class ModelMapper {
         postDto.setTitle(post.getTitle());
         postDto.setContent(post.getContent());
         return postDto;
+    }
+
+    public PostOutDto toOutDto(Post post){
+        PostOutDto postOutDto = new PostOutDto();
+        postOutDto.setTitle(post.getTitle());
+        postOutDto.setContent(post.getContent());
+        postOutDto.setUser(post.getUser().getUsername());
+        postOutDto.setLikes(post.getLikes());
+        postOutDto.setComments(post.getComments().stream().map(Comment::getContent).toList());
+        postOutDto.setCreatedAt(post.getCreatedAt());
+        postOutDto.setUpdatedAt(post.getUpdatedAt());
+        return postOutDto;
     }
 
     public User fromDto(RegisterDto registerDto) {

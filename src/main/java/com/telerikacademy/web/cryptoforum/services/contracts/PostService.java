@@ -15,9 +15,9 @@ public interface PostService {
 
     Post getPostByTitle(String title);
 
-    void createPost(Post post);
+    List<Post> getAllPostsOfUser(User user);
 
-    List<Post> getAllPostsOfUser(int userId);
+    void createPost(Post post, User user);
 
     void updatePost(User user, Post post);
 

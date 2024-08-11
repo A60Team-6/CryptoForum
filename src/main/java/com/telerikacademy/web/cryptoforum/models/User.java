@@ -48,32 +48,9 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> postsOfUser;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentsOfUser;
-
-
     public User() {
     }
 
-    public List<Comment> getCommentsOfUser() {
-        return commentsOfUser;
-    }
-
-    public void setCommentsOfUser(List<Comment> commentsOfUser) {
-        this.commentsOfUser = commentsOfUser;
-    }
-
-    public List<Post> getPostsOfUser() {
-        return postsOfUser;
-    }
-
-    public void setPostsOfUser(List<Post> postsOfUser) {
-        this.postsOfUser = postsOfUser;
-    }
 
     public int getId() {
         return id;

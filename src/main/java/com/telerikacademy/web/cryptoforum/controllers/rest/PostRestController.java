@@ -3,11 +3,13 @@ package com.telerikacademy.web.cryptoforum.controllers.rest;
 import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
+import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.Tag;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
+import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.TagDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
@@ -31,15 +33,16 @@ public class PostRestController {
     private final MapperHelper mapperHelper;
     private final AuthenticationHelper authenticationHelper;
     private final TagService tagService;
+    private final ModelMapper modelMapper;
 
 
     @Autowired
-    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper, TagService tagService) {
+    public PostRestController(PostService postService, MapperHelper mapperHelper, AuthenticationHelper authenticationHelper, TagService tagService, ModelMapper modelMapper) {
         this.postService = postService;
         this.mapperHelper = mapperHelper;
         this.authenticationHelper = authenticationHelper;
         this.tagService = tagService;
-
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/{id}")
@@ -55,7 +58,7 @@ public class PostRestController {
     }
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam(required = false) String title,
+    public List<PostOutDto> getAllPosts(@RequestParam(required = false) String title,
                                   @RequestParam(required = false) String content,
                                   @RequestParam(required = false) Integer minLikes,
                                   @RequestParam(required = false) Integer maxLikes,
@@ -64,7 +67,7 @@ public class PostRestController {
                                   @RequestParam(required = false) String sortBy,
                                   @RequestParam(required = false) String sortOrder) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(title, content, minLikes, maxLikes, createBefore, createAfter, sortBy, sortOrder);
-        return postService.getAll(filteredPostsOptions);
+        return postService.getAll(filteredPostsOptions).stream().map(modelMapper::toOutDto).toList();
     }
 
     @GetMapping("/{title}")
@@ -79,12 +82,25 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/getUserPosts")
+    public List<PostOutDto> getAllPostsOfUser(@RequestHeader HttpHeaders headers){
+        try {
+           User user = authenticationHelper.tryGetUser(headers);
+           List<Post> posts = postService.getAll(new FilteredPostsOptions());
+           return postService.getAllPostsOfUser(user).stream().map(modelMapper::toOutDto).toList();
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<String> createPost(@Valid @RequestBody PostDto postDto, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = mapperHelper.createPostFromDto(postDto, user);
-            postService.createPost(post);
+            postService.createPost(post, user);
 
             return new ResponseEntity<>("Congratulations, your post has been successfully created.", HttpStatus.CREATED);
         } catch (DuplicateEntityException e) {
@@ -164,18 +180,18 @@ public class PostRestController {
     }
 
     @GetMapping("/top10MostLikedPosts")
-    public List<Post> getMostLikedPosts() {
-        return postService.getMostLikedPosts();
+    public List<PostOutDto> getMostLikedPosts() {
+        return postService.getMostLikedPosts().stream().map(modelMapper::toOutDto).toList();
     }
 
     @GetMapping("/top10CommentedPosts")
-    public List<Post> getMostCommentedPosts() {
-        return postService.getMostCommentedPosts();
+    public List<PostOutDto> getMostCommentedPosts() {
+        return postService.getMostCommentedPosts().stream().map(modelMapper::toOutDto).toList();
     }
 
     @GetMapping("/top10MostRecentlyCreated")
-    public List<Post> getMostRecentlyCreated() {
-        return postService.getMostRecentlyCreated();
+    public List<PostOutDto> getMostRecentlyCreated() {
+        return postService.getMostRecentlyCreated().stream().map(modelMapper::toOutDto).toList();
     }
 
 

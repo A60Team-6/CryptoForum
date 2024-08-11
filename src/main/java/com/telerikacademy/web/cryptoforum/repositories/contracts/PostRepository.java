@@ -31,4 +31,5 @@ public interface PostRepository {
 
     void deleteTagFromPost(User user, Post post, Tag tag);
 
+    List<Post> getPostsWithThisUser(User user);
 }

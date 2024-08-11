@@ -15,8 +15,8 @@
         <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
         <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
 
-        <input type="date" placeholder="7.5" th:field="*{createBefore}">
-        <input type="date" placeholder="7.5" th:field="*{createAfter}">
+        <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
+        <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
 
 
         <select th:field="*{sortBy}">
@@ -35,10 +35,10 @@
     </form>
 
     <div th:if="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title.empty}">No Beers</h2>
+        <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
     <div th:unless="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title}">All Beers</h2>
+        <h2 th:text="#{posts.title}">All Posts</h2>
 
         <div class="table">
             <div class="header">

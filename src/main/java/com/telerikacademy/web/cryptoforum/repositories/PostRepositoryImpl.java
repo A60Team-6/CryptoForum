@@ -51,6 +51,17 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Post> getPostsWithThisUser(User user) {
+
+        try (Session session = sessionFactory.openSession()){
+            String hql = "FROM Post p WHERE p.user = :user";
+            Query<Post> query = session.createQuery(hql, Post.class);
+            query.setParameter("user", user);
+            return query.list();
+        }
+    }
+
+    @Override
     public void createPost(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -83,6 +94,7 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
+
 
             filteredPostsOptions.getTitle().ifPresent(value -> {
                 filters.add("title like :title");
@@ -184,7 +196,8 @@ public class PostRepositoryImpl implements PostRepository {
             String hql = "FROM Post p ORDER BY p.createdAt DESC";
             Query<Post> query = session.createQuery(hql, Post.class);
             query.setMaxResults(10);
-            return query.list();
+            List<Post> list = query.list();
+            return list;
         }
     }
 
@@ -197,4 +210,5 @@ public class PostRepositoryImpl implements PostRepository {
     public void deleteTagFromPost(User user, Post post, Tag tag){
 
     }
+
 }

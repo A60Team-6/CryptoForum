@@ -62,7 +62,8 @@ public class UserRestController {
         }
     }
 
-    @GetMapping("id/{id}")
+
+    @GetMapping("/id/{id}")
     public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);

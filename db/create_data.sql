@@ -30,7 +30,7 @@ CREATE TABLE admin_phones
     id            INT AUTO_INCREMENT PRIMARY KEY,
     user_id      INT UNIQUE         NOT NULL,
     phone_number VARCHAR(15) UNIQUE DEFAULT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE posts
@@ -45,7 +45,7 @@ CREATE TABLE posts
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CHECK (CHAR_LENGTH(posts.title) BETWEEN 16 AND 64),
     CHECK (CHAR_LENGTH(posts.content) BETWEEN 32 AND 8192),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments
@@ -56,8 +56,8 @@ CREATE TABLE comments
     content    VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_id) REFERENCES posts (id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags
@@ -71,14 +71,14 @@ CREATE TABLE post_tags
     post_id INT NOT NULL,
     tag_id  INT NOT NULL,
     PRIMARY KEY (post_id, tag_id),
-    FOREIGN KEY (post_id) REFERENCES posts (id),
-    FOREIGN KEY (tag_id) REFERENCES tags (id)
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ,
+    FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
 );
 
 CREATE TABLE posts_users_likes
 (
     post_id    INT NOT NULL,
     user_id     INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES posts (id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

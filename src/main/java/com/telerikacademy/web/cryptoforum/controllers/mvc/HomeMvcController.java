@@ -33,15 +33,4 @@ public class HomeMvcController {
         return "HomeView";
     }
 
-    @GetMapping("/admin")
-    public String showAdminPortal(HttpSession session, Model model) {
-        try {
-            User user = authenticationHelper.tryGetCurrentUser(session);
-            PermissionHelper.isAdmin(user, "You are not an admin!");
-            return "AdminPortalView";
-            //return "AccessDeniedView";
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-    }
 }

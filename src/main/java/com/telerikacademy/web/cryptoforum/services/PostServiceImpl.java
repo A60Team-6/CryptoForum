@@ -1,21 +1,22 @@
 package com.telerikacademy.web.cryptoforum.services;
 
-import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
-import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
 import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
 
     private final PostRepository repository;
 
@@ -35,16 +36,19 @@ public class PostServiceImpl implements PostService{
         return repository.getPostById(id);
     }
 
-
     @Override
-    public Post getPostByTitle(String title){
+    public Post getPostByTitle(String title) {
         return repository.getPostByTitle(title);
     }
 
+    @Override
+    public List<Post> getAllPostsOfUser(User user) {
+        return repository.getPostsWithThisUser(user);
+    }
 
     @Override
-    public void createPost(Post post) {
-        PermissionHelper.isBlocked(post.getUser(), "You are blocked.");
+    public void createPost(Post post, User user) {
+        PermissionHelper.isBlocked(user, "You are blocked.");
         repository.createPost(post);
     }
 
@@ -63,10 +67,6 @@ public class PostServiceImpl implements PostService{
         repository.deletePost(post.getId());
     }
 
-    @Override
-    public List<Post> getAllPostsOfUser(int userId) {
-        return List.of();
-    }
 
     @Override
     public void likePost(Post post, User user) {
@@ -108,6 +108,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getMostRecentlyCreated() {
-        return repository.getMostRecentlyCreated();
+        List<Post> mostRecentlyCreated = repository.getMostRecentlyCreated();
+        return mostRecentlyCreated;
     }
 }
