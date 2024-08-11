@@ -34,6 +34,8 @@
         <input type="submit" value="Search"/>
     </form>
 
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
     <div th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
@@ -50,6 +52,15 @@
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
                 </div>
                 <div class="cell" th:text="${post.content}">Content</div>
+<!--                <form th:action="@{/posts/{id}/like(id=${post.id})}" method="post">-->
+<!--                    <button type="submit">Like</button>-->
+<!--                </form>-->
+                <form th:if="${post.usersWhoLikedPost.contains(currentUser)}" th:action="@{/posts/{id}/removeLike(id=${post.id})}" method="post">
+                    <button type="submit" class="like-button">Unlike</button>
+                </form>
+                <form th:if="${!post.usersWhoLikedPost.contains(currentUser)}" th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
+                    <button type="submit" class="like-button">Like</button>
+                </form>
             </div>
         </div>
     </div>

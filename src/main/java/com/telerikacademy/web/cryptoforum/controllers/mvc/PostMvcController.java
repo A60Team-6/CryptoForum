@@ -1,10 +1,7 @@
 package com.telerikacademy.web.cryptoforum.controllers.mvc;
 
 
-import com.telerikacademy.web.cryptoforum.exceptions.AuthenticationFailureException;
-import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
-import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
-import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
@@ -13,7 +10,6 @@ import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.FilterPostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -24,9 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -56,7 +54,7 @@ public class PostMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model) {
+    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model, HttpSession session) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
@@ -68,6 +66,9 @@ public class PostMvcController {
                 filterPostDto.getSortOrder()
         );
         List<Post> posts = postService.getAll(filteredPostsOptions);
+        User currentUser = authenticationHelper.tryGetUser(session);
+        model.addAttribute("currentUser", currentUser);
+
         model.addAttribute("filterPostOptions", filterPostDto);
         model.addAttribute("posts", posts);
         return "PostsView";
@@ -91,7 +92,6 @@ public class PostMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             List<Post> posts = postService.getAllPostsOfUser(user).stream().collect(Collectors.toList());
-//                    .map(modelMapper::toOutDto)
             model.addAttribute("posts", posts);
         } catch (AuthenticationFailureException e) {
             return "HomeView";
@@ -217,6 +217,50 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
+        }
+    }
+
+    @PostMapping("/{id}/like")
+    public String likePost(@PathVariable int id, HttpSession session, Model model){
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+            Post post = postService.getPostById(id);
+            postService.likePost(post, user);
+            return "redirect:/posts";
+        }catch (EntityNotFoundException e){
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        }catch (UnsupportedOperationException е){
+            model.addAttribute("error", "You can not like this post twice!");
+            return "redirect:/posts";
+        }
+    }
+
+    @PostMapping("/{id}/removeLike")
+    public String removeLike(@PathVariable int id, HttpSession session, Model model){
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+            Post post = postService.getPostById(id);
+            postService.removeLike(post, user);
+            return "redirect:/posts";
+        } catch (EntityNotFoundException e){
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        }catch (UnsupportedOperationException е){
+            model.addAttribute("error", "You can not like this post twice!");
+            return "redirect:/posts";
         }
     }
 }

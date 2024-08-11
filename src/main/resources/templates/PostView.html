@@ -26,7 +26,7 @@
         <p class="margin12" th:text="#{post.label.content}  + ': ' +       ${post.content}">Content</p>
         <p class="margin12" th:text="#{post.label.createdAt} + ': ' +      ${post.createdAt}">01.01.1999</p>
         <p class="margin12" th:text="#{post.label.updatedAt}  + ': ' + ${post.updatedAt}">01.01.1999</p>
-        <p class="margin12" th:text="#{post.label.likes}  + ': ' + ${post.usersWhoLikedPost.size()}">0</p>
+        <p class="margin12" th:text="#{post.label.likes}  + ': ' + ${post.likes}">0</p>
         <p class="margin12" th:text="#{post.label.comments}  + ': '">Comments:</p>
         <ul class="margin12">
             <li th:each="comment : ${post.comments}" th:text="${comment.content}"></li>
