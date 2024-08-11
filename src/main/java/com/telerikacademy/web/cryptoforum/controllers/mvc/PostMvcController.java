@@ -90,9 +90,8 @@ public class PostMvcController {
     public String showUserPosts(Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
-            List<PostOutDto> posts = postService.getAllPostsOfUser(user).stream()
-                    .map(modelMapper::toOutDto)
-                    .collect(Collectors.toList());
+            List<Post> posts = postService.getAllPostsOfUser(user).stream().collect(Collectors.toList());
+//                    .map(modelMapper::toOutDto)
             model.addAttribute("posts", posts);
         } catch (AuthenticationFailureException e) {
             return "HomeView";
@@ -184,13 +183,13 @@ public class PostMvcController {
         try {
             Post post = modelMapper.fromDto(id, postDto);
             postService.updatePost(user, post);
-            return "redirect:/beers";
+            return "HomeView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("name", "duplicate_beer", e.getMessage());
+            bindingResult.rejectValue("name", "duplicate_post", e.getMessage());
             return "PostUpdateView";
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
@@ -199,7 +198,7 @@ public class PostMvcController {
     }
 
 
-    @GetMapping("/{id}/delete")
+    @PostMapping ("/{id}/delete")
     public String deletePost(@PathVariable int id, Model model, HttpSession session) {
 
         User user;
@@ -210,7 +209,7 @@ public class PostMvcController {
         }
         try {
             postService.deletePost(user, postService.getPostById(id));
-            return "redirect:/posts";
+            return "HomeView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
