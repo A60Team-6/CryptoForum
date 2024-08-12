@@ -301,37 +301,4 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
-
-//    @PostMapping("/{id}/comments")
-//    public String createComment(@PathVariable int id,
-//                                @Valid @ModelAttribute("comment") CommentDto commentDto,
-//                                BindingResult bindingResult,
-//                                Model model,
-//                                HttpSession session) {
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetUser(session);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/login";
-//        }
-//
-//        if (bindingResult.hasErrors()) {
-//            return "redirect:/posts/" + id;
-//        }
-//
-//        try {
-//            Post post = postService.getPostById(id);
-//            Comment comment = mapperHelper.createCommentFromDto(commentDto, post, user);
-//            commentService.createComment(comment, post);
-//            return "redirect:/posts/" + id;
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        } catch (UnauthorizedOperationException e) {
-//            model.addAttribute("error", "You are not authorized to perform this action.");
-//            return "AccessDeniedView";
-//        }
-//    }
-
 }

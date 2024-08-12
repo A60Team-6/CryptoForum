@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthenticationController {
 
 
-
+    private static final int ADMIN_POSITION = 1;
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -35,6 +35,7 @@ public class AuthenticationController {
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
+
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
@@ -56,8 +57,9 @@ public class AuthenticationController {
         }
 
         try {
-            authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
+            User user = authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
             session.setAttribute("currentUser", loginDto.getUsername());
+            session.setAttribute("isAdmin", user.getPosition().getId() == ADMIN_POSITION);
             return "HomeView";
         }catch (AuthenticationFailureException e){
             bindingResult.rejectValue("username", "auth_error", e.getMessage());

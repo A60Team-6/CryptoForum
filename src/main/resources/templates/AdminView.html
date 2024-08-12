@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('Admin Portal')}"></form>
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+<div class="body-content">
+    <h2 th:text="#{admin.welcome}">Welcome to the Admin Portal</h2>
+    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+</div>
+<form th:replace="~{PostForm.html :: footer}"></form>
+</body>
+</html>
