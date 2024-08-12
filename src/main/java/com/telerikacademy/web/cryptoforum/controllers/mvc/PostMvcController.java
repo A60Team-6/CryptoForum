@@ -80,10 +80,11 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable int id, Model model) {
+    public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
         try {
             Post post = postService.getPostById(id);
             model.addAttribute("post", post);
+            model.addAttribute("currentUser", authenticationHelper.tryGetUser(session));
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
