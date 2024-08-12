@@ -4,6 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        function toggleCommentForm() {
+            const form = document.getElementById("commentForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
 <form th:replace="~{PostForm.html :: header}"></form>
@@ -31,6 +41,21 @@
         <ul class="margin12">
             <li th:each="comment : ${post.comments}" th:text="${comment.content}"></li>
         </ul>
+        <button type="button" onclick="toggleCommentForm()">Add Comment</button>
+        <div id="commentForm" style="display:none;">
+            <form th:action="@{/posts/{id}/comment(id=${post.id})}" method="post">
+                <textarea name="content" placeholder="Write your comment here..."></textarea>
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <button type="submit">Save</button>
+            </form>
+<!--            <form th:action="@{/comments}" method="post">-->
+<!--                <label>-->
+<!--                    <textarea name="content" placeholder="Write your comment here..."></textarea>-->
+<!--                </label>-->
+<!--                <button type="submit">Save</button>-->
+<!--            </form>-->
+
+        </div>
         <form th:action="@{/posts/{id}/update(id=${post.id})}" method="get">
             <button type="submit">Update</button>
         </form>

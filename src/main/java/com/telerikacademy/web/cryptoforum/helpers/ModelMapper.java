@@ -4,6 +4,7 @@ import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.Position;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegisterDto;
@@ -67,6 +68,12 @@ public class ModelMapper {
         Post repositoryBeer = postService.getPostById(id);
         post.setUser(repositoryBeer.getUser());
         return post;
+    }
+
+    public Comment fromDto(CommentDto commentDto) {
+        Comment comment = new Comment();
+        comment.setContent(commentDto.getContent());
+        return comment;
     }
 
 }

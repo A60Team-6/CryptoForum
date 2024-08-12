@@ -5,11 +5,14 @@ import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
+import com.telerikacademy.web.cryptoforum.models.Comment;
 import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
+import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.FilterPostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
+import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -37,15 +40,17 @@ public class PostMvcController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
+    private final CommentService commentService;
 
 
     @Autowired
-    public PostMvcController(PostService postService, ModelMapper modelMapper, UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper) {
+    public PostMvcController(PostService postService, ModelMapper modelMapper, UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, CommentService commentService) {
         this.postService = postService;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
+        this.commentService = commentService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -198,7 +203,7 @@ public class PostMvcController {
     }
 
 
-    @PostMapping ("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable int id, Model model, HttpSession session) {
 
         User user;
@@ -221,7 +226,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/like")
-    public String likePost(@PathVariable int id, HttpSession session, Model model){
+    public String likePost(@PathVariable int id, HttpSession session, Model model) {
 
         User user;
         try {
@@ -229,21 +234,21 @@ public class PostMvcController {
             Post post = postService.getPostById(id);
             postService.likePost(post, user);
             return "redirect:/posts";
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
-        }catch (UnsupportedOperationException е){
+        } catch (UnsupportedOperationException е) {
             model.addAttribute("error", "You can not like this post twice!");
             return "redirect:/posts";
         }
     }
 
     @PostMapping("/{id}/removeLike")
-    public String removeLike(@PathVariable int id, HttpSession session, Model model){
+    public String removeLike(@PathVariable int id, HttpSession session, Model model) {
 
         User user;
         try {
@@ -251,16 +256,82 @@ public class PostMvcController {
             Post post = postService.getPostById(id);
             postService.removeLike(post, user);
             return "redirect:/posts";
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
-        }catch (UnsupportedOperationException е){
+        } catch (UnsupportedOperationException е) {
             model.addAttribute("error", "You can not like this post twice!");
             return "redirect:/posts";
         }
     }
+
+    @GetMapping("/{id}/comment")
+    public String showNewCommentPage(@PathVariable int id, Model model) {
+        model.addAttribute("comment", new CommentDto());
+
+        return "CommentCreateView";
+    }
+
+    @PostMapping("/{id}/comment")
+    public String createComment(@PathVariable int id, @Valid @ModelAttribute("comment") CommentDto commentDto,
+                                BindingResult bindingResult, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "PostView";
+        }
+
+        try {
+            Post post = postService.getPostById(id);
+            Comment comment = modelMapper.fromDto(commentDto);
+            commentService.createComment(comment, post);
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+//    @PostMapping("/{id}/comments")
+//    public String createComment(@PathVariable int id,
+//                                @Valid @ModelAttribute("comment") CommentDto commentDto,
+//                                BindingResult bindingResult,
+//                                Model model,
+//                                HttpSession session) {
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetUser(session);
+//        } catch (AuthenticationFailureException e) {
+//            return "redirect:/login";
+//        }
+//
+//        if (bindingResult.hasErrors()) {
+//            return "redirect:/posts/" + id;
+//        }
+//
+//        try {
+//            Post post = postService.getPostById(id);
+//            Comment comment = mapperHelper.createCommentFromDto(commentDto, post, user);
+//            commentService.createComment(comment, post);
+//            return "redirect:/posts/" + id;
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (UnauthorizedOperationException e) {
+//            model.addAttribute("error", "You are not authorized to perform this action.");
+//            return "AccessDeniedView";
+//        }
+//    }
+
 }

@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(Comment comment, Post post) {
-        User user = post.getUser();
+        User user = comment.getUser();
         PermissionHelper.isBlocked(user, "You are blocked.");
         post.getComments().add(comment);
         commentRepository.createComment(comment);
