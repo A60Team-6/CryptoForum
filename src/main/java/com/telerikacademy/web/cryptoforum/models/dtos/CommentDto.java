@@ -22,4 +22,12 @@ public class CommentDto {
     public Integer getPostId() {
         return postId;
     }
+
+    public void setContent( String content) {
+        this.content = content;
+    }
+
+    public void setPostId( Integer postId) {
+        this.postId = postId;
+    }
 }

@@ -13,7 +13,7 @@
       <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" >Register</a>
       <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" >Logout</a>
       <a href="#" th:href="@{/}" th:text="#{navigation.home} + ' | '">Home</a>
-      <a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>
+      <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>
       <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post} + ' | '">Create Post | </a>
       <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}" >My Posts</a>
 

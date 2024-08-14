@@ -10,6 +10,7 @@ import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
+import com.telerikacademy.web.cryptoforum.models.dtos.CommentMvcDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.FilterPostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
@@ -23,11 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -59,7 +57,7 @@ public class PostMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(@ModelAttribute("filterPostOptions") FilterPostDto filterPostDto, Model model, HttpSession session) {
+    public String showAllPosts(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto, Model model, HttpSession session) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
@@ -68,13 +66,12 @@ public class PostMvcController {
                 filterPostDto.getCreateBefore(),
                 filterPostDto.getCreateAfter(),
                 filterPostDto.getSortBy(),
-                filterPostDto.getSortOrder()
-        );
+                filterPostDto.getSortOrder());
         List<Post> posts = postService.getAll(filteredPostsOptions);
         User currentUser = authenticationHelper.tryGetUser(session);
         model.addAttribute("currentUser", currentUser);
 
-        model.addAttribute("filterPostOptions", filterPostDto);
+        model.addAttribute("filteredPostsOptions", filterPostDto);
         model.addAttribute("posts", posts);
         return "PostsView";
     }
@@ -85,6 +82,7 @@ public class PostMvcController {
             Post post = postService.getPostById(id);
             model.addAttribute("post", post);
             model.addAttribute("currentUser", authenticationHelper.tryGetUser(session));
+            model.addAttribute("comment", new CommentDto());
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -270,15 +268,9 @@ public class PostMvcController {
         }
     }
 
-    @GetMapping("/{id}/comment")
-    public String showNewCommentPage(@PathVariable int id, Model model) {
-        model.addAttribute("comment", new CommentDto());
 
-        return "CommentCreateView";
-    }
-
-    @PostMapping("/{id}/comment")
-    public String createComment(@PathVariable int id, @Valid @ModelAttribute("comment") CommentDto commentDto,
+    @PostMapping("/{id}")
+    public String createComment(@PathVariable int id, @Valid @ModelAttribute("comment") CommentMvcDto commentDto,
                                 BindingResult bindingResult, Model model, HttpSession session) {
         User user;
         try {
@@ -287,13 +279,23 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
+        Post post;
+        try {
+            post = postService.getPostById(id);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("post", post);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
         if (bindingResult.hasErrors()) {
             return "PostView";
         }
 
         try {
-            Post post = postService.getPostById(id);
-            Comment comment = modelMapper.fromDto(commentDto);
+            Comment comment = mapperHelper.createCommentFromMvcDto(commentDto, post, user);
             commentService.createComment(comment, post);
             return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
@@ -302,4 +304,5 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+
 }

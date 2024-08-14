@@ -87,6 +87,16 @@ public class MapperHelper {
         return comment;
     }
 
+    public Comment createCommentFromMvcDto(CommentMvcDto commentMvcDto, Post post, User user){
+        Comment comment = new Comment();
+        comment.setContent(commentMvcDto.getContent());
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setCreatedAt(LocalDateTime.now());
+
+        return comment;
+    }
+
     public Comment updatedCommentFromDto(CommentDto commentDto, int id) {
         Comment comment = commentRepository.getCommentById(id);
         comment.setContent(commentDto.getContent());

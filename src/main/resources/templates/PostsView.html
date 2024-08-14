@@ -7,7 +7,7 @@
 <form th:replace="~{PostForm.html :: header}"></form>
 
 <div class="body-content">
-    <form action="#" th:action="@{/posts}" method="get" th:object="${filterPostOptions}">
+    <form action="#" th:action="@{/posts}" method="get" th:object="${filteredPostsOptions}">
         <label th:text="#{posts.filter.label}">Filter Post Options</label>
         <br/><br/>
         <input type="text" placeholder="Post Title" th:field="*{title}"/>

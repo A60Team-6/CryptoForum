@@ -19,7 +19,7 @@ import java.util.*;
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private final SessionFactory sessionFactory;
 
@@ -108,23 +108,30 @@ public class PostRepositoryImpl implements PostRepository {
 
             filteredPostsOptions.getMinLikes().ifPresent(value -> {
                 filters.add("likes >= :minLikes");
-                params.put("minLike", value);
+                params.put("minLikes", value);
             });
 
             filteredPostsOptions.getMaxLikes().ifPresent(value -> {
                 filters.add("likes <= :maxLikes");
-                params.put("maxLike", value);
+                params.put("maxLikes", value);
             });
 
             filteredPostsOptions.getCreateBefore().ifPresent(value -> {
-                filters.add("createdAt <= :createBefore");
-                params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
-
+//                filters.add("createdAt <= :createBefore");
+//                params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                if (!value.isBlank()) {
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
             });
 
             filteredPostsOptions.getCreateAfter().ifPresent(value -> {
-                filters.add("createdAt >= :createAfter");
-                params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+//                filters.add("createdAt >= :createAfter");
+//                params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                if (!value.isBlank()) {
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
             });
 
             StringBuilder queryString = new StringBuilder("from Post");
@@ -132,7 +139,11 @@ public class PostRepositoryImpl implements PostRepository {
                 queryString.append(" where ")
                         .append(String.join(" and ", filters));
             }
-            queryString.append(generateOrderBy(filteredPostsOptions));
+            //queryString.append(generateOrderBy(filteredPostsOptions));
+            String orderByClause = generateOrderBy(filteredPostsOptions);
+            if (!orderByClause.isEmpty()) {
+                queryString.append(orderByClause);
+            }
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
@@ -158,6 +169,9 @@ public class PostRepositoryImpl implements PostRepository {
                 break;
             case "createdAt":
                 orderBy = "createdAt";
+                break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
