@@ -44,16 +44,13 @@
         <button type="button" onclick="toggleCommentForm()">Add Comment</button>
         <div id="commentForm" style="display:none;">
             <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${comment}" method="post">
-<!--                <input type="hidden" value=[[${post.id}]] th:field="*{postId}" />-->
-<!--                <label class="error" th:errors="*{postId}">Post error placeholder</label>-->
-<!--                <br/><br/>-->
                 <label>
                     <textarea th:field="*{content}" placeholder="Write your comment here..."></textarea>
                 </label>
                 <button type="submit">Save</button>
             </form>
         </div>
-        <form th:if="${currentUser.username.equals(post.user.username) or currentUser.position.getId() == 1}" th:action="@{/posts/{id}/update(id=${post.id})}" method="get">
+        <form th:if="${currentUser.username.equals(post.user.username)}" th:action="@{/posts/{id}/update(id=${post.id})}" method="get">
             <button type="submit">Update</button>
         </form>
         <form th:if="${currentUser.username.equals(post.user.username) or currentUser.position.getId() == 1}" th:action="@{/posts/{id}/delete(id=${post.id})}" method="post">

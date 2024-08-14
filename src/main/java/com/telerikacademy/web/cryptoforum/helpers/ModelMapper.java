@@ -12,6 +12,8 @@ import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ModelMapper {
 
@@ -65,8 +67,11 @@ public class ModelMapper {
     public Post fromDto(int id, PostDto dto) {
         Post post = fromDto(dto);
         post.setId(id);
-        Post repositoryBeer = postService.getPostById(id);
-        post.setUser(repositoryBeer.getUser());
+        Post repository = postService.getPostById(id);
+        post.setUser(repository.getUser());
+        post.setLikes(repository.getLikes());
+        post.setCreatedAt(repository.getCreatedAt());
+        post.setUpdatedAt(LocalDateTime.now());
         return post;
     }
 
