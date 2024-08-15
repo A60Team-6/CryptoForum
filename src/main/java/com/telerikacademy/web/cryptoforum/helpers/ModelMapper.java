@@ -8,6 +8,7 @@ import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
 import com.telerikacademy.web.cryptoforum.models.dtos.RegisterDto;
+import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,12 @@ import java.time.LocalDateTime;
 public class ModelMapper {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @Autowired
-    public ModelMapper(PostService postService) {
+    public ModelMapper(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
 
@@ -73,6 +76,23 @@ public class ModelMapper {
         post.setCreatedAt(repository.getCreatedAt());
         post.setUpdatedAt(LocalDateTime.now());
         return post;
+    }
+
+    public Comment fromDto(int id, CommentDto dto) {
+        Comment comment = fromDto(dto);
+        comment.setId(id);
+        Comment comment1 = commentService.getCommentById(comment.getId());
+        comment.setPost(comment1.getPost());
+        comment.setUser(comment1.getUser());
+        comment.setCreatedAt(comment1.getCreatedAt());
+        comment.setUpdatedAt(comment1.getUpdatedAt());
+        return comment;
+    }
+
+    public CommentDto toDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setContent(comment.getContent());
+        return commentDto;
     }
 
     public Comment fromDto(CommentDto commentDto) {

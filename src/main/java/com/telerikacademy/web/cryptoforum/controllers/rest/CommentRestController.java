@@ -54,7 +54,7 @@ public class CommentRestController {
     public ResponseEntity<String> createComment(@Valid @RequestBody CommentDto commentDto, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostById(commentDto.getPostId());
+            Post post = postService.getPostById(commentDto.getId());
             Comment comment = mapperHelper.createCommentFromDto(commentDto, post, user);
             commentService.createComment(comment, post);
             return new ResponseEntity<>("Congratulations! Comment has been successfully created!", HttpStatus.CREATED);

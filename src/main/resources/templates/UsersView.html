@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{PostForm.html :: head('Admin Portal')}"></div>
+<form th:replace="~{PostForm.html :: head('All Users')}"></form>
+
+
 <body>
-<div th:replace="~{PostForm.html :: header}"></div>
-<div class="body-content">
-    <h2 th:text="#{admin.welcome}">Welcome to the Admin Portal</h2>
-    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
-</div>
+<form th:replace="~{PostForm.html :: header}"></form>
 
 <div class="body-content">
     <form action="#" th:action="@{/admin/users}" method="get" th:object="${filteredUserOptions}">
@@ -49,18 +47,15 @@
                 <div class="cell" th:text="#{user.label.email}">Email</div>
                 </br>
             </div>
-            <div class="row" th:each="user : ${users}">
-                <div class="cell" th:text="${user.username}">Username</div>
-                <div class="cell" th:text="${user.email}">Email</div>
-            </div>
-            <!--            <div class="row" th:each="user : ${users}">-->
-            <!--                <div class="cell">-->
-            <!--                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>-->
-            <!--                </div>-->
-            <!--                <div class="cell" th:text="${post.content}">Content</div>-->
-            <!--            </div>-->
+<!--            <div class="row" th:each="user : ${users}">-->
+<!--                <div class="cell">-->
+<!--                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>-->
+<!--                </div>-->
+<!--                <div class="cell" th:text="${post.content}">Content</div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
+
 </body>
 </html>

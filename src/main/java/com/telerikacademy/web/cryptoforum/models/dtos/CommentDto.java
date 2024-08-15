@@ -10,7 +10,7 @@ public class CommentDto {
     private String content;
 
     @NotNull
-    private Integer postId;
+    private Integer id;
 
     public CommentDto() {
     }
@@ -19,15 +19,15 @@ public class CommentDto {
         return content;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public Integer getId() {
+        return id;
     }
 
     public void setContent( String content) {
         this.content = content;
     }
 
-    public void setPostId( Integer postId) {
-        this.postId = postId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

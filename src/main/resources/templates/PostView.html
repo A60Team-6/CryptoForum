@@ -38,8 +38,17 @@
         <p class="margin12" th:text="#{post.label.updatedAt}  + ': ' + ${post.updatedAt}">01.01.1999</p>
         <p class="margin12" th:text="#{post.label.likes}  + ': ' + ${post.likes}">0</p>
         <p class="margin12" th:text="#{post.label.comments}  + ': '">Comments:</p>
+<!--        <ul class="margin12">-->
+<!--            <li th:each="comment : ${post.comments}" th:text="${comment.content}">-->
+<!--                <div class="cell">-->
+<!--                    <a href="#" th:href="@{/posts/{id}/comment/{commentId}(id=${post.id}, commentId=${comment.id})}" th:text="${comment.content}"></a>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
         <ul class="margin12">
-            <li th:each="comment : ${post.comments}" th:text="${comment.content}"></li>
+            <li th:each="comment : ${post.comments}">
+                <a th:href="@{/posts/{postId}/comment/{commentId}(postId=${post.id}, commentId=${comment.id})}" th:text="${comment.content}"></a>
+            </li>
         </ul>
         <button type="button" onclick="toggleCommentForm()">Add Comment</button>
         <div id="commentForm" style="display:none;">

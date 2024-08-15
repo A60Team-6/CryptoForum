@@ -305,4 +305,108 @@ public class PostMvcController {
         }
     }
 
+    @GetMapping("/{id}/comment/{commentId}")
+    public String showSingleComment(@PathVariable int id, @PathVariable int commentId, Model model, HttpSession session) {
+        try {
+            Post post = postService.getPostById(id);
+            Comment comment = commentService.getCommentById(commentId);
+            model.addAttribute("post", post);
+            model.addAttribute("comment", comment);
+            model.addAttribute("currentUser", authenticationHelper.tryGetUser(session));
+            return "CommentView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/{id}/comment/{commentId}/update")
+    public String showEditCommentPage(@PathVariable int id, @PathVariable int commentId, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/login";
+        }
+
+        try {
+            Post post = postService.getPostById(id);
+            Comment comment = commentService.getCommentById(commentId);
+            CommentDto commentDto = modelMapper.toDto(comment);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("post", post);
+            model.addAttribute("commentId", comment.getId());
+            model.addAttribute("comment", commentDto);
+            return "CommentUpdateView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/{id}/comment/{commentId}/update")
+    public String updateComment(@PathVariable int id, @PathVariable int commentId, @Valid @ModelAttribute("comment") CommentDto commentDto,
+                             BindingResult bindingResult, Model model, HttpSession session
+    ) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/Login";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "CommentUpdateView";
+        }
+
+        try {
+            Post post = postService.getPostById(id);
+            Comment comment = modelMapper.fromDto(commentId, commentDto);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("id", id);
+            model.addAttribute("post", post);
+            model.addAttribute("commentId", commentId);
+            model.addAttribute("comment", comment);
+            commentService.updateComment(user, comment);
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            bindingResult.rejectValue("name", "duplicate_post", e.getMessage());
+            return "CommentUpdateView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        }
+    }
+
+
+    @PostMapping("/{id}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable int id, @PathVariable int commentId, Model model, HttpSession session) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        try {
+            Post post = postService.getPostById(id);
+            Comment comment = commentService.getCommentById(commentId);
+            commentService.removeComment(comment, post, user);
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        }
+    }
 }
