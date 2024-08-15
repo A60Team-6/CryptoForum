@@ -49,4 +49,21 @@ public class HomeMvcController {
         }
     }
 
+    @GetMapping("/about")
+    public String showAboutPage() {
+        return "about";
+    }
+
+    @GetMapping("/post")
+    public String showPostPage() {
+        return "post";
+
+    }
+
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "contact";
+    }
+
+
 }

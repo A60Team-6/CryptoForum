@@ -27,14 +27,18 @@
     <label th:text="#{post.label.title}">Post</label>
     <br/>
 
-    <input type="text" th:field="*{title}"/>
+    <label>
+      <input type="text" th:field="*{title}"/>
+    </label>
     <label class="error" th:errors="*{title}">Title error placeholder</label>
     <br/><br/>
 
     <label th:text="#{post.label.content}">Content</label>
     <br/>
 
-    <input type="text" th:field="*{content}">
+    <label>
+      <input type="text" th:field="*{content}">
+    </label>
     <label class="error" th:errors="*{content}">Content error placeholder</label>
 
     <input type="submit" value="Save"/>
