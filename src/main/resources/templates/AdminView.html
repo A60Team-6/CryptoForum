@@ -1,16 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{PostForm.html :: head('Admin Portal')}"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <style>
+        /* Основен стил за хедъра */
+        header {
+            background-color: #007bff;
+            padding: 10px 15px; /* Намален padding */
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header h3 {
+            margin: 0;
+            font-size: 1.2em; /* Намален размер на шрифта */
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 12px; /* Намален padding */
+            border-radius: 4px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header a:hover {
+            background-color: #ffffff;
+            color: #007bff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/img/admin.jpg'); /* Фонова снимка */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .body-content {
+            text-align: center;
+            padding: 30px 15px; /* Намален padding */
+            max-width: 800px; /* Намалена ширина */
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 15px; /* Намален margin */
+        }
+
+        .body-content h2 {
+            color: #333;
+            font-size: 2em; /* Намален размер на шрифта */
+            margin: 0 0 15px; /* Намален margin */
+            padding-bottom: 8px; /* Намален padding */
+            border-bottom: 2px solid #007bff;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px; /* Намален padding */
+            border-radius: 5px;
+            font-size: 1em; /* Намален размер на шрифта */
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 15px; /* Намален margin */
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
 <body>
 <div th:replace="~{PostForm.html :: header}"></div>
+
 <div class="body-content">
     <h2 th:text="#{admin.welcome}">Welcome to the Portal</h2>
     <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+
+    <div>
+        <form th:action="@{/admin/users}" method="get">
+            <button class="button" type="submit">Show All Users</button>
+        </form>
+    </div>
 </div>
-<div>
-    <form th:action="@{/admin/users}" method="get">
-        <button type="submit">Show All Users</button>
-    </form>
-</div>
+
+<div th:replace="~{PostForm.html :: footer}"></div>
 </body>
 </html>

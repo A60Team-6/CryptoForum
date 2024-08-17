@@ -1,80 +1,244 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('All Users')}"></form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{users.usernames}">All Users</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
+        .body-content {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
 
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6em;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .input-row input[type="datetime-local"] {
+            width: calc(50% - 10px);
+        }
+
+        .form-section input,
+        .form-section select {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .form-section input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-section input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table .header {
+            background-color: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .table .header .cell,
+        .table .row .cell {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .table .row {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .table .row .cell {
+            flex: 1 1 100%;
+            margin-bottom: 10px;
+        }
+
+        .table .row .block-button,
+        .table .row .unblock-button {
+            padding: 6px 12px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .table .row .block-button {
+            background-color: #dc3545;
+        }
+
+        .table .row .unblock-button {
+            background-color: #28a745;
+        }
+
+        .table .row .block-button:hover {
+            background-color: #c82333;
+        }
+
+        .table .row .unblock-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
+<header th:replace="~{PostForm.html :: header}"></header>
 
 <div class="body-content">
-    <form action="#" th:action="@{/admin/users}" method="get" th:object="${filteredUserOptions}">
-        <label th:text="#{users.filter.label}">Filter User Options</label>
-        <br/><br/>
-        <input type="text" placeholder="Username" th:field="*{username}"/>
-        <input type="text" placeholder="Email" th:field="*{email}"/>
-        <input type="text" placeholder="First Name" th:field="*{firstName}"/>
-
-        <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
-        <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
-
-
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="username">Username</option>
-            <option value="email">Email</option>
-        </select>
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-        <br/><br/>
-
-        <input type="submit" value="Search"/>
-    </form>
-
+    <div class="header">
+        <h1 th:text="#{users.filter.label}">Filter User Options</h1>
+    </div>
+    <div class="form-section">
+        <form action="#" th:action="@{/admin/users}" method="get" th:object="${filteredUserOptions}">
+            <div class="input-row">
+                <input type="text" placeholder="Username" th:field="*{username}"/>
+                <input type="text" placeholder="First Name" th:field="*{firstName}"/>
+                <input type="text" placeholder="Email" th:field="*{email}"/>
+            </div>
+            <div class="input-row">
+                <input type="datetime-local" placeholder="Created Before" th:field="*{createBefore}"/>
+                <input type="datetime-local" placeholder="Created After" th:field="*{createAfter}"/>
+                <select th:field="*{sortBy}">
+                    <option value="">Sort By</option>
+                    <option value="username">Username</option>
+                    <option value="email">Email</option>
+                </select>
+                <select th:field="*{sortOrder}">
+                    <option value="">Sort Order</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <input type="submit" value="Search"/>
+        </form>
+    </div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
     <div th:if="${users.isEmpty()}">
         <h2 th:text="#{users.title.empty}">No Users</h2>
     </div>
-    <div th:unless="${users.isEmpty()}">
-        <h2 th:text="#{users.usernames}">All Users</h2>
 
+    <div th:unless="${users.isEmpty()}">
         <div class="table">
             <div class="header">
-                <div class="cell" th:text="#{user.label.username}">Username</div>
-                <div class="cell" th:text="#{user.label.email}">Email</div>
-                </br>
+                <h1 th:text="#{users.usernames}">All Users</h1>
             </div>
+
             <div class="row" th:each="user : ${users}">
                 <div class="cell">
-                    <a href="#"  th:href="@{/admin/users/{id}(id=${user.id})}" th:text="${user.username}">Username</a>
+                    <span th:text="#{user.label.username} + ': '"></span><a href="#"
+                                                                            th:href="@{/admin/users/{id}(id=${user.id})}"
+                                                                            th:text="${user.username}">Username</a>
                 </div>
-                <div class="cell" th:text="${user.email}">Email</div>
-                <div class="cell" th:text="${user.firstName}">First Name</div>
-                <div class="cell" th:text="${user.createdAt}">Created At</div>
-<!--                <div class="cell" th:text="${user.isBlocked()}">isBlocked</div>-->
-<!--                <div class="cell" th:text="${user.position}">Position</div>-->
-                <form  th:if="${(!user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (!user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }"  th:action="@{/admin/users/{id}/block(id=${user.id})}" method="post">
-                    <button type="submit" class="block-button">Block</button>
-                </form>
-                <form th:if="${(user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }" th:action="@{/admin/users/{id}/unblock(id=${user.id})}" method="post">
-                    <button type="submit" class="unblock-button">Unblock</button>
-                </form>
-
-                <form  th:if="${user.position.getId()==3 && currentUser.position.getId() == 1}" th:action="@{/admin/users/{id}/toModerator(id=${user.id})}" method="post">
-                    <button type="submit" class="block-button">User To Moderator</button>
-                </form>
-                <form th:if="${user.position.getId()==2 && currentUser.position.getId() == 1}" th:action="@{/admin/users/{id}/toUser(id=${user.id})}" method="post">
-                    <button type="submit" class="unblock-button">Moderator To User</button>
-                </form>
-                <br/><br/>
-
+                <div class="cell">
+                    <span th:text="#{user.label.email} + ': '"></span><span th:text="${user.email}">Email</span>
+                </div>
+                <div class="cell">
+                    <span th:text="#{user.label.FirstName} + ': '"></span><span
+                        th:text="${user.firstName}">First Name</span>
+                </div>
+                <div class="cell">
+                    <span th:text="#{user.label.createdAt} + ': '"></span><span
+                        th:text="${user.createdAt}">Created At</span>
+                </div>
+                <div class="cell">
+                    <form th:if="${(!user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (!user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }"
+                          th:action="@{/admin/users/{id}/block(id=${user.id})}" method="post">
+                        <button type="submit" class="block-button">Block</button>
+                    </form>
+                    <form th:if="${(user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }"
+                          th:action="@{/admin/users/{id}/unblock(id=${user.id})}" method="post">
+                        <button type="submit" class="unblock-button">Unblock</button>
+                    </form>
+                    <form th:if="${user.position.getId() == 3 && currentUser.position.getId() == 1}"
+                          th:action="@{/admin/users/{id}/toModerator(id=${user.id})}" method="post">
+                        <button type="submit" class="block-button">User To Moderator</button>
+                    </form>
+                    <form th:if="${user.position.getId() == 2 && currentUser.position.getId() == 1}"
+                          th:action="@{/admin/users/{id}/toUser(id=${user.id})}" method="post">
+                        <button type="submit" class="unblock-button">Moderator To User</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<footer th:replace="~{PostForm.html :: footer}"></footer>
 </body>
 </html>
