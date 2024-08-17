@@ -1,7 +1,6 @@
 package com.telerikacademy.web.cryptoforum.repositories;
 
 import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.cryptoforum.models.AdminPhone;
 import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.UserRepository;
@@ -9,6 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,122 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     public UserRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+
+    @Override
+    public int countFilteredUsers(FilteredUserOptions filteredUserOptions) {
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filteredUserOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getEmail().ifPresent(value -> {
+                filters.add("email like :email");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getFirstName().ifPresent(value -> {
+                filters.add("firstName like :firstname");
+                params.put("firstname", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getCreateBefore().ifPresent(value -> {
+                if(!value.isBlank()){
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
+
+            });
+
+            filteredUserOptions.getCreateAfter().ifPresent(value -> {
+                if(!value.isBlank()){
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+//            StringBuilder queryString = new StringBuilder("from User");
+//            if (!filters.isEmpty()) {
+//                queryString.append(" where ")
+//                        .append(String.join(" and ", filters));
+//            }
+            StringBuilder queryString = new StringBuilder("select count(*) from User");
+            if (!filters.isEmpty()) {
+                queryString.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            String orderedByClause = generateOrderBy(filteredUserOptions);
+            if(!orderedByClause.isEmpty()) {
+                queryString.append(orderedByClause);
+            }
+
+            Query<Long> query = session.createQuery(queryString.toString(), Long.class);
+            query.setProperties(params);
+            return Math.toIntExact(query.uniqueResult());
+        }
+    }
+
+
+    @Override
+    public List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize) {
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filteredUserOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getEmail().ifPresent(value -> {
+                filters.add("email like :email");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getFirstName().ifPresent(value -> {
+                filters.add("firstName like :firstname");
+                params.put("firstname", String.format("%%%s%%", value));
+            });
+
+            filteredUserOptions.getCreateBefore().ifPresent(value -> {
+                if(!value.isBlank()){
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
+
+            });
+
+            filteredUserOptions.getCreateAfter().ifPresent(value -> {
+                if(!value.isBlank()){
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+            StringBuilder queryString = new StringBuilder("from User");
+            if (!filters.isEmpty()) {
+                queryString.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            String orderedByClause = generateOrderBy(filteredUserOptions);
+            if(!orderedByClause.isEmpty()) {
+                queryString.append(orderedByClause);
+            }
+
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
+
+            Pageable pageable = PageRequest.of(page, pageSize);
+            query.setFirstResult((int) pageable.getOffset());
+            query.setMaxResults(pageSize);
+
+            return query.list();
+        }
     }
 
     @Override
@@ -70,7 +187,7 @@ public class UserRepositoryImpl implements UserRepository {
             }
             String orderedByClause = generateOrderBy(filteredUserOptions);
             if(!orderedByClause.isEmpty()) {
-                queryString.append(orderedByClause);
+                queryString.append(" ").append(orderedByClause);
             }
 
             Query<User> query = session.createQuery(queryString.toString(), User.class);

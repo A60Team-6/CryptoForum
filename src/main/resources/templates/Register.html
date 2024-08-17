@@ -81,6 +81,11 @@
 
 
 <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+
+  <label th:text="#{user.label.profilePhoto}">Profile Photo</label>
+  <input type="text" th:field="*{profilePhoto}"/>
+  <label class="error" th:errors="*{profilePhoto}">Profile photo error placeholder</label>
+
   <label th:text="#{user.label.username}">Username</label>
   <input type="text" th:field="*{username}"/>
   <label class="error" th:errors="*{username}">Username error placeholder</label>

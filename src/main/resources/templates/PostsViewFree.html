@@ -54,6 +54,44 @@
                 <br/><br/>
             </div>
         </div>
+
+        <div>
+            <ul class="pagination">
+                <li th:if="${currentPage > 1}">
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage - 2} + '&pageSize=' + ${pageSize}}">&laquo; Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i == currentPage} ? 'active'">
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${i - 1} + '&pageSize=' + ${pageSize}}" th:text="${i}">1</a>
+                </li>
+                <li th:if="${currentPage < totalPages}">
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage} + '&pageSize=' + ${pageSize}}">Next &raquo;</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <style>
@@ -192,6 +230,36 @@
         border-radius: 20px; /* Заоблени краища на таговете (кръгли) */
         font-size: 0.9em; /* Размер на шрифта на таговете */
         font-weight: 500; /* Полудебел шрифт за таговете */
+    }
+
+
+    .pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a {
+        text-decoration: none;
+        padding: 10px 15px;
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    }
+
+    .pagination li a:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+    }
+
+    .pagination .active a {
+        background-color: #007bff;
+        color: #ffffff;
+        border-color: #007bff;
     }
 </style>
 

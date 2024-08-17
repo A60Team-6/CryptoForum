@@ -33,6 +33,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize){
+        return repository.getAll(filteredUserOptions, page, pageSize);
+    }
+
+    @Override
+    public int countFilteredUsers(FilteredUserOptions options) {
+        return repository.countFilteredUsers(options);
+    }
+
+    @Override
     public User getById(User user, int id) {
         PermissionHelper.isAdminOrSameUserOrModerator(user, id, ERROR_MESSAGE);
         return repository.getById(id);

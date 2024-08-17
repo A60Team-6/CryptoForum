@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 
 public class RegisterDto extends LoginDto{
 
+    @Size(max = 256, message = "This Profile Picture is too big!")
+    private String profilePhoto;
+
     @Size(min = 8, max = 32, message = "Password should be between 8 and 32 symbols!")
     @NotNull(message = "Password can not be empty!")
     private String passwordConfirm;
@@ -55,4 +58,11 @@ public class RegisterDto extends LoginDto{
         this.email = email;
     }
 
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 }

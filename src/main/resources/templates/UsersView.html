@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,6 +153,35 @@
         .table .row .unblock-button:hover {
             background-color: #218838;
         }
+
+        .pagination {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 10px 15px;
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .pagination li a:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+
+        .pagination .active a {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -237,8 +265,44 @@
             </div>
         </div>
     </div>
+
+
+    <div>
+        <ul class="pagination">
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{'__${requestURI}__' + '?' + ${(filteredUserOptions.firstName != null && !filteredUserOptions.firstName.isEmpty()) ? 'firstName=' + filteredUserOptions.firstName + '&' : ''}
+                        + ${filteredUserOptions.createAfter != null ? 'createAfter=' + filteredUserOptions.createAfter + '&' : ''}
+                        + ${filteredUserOptions.createBefore != null ? 'createBefore=' + filteredUserOptions.createBefore + '&' : ''}
+                        + ${(filteredUserOptions.email != null && !filteredUserOptions.email.isEmpty()) ? 'email=' + filteredUserOptions.email + '&' : ''}
+                        + ${(filteredUserOptions.username != null && !filteredUserOptions.username.isEmpty()) ? 'username=' + filteredUserOptions.username + '&' : ''}
+                        + ${(filteredUserOptions.sortBy != null && !filteredUserOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredUserOptions.sortBy + '&' : ''}
+                        + ${(filteredUserOptions.sortOrder != null && !filteredUserOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredUserOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage - 2} + '&pageSize=' + ${pageSize}}">&laquo; Previous</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i == currentPage} ? 'active'">
+                <a th:href="@{'__${requestURI}__' + '?' + ${(filteredUserOptions.firstName != null && !filteredUserOptions.firstName.isEmpty()) ? 'firstName=' + filteredUserOptions.firstName + '&' : ''}
+                        + ${filteredUserOptions.createAfter != null ? 'createAfter=' + filteredUserOptions.createAfter + '&' : ''}
+                        + ${filteredUserOptions.createBefore != null ? 'createBefore=' + filteredUserOptions.createBefore + '&' : ''}
+                        + ${(filteredUserOptions.email != null && !filteredUserOptions.email.isEmpty()) ? 'email=' + filteredUserOptions.email + '&' : ''}
+                        + ${(filteredUserOptions.username != null && !filteredUserOptions.username.isEmpty()) ? 'username=' + filteredUserOptions.username + '&' : ''}
+                        + ${(filteredUserOptions.sortBy != null && !filteredUserOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredUserOptions.sortBy + '&' : ''}
+                        + ${(filteredUserOptions.sortOrder != null && !filteredUserOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredUserOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${i - 1} + '&pageSize=' + ${pageSize}}" th:text="${i}">1</a>
+            </li>
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{'__${requestURI}__' + '?' + ${(filteredUserOptions.firstName != null && !filteredUserOptions.firstName.isEmpty()) ? 'firstName=' + filteredUserOptions.firstName + '&' : ''}
+                        + ${filteredUserOptions.createAfter != null ? 'createAfter=' + filteredUserOptions.createAfter + '&' : ''}
+                        + ${filteredUserOptions.createBefore != null ? 'createBefore=' + filteredUserOptions.createBefore + '&' : ''}
+                        + ${(filteredUserOptions.email != null && !filteredUserOptions.email.isEmpty()) ? 'email=' + filteredUserOptions.email + '&' : ''}
+                        + ${(filteredUserOptions.username != null && !filteredUserOptions.username.isEmpty()) ? 'username=' + filteredUserOptions.username + '&' : ''}
+                        + ${(filteredUserOptions.sortBy != null && !filteredUserOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredUserOptions.sortBy + '&' : ''}
+                        + ${(filteredUserOptions.sortOrder != null && !filteredUserOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredUserOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage} + '&pageSize=' + ${pageSize}}">Next &raquo;</a>
+            </li>
+        </ul>
+
+    </div>
 </div>
 
 <footer th:replace="~{PostForm.html :: footer}"></footer>
 </body>
-</html>

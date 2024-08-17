@@ -9,6 +9,7 @@ import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class HomeMvcController {
     public HomeMvcController(AuthenticationHelper authenticationHelper, PostService postService) {
         this.authenticationHelper = authenticationHelper;
         this.postService = postService;
+    }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
     }
 
     @ModelAttribute("isAuthenticated")

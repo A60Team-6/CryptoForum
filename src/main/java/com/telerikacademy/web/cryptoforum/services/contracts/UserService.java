@@ -10,6 +10,10 @@ public interface UserService {
 
     List<User> getAll(FilteredUserOptions filteredUserOptions, User user);
 
+    List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize);
+
+    int countFilteredUsers(FilteredUserOptions options);
+
     User getById(User user, int id);
 
     User getByUsername(String username);

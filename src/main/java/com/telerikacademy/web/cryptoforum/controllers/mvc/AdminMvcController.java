@@ -10,6 +10,7 @@ import com.telerikacademy.web.cryptoforum.services.contracts.AdminPhoneService;
 import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +48,21 @@ public class AdminMvcController {
         this.adminPhoneService = adminPhoneService;
     }
 
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
     }
 
     @GetMapping("/users")
-    public String showAllUsers(@ModelAttribute("filteredUserOptions") FilterUserDto filterUserDto, Model model, HttpSession session) {
+    public String showAllUsers(@ModelAttribute("filteredUserOptions") FilterUserDto filterUserDto,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int pageSize,
+                               Model model, HttpSession session) {
         FilteredUserOptions filteredUserOptions = new FilteredUserOptions(
                 filterUserDto.getUsername(),
                 filterUserDto.getEmail(),
@@ -63,9 +72,14 @@ public class AdminMvcController {
                 filterUserDto.getSortBy(),
                 filterUserDto.getSortOrder());
         User currentUser = authenticationHelper.tryGetUser(session);
-        List<User> users = userService.getAll(filteredUserOptions, currentUser);
+        List<User> users = userService.getAll(filteredUserOptions, page, pageSize);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("users", users);
+        model.addAttribute("currentPage", page + 1);
+        int totalPages = (int) Math.ceil(userService.countFilteredUsers(filteredUserOptions) / (double) pageSize);
+        totalPages = totalPages > 0 ? totalPages : 1;
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageSize", pageSize);
         return "UsersView";
     }
 

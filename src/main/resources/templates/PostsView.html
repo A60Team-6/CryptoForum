@@ -211,7 +211,7 @@
 
 <div class="body-content">
     <div class="header">
-        <h1 th:text="#{users.filter.label}">Filter User Options</h1>
+        <h1 th:text="#{posts.filter.label}">Filter Post Options</h1>
     </div>
     <div class="form-section">
         <form action="#" th:action="@{/posts}" method="get" th:object="${filteredPostsOptions}">
@@ -273,13 +273,37 @@
         <div>
             <ul class="pagination">
                 <li th:if="${currentPage > 1}">
-                    <a th:href="@{/posts(page=${currentPage - 1}, pageSize=${pageSize})}">&laquo; Previous</a>
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage - 2} + '&pageSize=' + ${pageSize}}">&laquo; Previous</a>
                 </li>
                 <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i == currentPage} ? 'active'">
-                    <a th:href="@{/posts(page=${i}, pageSize=${pageSize})}" th:text="${i}">1</a>
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${i - 1} + '&pageSize=' + ${pageSize}}" th:text="${i}">1</a>
                 </li>
                 <li th:if="${currentPage < totalPages}">
-                    <a th:href="@{/posts(page=${currentPage + 1}, pageSize=${pageSize})}">Next &raquo;</a>
+                    <a th:href="@{'__${requestURI}__' + '?' + ${(filteredPostsOptions.title != null && !filteredPostsOptions.title.isEmpty()) ? 'title=' + filteredPostsOptions.title + '&' : ''}
+                        + ${filteredPostsOptions.createAfter != null ? 'createAfter=' + filteredPostsOptions.createAfter + '&' : ''}
+                        + ${filteredPostsOptions.createBefore != null ? 'createBefore=' + filteredPostsOptions.createBefore + '&' : ''}
+                        + ${filteredPostsOptions.minLikes != null ? 'minLikes=' + filteredPostsOptions.minLikes + '&' : ''}
+                        + ${filteredPostsOptions.maxLikes != null ? 'maxLikes=' + filteredPostsOptions.maxLikes + '&' : ''}
+                        + ${(filteredPostsOptions.content != null && !filteredPostsOptions.content.isEmpty()) ? 'content=' + filteredPostsOptions.content + '&' : ''}
+                        + ${(filteredPostsOptions.sortBy != null && !filteredPostsOptions.sortBy.isEmpty()) ? 'sortBy=' + filteredPostsOptions.sortBy + '&' : ''}
+                        + ${(filteredPostsOptions.sortOrder != null && !filteredPostsOptions.sortOrder.isEmpty()) ? 'sortOrder=' + filteredPostsOptions.sortOrder + '&' : ''}
+                        + 'page=' + ${currentPage} + '&pageSize=' + ${pageSize}}">Next &raquo;</a>
                 </li>
             </ul>
         </div>

@@ -10,6 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -254,7 +256,8 @@ public class PostRepositoryImpl implements PostRepository {
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
 
-            query.setFirstResult((page - 1) * pageSize);
+            Pageable pageable = PageRequest.of(page, pageSize);
+            query.setFirstResult((int) pageable.getOffset());
             query.setMaxResults(pageSize);
 
             return query.list();

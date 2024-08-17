@@ -11,6 +11,7 @@ import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,11 @@ public class PostMvcController {
         this.tagService = tagService;
     }
 
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -56,6 +62,8 @@ public class PostMvcController {
 
     @GetMapping("/free")
     public String showAllPostsBeforeAuth(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "4") int pageSize,
                                Model model) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
@@ -66,16 +74,19 @@ public class PostMvcController {
                 filterPostDto.getCreateAfter(),
                 filterPostDto.getSortBy(),
                 filterPostDto.getSortOrder());
-        List<Post> posts = postService.getAll(filteredPostsOptions);
+        List<Post> posts = postService.getAll(filteredPostsOptions, page, pageSize);
         model.addAttribute("filteredPostsOptions", filterPostDto);
         model.addAttribute("posts", posts);
+        model.addAttribute("currentPage", page + 1);
+        model.addAttribute("totalPages", (int) Math.ceil(postService.countFilteredPosts(filteredPostsOptions) / (double) pageSize));
+        model.addAttribute("pageSize", pageSize);
         return "PostsViewFree";
     }
 
 
     @GetMapping
     public String showAllPosts(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
-                               @RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "4") int pageSize,
                                Model model, HttpSession session) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
@@ -93,8 +104,9 @@ public class PostMvcController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("filteredPostsOptions", filterPostDto);
         model.addAttribute("posts", posts);
-        model.addAttribute("currentPage", page);
+        model.addAttribute("currentPage", page + 1);
         model.addAttribute("totalPages", (int) Math.ceil(postService.countFilteredPosts(filteredPostsOptions) / (double) pageSize));
+        model.addAttribute("pageSize", pageSize);
         return "PostsView";
     }
 

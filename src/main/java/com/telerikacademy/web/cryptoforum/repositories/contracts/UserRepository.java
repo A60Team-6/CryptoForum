@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface UserRepository {
 
+    int countFilteredUsers(FilteredUserOptions filteredUserOptions);
+
+    List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize);
+
     List<User> getAll(FilteredUserOptions filteredUserOptions);
 
     User getById(int id);

@@ -15,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/auth")
@@ -37,6 +35,7 @@ public class AuthenticationController {
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
+
 
 
     @ModelAttribute("isAuthenticated")
@@ -86,8 +85,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute("register") RegisterDto registerDto,
-                                 BindingResult bindingResult, HttpSession session) {
+    public String handleRegister(@Valid @ModelAttribute("register") RegisterDto registerDto, BindingResult bindingResult,
+                                 Model model) {
         if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Password confirmation should match password");
         }
@@ -95,7 +94,6 @@ public class AuthenticationController {
         if(bindingResult.hasErrors()) {
             return "Register";
         }
-
 
         try {
             User user = modelMapper.fromDto(registerDto);
