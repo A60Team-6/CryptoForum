@@ -44,15 +44,20 @@
     }
 
     body {
-        font-family: Arial, sans-serif; /* Шрифт на текста */
-        background-color: #f4f4f4; /* Светъл фон на страницата */
-        margin: 0; /* Премахва стандартните маргини на body */
-        padding: 0; /* Премахва стандартното падинг на body */
-        display: flex; /* Flexbox за центриране на съдържанието на страницата */
-        flex-direction: column; /* Вертикално разположение на съдържанието */
-        align-items: center; /* Центрира съдържанието хоризонтално */
-        min-height: 100vh; /* Височина на страницата, за да запълни целия екран */
+        font-family: Arial, sans-serif;
+        background-image: url('/assets/img/home-bg.jpg'); /* Указва пътя към изображението */
+        background-size: cover; /* Изображението покрива целия екран */
+        background-position: center; /* Центрира изображението */
+        background-repeat: no-repeat; /* Избягва повторението на изображението */
+        background-attachment: fixed; /* Изображението остава фиксирано при скролване */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
     }
+
 
     /* Стил за основното съдържание */
     .body-content {
