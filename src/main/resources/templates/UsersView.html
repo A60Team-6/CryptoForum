@@ -20,8 +20,8 @@
 
         <select th:field="*{sortBy}">
             <option value="">Sort By</option>
-            <option value="username">Title</option>
-            <option value="email">Content</option>
+            <option value="username">Username</option>
+            <option value="email">Email</option>
         </select>
         <select th:field="*{sortOrder}">
             <option value="">Sort Order</option>
@@ -47,12 +47,31 @@
                 <div class="cell" th:text="#{user.label.email}">Email</div>
                 </br>
             </div>
-<!--            <div class="row" th:each="user : ${users}">-->
-<!--                <div class="cell">-->
-<!--                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>-->
-<!--                </div>-->
-<!--                <div class="cell" th:text="${post.content}">Content</div>-->
-<!--            </div>-->
+            <div class="row" th:each="user : ${users}">
+                <div class="cell">
+                    <a href="#"  th:href="@{/admin/users/{id}(id=${user.id})}" th:text="${user.username}">Username</a>
+                </div>
+                <div class="cell" th:text="${user.email}">Email</div>
+                <div class="cell" th:text="${user.firstName}">First Name</div>
+                <div class="cell" th:text="${user.createdAt}">Created At</div>
+<!--                <div class="cell" th:text="${user.isBlocked()}">isBlocked</div>-->
+<!--                <div class="cell" th:text="${user.position}">Position</div>-->
+                <form  th:if="${(!user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (!user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }"  th:action="@{/admin/users/{id}/block(id=${user.id})}" method="post">
+                    <button type="submit" class="block-button">Block</button>
+                </form>
+                <form th:if="${(user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }" th:action="@{/admin/users/{id}/unblock(id=${user.id})}" method="post">
+                    <button type="submit" class="unblock-button">Unblock</button>
+                </form>
+
+                <form  th:if="${user.position.getId()==3 && currentUser.position.getId() == 1}" th:action="@{/admin/users/{id}/toModerator(id=${user.id})}" method="post">
+                    <button type="submit" class="block-button">User To Moderator</button>
+                </form>
+                <form th:if="${user.position.getId()==2 && currentUser.position.getId() == 1}" th:action="@{/admin/users/{id}/toUser(id=${user.id})}" method="post">
+                    <button type="submit" class="unblock-button">Moderator To User</button>
+                </form>
+                <br/><br/>
+
+            </div>
         </div>
     </div>
 </div>

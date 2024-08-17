@@ -28,6 +28,10 @@ public class FilteredUserOptions {
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
 
+    public FilteredUserOptions(){
+        this(null,null,null,null,null,null,null);
+    }
+
     public Optional<String> getUsername() {
         return username;
     }

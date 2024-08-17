@@ -14,7 +14,7 @@ public class AdminPhone {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

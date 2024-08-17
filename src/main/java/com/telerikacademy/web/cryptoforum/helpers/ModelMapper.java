@@ -1,15 +1,11 @@
 package com.telerikacademy.web.cryptoforum.helpers;
 
-import com.telerikacademy.web.cryptoforum.models.Comment;
-import com.telerikacademy.web.cryptoforum.models.Position;
-import com.telerikacademy.web.cryptoforum.models.Post;
-import com.telerikacademy.web.cryptoforum.models.User;
-import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostOutDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.RegisterDto;
+import com.telerikacademy.web.cryptoforum.models.*;
+import com.telerikacademy.web.cryptoforum.models.dtos.*;
 import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
+import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
+import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +16,16 @@ public class ModelMapper {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final UserService userService;
+    private final TagService tagService;
 
     @Autowired
-    public ModelMapper(PostService postService, CommentService commentService) {
+    public ModelMapper(PostService postService, CommentService commentService, UserService userService, TagService tagService) {
         this.postService = postService;
         this.commentService = commentService;
+
+        this.userService = userService;
+        this.tagService = tagService;
     }
 
 
@@ -54,6 +55,18 @@ public class ModelMapper {
         return postOutDto;
     }
 
+//    public UserOutDto toDto(User user){
+//        UserOutDto userDto = new UserOutDto();
+//        userDto.setProfilePicture(user.getProfilePhoto());
+//        userDto.setUsername(user.getUsername());
+//        userDto.setFirstName(user.getFirstName());
+//        userDto.setLastName(user.getLastName());
+//        userDto.setPassword(user.getPassword());
+//        userDto.setEmail(user.getEmail());
+//        userDto.setCreatedAt(user.getCreatedAt());
+//        return userDto;
+//    }
+
     public User fromDto(RegisterDto registerDto) {
 
         User user = new User();
@@ -78,6 +91,61 @@ public class ModelMapper {
         return post;
     }
 
+    public User fromDto(int id, UserOutDto dto) {
+        User user = new User();
+        user.setId(id);
+        user.setUsername(dto.getUsername());
+        User repository = userService.getByUsername(user.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setLastName(dto.getLastName());
+        user.setPassword(dto.getPassword());
+        user.setCreatedAt(repository.getCreatedAt());
+        user.setPosition(repository.getPosition());
+        user.setProfilePhoto(dto.getProfilePicture());
+        user.setBlocked(repository.isBlocked());
+        return user;
+    }
+
+    public User fromDto(int id, UserDto dto) {
+        User mockUser = new User();
+
+        mockUser.setId(999999999);
+        mockUser.setFirstName("Gogo");
+        mockUser.setLastName("Tomov");
+        mockUser.setUsername("Gotogoto");
+        mockUser.setEmail("ggg.ttt@example.com");
+        mockUser.setPassword("15975253");
+        mockUser.setPosition(new Position(1, "admin"));
+        mockUser.setBlocked(false);
+        mockUser.setProfilePhoto(null);
+        mockUser.setCreatedAt(LocalDateTime.now());
+
+
+        User user = new User();
+        user.setId(id);
+        User userRepository = userService.getById(mockUser, id);
+        user.setId(userRepository.getId());
+        user.setUsername(userRepository.getUsername());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setPosition(userRepository.getPosition());
+        user.setBlocked(userRepository.isBlocked());
+        user.setProfilePhoto(userRepository.getProfilePhoto());
+        user.setCreatedAt(userRepository.getCreatedAt());
+        return user;
+    }
+
+    public UserDto toDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        return userDto;
+    }
+
     public Comment fromDto(int id, CommentDto dto) {
         Comment comment = fromDto(dto);
         comment.setId(id);
@@ -87,6 +155,21 @@ public class ModelMapper {
         comment.setCreatedAt(comment1.getCreatedAt());
         comment.setUpdatedAt(comment1.getUpdatedAt());
         return comment;
+    }
+
+    public Tag fromDto(int id, TagDto dto) {
+        Tag tag = new Tag();
+        tag.setId(id);
+        Tag repo = tagService.getById(id);
+        tag.setName(dto.getName());
+        tag.setPosts(repo.getPosts());
+        return tag;
+    }
+
+    public Tag fromDto(TagDto dto) {
+        Tag tag = new Tag();
+        tag.setName(dto.getName());
+        return tag;
     }
 
     public CommentDto toDto(Comment comment) {
@@ -99,6 +182,27 @@ public class ModelMapper {
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
         return comment;
+    }
+
+
+//    public User fromUpdateAdminDto(int id, AdminUpdateDto dto) {
+//        User admin = new User();
+//        admin.setId(id);
+//        admin.setFirstName(dto.getFirstName());
+//        admin.setLastName(dto.getLastName());
+//        admin.setEmail(dto.getEmail());
+//        admin.setPassword(dto.getPassword());
+//        admin.setProfilePhoto(dto.getProfilePhoto());
+//        AdminPhone adminPhone = new AdminPhone();
+//        adminPhone.setPhoneNumber(dto.getPhoneNumber());
+//        adminPhone.setUser(admin);
+//    }
+
+
+    public AdminPhone fromPhoneDto(PhoneNumberDto phoneNumberDto){
+        AdminPhone adminPhone = new AdminPhone();
+        adminPhone.setPhoneNumber(phoneNumberDto.getPhoneNumber());
+        return adminPhone;
     }
 
 }

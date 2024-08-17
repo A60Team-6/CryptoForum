@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll(FilteredUserOptions filteredUserOptions, User user) {
-        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
+        PermissionHelper.isAdminOrModerator(user, ERROR_MESSAGE);
         return repository.getAll(filteredUserOptions);
     }
 
     @Override
     public User getById(User user, int id) {
-        PermissionHelper.isAdmin(user, ERROR_MESSAGE);
+        PermissionHelper.isAdminOrSameUserOrModerator(user, id, ERROR_MESSAGE);
         return repository.getById(id);
     }
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user, User userForUpdate){
         PermissionHelper.isBlocked(user, "User is not blocked!");
-        PermissionHelper.isAdminOrSameUser(user, userForUpdate, "This user is not admin or owner!");
+        PermissionHelper.isSameUser(user, userForUpdate, "This user is not an owner!");
 
         boolean duplicateExists = true;
         try {

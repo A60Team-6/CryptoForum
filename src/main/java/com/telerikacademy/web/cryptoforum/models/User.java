@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +49,10 @@ public class User {
     @JsonIgnore
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    Set<AdminPhone> adminPhones = new HashSet<>();
 
     public User() {
     }
@@ -130,6 +136,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<AdminPhone> getAdminPhones() {
+        return adminPhones;
+    }
+
+    public void setAdminPhones(Set<AdminPhone> adminPhones) {
+        this.adminPhones = adminPhones;
     }
 
     @Override

@@ -107,7 +107,7 @@ public class MapperHelper {
 
     public Tag createTagFromDto(TagDto tagDto){
         Tag tag = new Tag();
-        tag.setName(tagDto.getTag());
+        tag.setName(tagDto.getName());
 
         return tag;
     }

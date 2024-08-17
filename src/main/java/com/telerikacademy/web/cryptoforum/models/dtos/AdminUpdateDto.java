@@ -1,15 +1,10 @@
 package com.telerikacademy.web.cryptoforum.models.dtos;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class RegisterDto extends LoginDto{
-
-    @Size(min = 8, max = 32, message = "Password should be between 8 and 32 symbols!")
-    @NotNull(message = "Password can not be empty!")
-    private String passwordConfirm;
+public class AdminUpdateDto {
 
     @NotNull(message = "First name can not be empty!")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols!")
@@ -19,23 +14,27 @@ public class RegisterDto extends LoginDto{
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32 symbols!")
     private String lastName;
 
-    @NotEmpty
     @Email(message = "Email is invalid!")
     private String email;
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
+    @NotNull(message = "Password can not be empty!")
+    @Size(min = 8)
+    private String password;
 
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    @Size(max = 15, message = "Phone number shout be valid")
+    private String phoneNumber;
+
+    @Size(max = 256, message = "Profile picture is too big")
+    private String profilePhoto;
+
+    public AdminUpdateDto() {
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName (String firstName) {
         this.firstName = firstName;
     }
 
@@ -55,4 +54,27 @@ public class RegisterDto extends LoginDto{
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 }

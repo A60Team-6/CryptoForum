@@ -16,10 +16,14 @@
       <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>
       <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post} + ' | '">Create Post | </a>
       <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}" >My Posts</a>
+      <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}" >Me</a>
 
     </h3>
   </div>
 </header>
+
+
+
 <div th:fragment="post-form(title)">
   <h2 th:text="${title}">Title</h2>
 
@@ -44,6 +48,47 @@
     <input type="submit" value="Save"/>
   </form>
 </div>
+
+<style>
+  header {
+    background-color: #007bff; /* Син фон на хедъра */
+    color: #ffffff; /* Бял текст на хедъра */
+    padding: 15px 30px; /* Padding около хедъра */
+    display: flex; /* Използва Flexbox за подредба на съдържанието */
+    justify-content: space-between; /* Разпределя елементите равномерно */
+    align-items: center; /* Центрира елементите вертикално */
+  }
+
+  /* Стил за заглавието в хедъра */
+  header h3 {
+    margin: 0; /* Премахва маргините на заглавието */
+    font-size: 1.2em; /* Размер на шрифта на заглавието */
+  }
+
+  /* Стил за линковете в хедъра */
+  header a {
+    color: #ffffff; /* Бял текст на линковете */
+    text-decoration: none; /* Премахва подчертаването на линковете */
+    margin-right: 15px; /* Разстояние между линковете */
+    font-size: 1em; /* Размер на шрифта на линковете */
+  }
+
+  /* Стил за линковете при ховър */
+  header a:hover {
+    text-decoration: underline; /* Подчертаване на линковете при ховър */
+    color: #f0f0f0; /* Светъл цвят на текста при ховър */
+  }
+
+  /* Стил за активните линкове */
+  header a.active {
+    font-weight: bold; /* Дебел шрифт за активния линк */
+  }
+
+  /* За да премахнем последното разстояние след последния линк */
+  header a:last-child {
+    margin-right: 0; /* Премахва разстоянието след последния линк */
+  }
+</style>
 
 <footer th:fragment="footer">
   <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>

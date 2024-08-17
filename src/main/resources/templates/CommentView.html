@@ -15,12 +15,13 @@
     <p class="margin12" th:text="#{comment.label.createdAt} + ': ' +      ${comment.createdAt}">01.01.1999</p>
     <p class="margin12" th:text="#{comment.label.updatedAt}  + ': ' + ${comment.updatedAt}">01.01.1999</p>
     <a th:href="@{/posts/{id}(id=${comment.post.id})}">Back to Post</a>
+    <br/>
 
     <form th:if="${currentUser.username.equals(comment.user.username)}" th:action="@{/posts/{id}/comment/{commentId}/update(id=${post.id}, commentId=${comment.id})}" method="get">
         <button type="submit">Edit Comment</button>
     </form>
-    <form th:if="${currentUser.username.equals(comment.user.username) or currentUser.position.getId() == 1}" th:action="@{/posts/{id}/comment/{commentId}/delete(id=${post.id}, commentId=${comment.id})}" method="post">
-        <button type="submit" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+    <form th:if="${(currentUser.username.equals(comment.user.username)) || (currentUser.position.getId() == 1 && comment.user.position.getId() != 1) || (currentUser.position.getId() == 2 && comment.user.position.getId() != 1 && comment.user.position.getId() != 2)}" th:action="@{/posts/{id}/comment/{commentId}/delete(id=${post.id}, commentId=${comment.id})}" method="post">
+        <button type="submit" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
     </form>
 </div>
 </div>

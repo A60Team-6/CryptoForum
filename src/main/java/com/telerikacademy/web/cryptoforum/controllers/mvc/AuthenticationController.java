@@ -2,6 +2,7 @@ package com.telerikacademy.web.cryptoforum.controllers.mvc;
 
 import com.telerikacademy.web.cryptoforum.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.cryptoforum.exceptions.DuplicateEntityException;
+import com.telerikacademy.web.cryptoforum.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
 import com.telerikacademy.web.cryptoforum.models.User;
@@ -25,6 +26,7 @@ public class AuthenticationController {
 
 
     private static final int ADMIN_POSITION = 1;
+    private static final int MODERATOR_POSITION = 2;
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -60,8 +62,12 @@ public class AuthenticationController {
             User user = authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
             session.setAttribute("currentUser", loginDto.getUsername());
             session.setAttribute("isAdmin", user.getPosition().getId() == ADMIN_POSITION);
-            return "HomeView";
+            session.setAttribute("isModerator", user.getPosition().getId() == MODERATOR_POSITION);
+            return "redirect:/";
         }catch (AuthenticationFailureException e){
+            bindingResult.rejectValue("username", "auth_error", e.getMessage());
+            return "Login";
+        }catch (EntityNotFoundException e){
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "Login";
         }

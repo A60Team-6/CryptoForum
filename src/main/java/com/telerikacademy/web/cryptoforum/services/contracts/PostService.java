@@ -4,6 +4,8 @@ import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
 import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.Tag;
 import com.telerikacademy.web.cryptoforum.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

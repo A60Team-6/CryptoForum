@@ -18,7 +18,7 @@ import java.util.*;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private final SessionFactory sessionFactory;
 
@@ -49,14 +49,18 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateBefore().ifPresent(value -> {
-                filters.add("createdAt <= :createBefore");
-                params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                if(!value.isBlank()){
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
 
             });
 
             filteredUserOptions.getCreateAfter().ifPresent(value -> {
-                filters.add("createdAt >= :createAfter");
-                params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                if(!value.isBlank()){
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
             });
 
             StringBuilder queryString = new StringBuilder("from User");
@@ -64,7 +68,10 @@ public class UserRepositoryImpl implements UserRepository {
                 queryString.append(" where ")
                         .append(String.join(" and ", filters));
             }
-            queryString.append(generateOrderBy(filteredUserOptions));
+            String orderedByClause = generateOrderBy(filteredUserOptions);
+            if(!orderedByClause.isEmpty()) {
+                queryString.append(orderedByClause);
+            }
 
             Query<User> query = session.createQuery(queryString.toString(), User.class);
             query.setProperties(params);
@@ -202,6 +209,9 @@ public class UserRepositoryImpl implements UserRepository {
                 break;
             case "createdAt":
                 orderBy = "createdAt";
+                break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);

@@ -31,6 +31,19 @@ public class PermissionHelper {
         }
     }
 
+    public static void isAdminOrSameUserOrModerator(User authenticatedUser, int id, String message) {
+        boolean isAuthorized = false;
+
+        if (authenticatedUser.getPosition().getName().equals(POSITION_ADMIN) || authenticatedUser.getId() == id
+            || authenticatedUser.getPosition().getName().equals(POSITION_MODERATOR)){
+            isAuthorized = true;
+        }
+
+        if (!isAuthorized) {
+            throw new UnauthorizedOperationException(message);
+        }
+    }
+
     public static void isSameUser(User user, User postCreator, String message) {
         if (!user.equals(postCreator)) {
             throw new UnauthorizedOperationException(message);

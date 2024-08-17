@@ -7,21 +7,17 @@ public class TagDto {
 
     @NotNull(message = "Tag can not be null!")
     @Size(min = 2, max = 32, message = "Last name should be between 2 and 32 symbols!")
-    private String tag;
+    private String name;
 
     public TagDto() {
 
     }
 
-    public TagDto(String tag) {
-        this.tag = tag;
+    public String getName() {
+        return name;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setName(String name) {
+        this.name = name;
     }
 }

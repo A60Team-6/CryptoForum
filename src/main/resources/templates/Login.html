@@ -4,21 +4,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        /* Основен стил за тялото на страницата */
+        body {
+            font-family: Arial, sans-serif; /* Шрифт на текста */
+            background-color: #f4f4f4; /* Светъл фон на страницата */
+            display: flex; /* Използва Flexbox за подравняване на формата */
+            justify-content: center; /* Центрира формата по хоризонтала */
+            align-items: center; /* Центрира формата по вертикала */
+            height: 100vh; /* Височина на страницата за да запълни целия екран */
+            margin: 0; /* Премахва стандартните маргини на body */
+        }
+
+        /* Основен стил за формата */
+        form {
+            background-color: #ffffff; /* Бел фон на формата */
+            border-radius: 8px; /* Заоблени краища на формата */
+            padding: 20px; /* Padding около формата */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
+            max-width: 400px; /* Максимална ширина на формата */
+            width: 100%; /* Ширина на формата за по-добра отзивчивост */
+        }
+
+        /* Стил за етикетите */
+        form label {
+            display: block; /* Показва етикета на нов ред */
+            margin-bottom: 5px; /* Разстояние под етикетите */
+            color: #333; /* Тъмен цвят на текста */
+            font-weight: bold; /* Дебел шрифт за етикетите */
+        }
+
+        /* Стил за текстовите полета и паролите */
+        form input[type="text"],
+        form input[type="password"] {
+            width: calc(100% - 22px); /* Ширина на полето, като се вземе предвид padding */
+            padding: 10px; /* Padding в полето */
+            margin-bottom: 15px; /* Разстояние под полето */
+            border: 1px solid #ddd; /* Лека граница около полето */
+            border-radius: 4px; /* Заоблени краища на полето */
+            box-sizing: border-box; /* Включва padding и border в ширината на полето */
+        }
+
+        /* Стил за грешките */
+        form label.error {
+            color: #dc3545; /* Червен цвят за грешките */
+            font-size: 0.9em; /* Размер на шрифта на грешките */
+            margin-bottom: 15px; /* Разстояние под грешките */
+        }
+
+        /* Стил за бутона за изпращане */
+        form input[type="submit"] {
+            background-color: #007bff; /* Син фон на бутона */
+            color: #ffffff; /* Бял текст на бутона */
+            padding: 10px 20px; /* Padding в бутона */
+            border: none; /* Без граница на бутона */
+            border-radius: 4px; /* Заоблени краища на бутона */
+            font-size: 1em; /* Размер на шрифта в бутона */
+            cursor: pointer; /* Курсор при посочване на бутона */
+            transition: background-color 0.3s ease; /* Плавен преход при промяна на цвета */
+            width: 100%; /* Ширина на бутона, за да запълни формата */
+        }
+
+        /* Стил за бутона при ховър */
+        form input[type="submit"]:hover {
+            background-color: #0056b3; /* По-тъмен син цвят при ховър */
+        }
+    </style>
 </head>
 <body>
 <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
     <label th:text="#{user.label.username}">Username</label>
-    </br>
 
     <input type="text" th:field="*{username}">
     <label th:errors="*{username}">Username error placeholder.</label>
-    </br></br>
+
 
     <label th:text="#{user.label.password}">Password</label>
-    </br>
     <input type="password" th:field="*{password}">
     <label class="error" th:errors="*{password}">Password error placeholder.</label>
-    </br></br>
 
 
     <input type="submit" value="Login">

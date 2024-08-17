@@ -4,63 +4,13 @@
 <body>
 <div th:replace="~{PostForm.html :: header}"></div>
 <div class="body-content">
-    <h2 th:text="#{admin.welcome}">Welcome to the Admin Portal</h2>
+    <h2 th:text="#{admin.welcome}">Welcome to the Portal</h2>
     <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
 </div>
-
-<div class="body-content">
-    <form action="#" th:action="@{/admin/users}" method="get" th:object="${filteredUserOptions}">
-        <label th:text="#{users.filter.label}">Filter User Options</label>
-        <br/><br/>
-        <input type="text" placeholder="Username" th:field="*{username}"/>
-        <input type="text" placeholder="Email" th:field="*{email}"/>
-        <input type="text" placeholder="First Name" th:field="*{firstName}"/>
-
-        <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
-        <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
-
-
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="username">Title</option>
-            <option value="email">Content</option>
-        </select>
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-        <br/><br/>
-
-        <input type="submit" value="Search"/>
+<div>
+    <form th:action="@{/admin/users}" method="get">
+        <button type="submit">Show All Users</button>
     </form>
-
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-    <div th:if="${users.isEmpty()}">
-        <h2 th:text="#{users.title.empty}">No Users</h2>
-    </div>
-    <div th:unless="${users.isEmpty()}">
-        <h2 th:text="#{users.usernames}">All Users</h2>
-
-        <div class="table">
-            <div class="header">
-                <div class="cell" th:text="#{user.label.username}">Username</div>
-                <div class="cell" th:text="#{user.label.email}">Email</div>
-                </br>
-            </div>
-            <div class="row" th:each="user : ${users}">
-                <div class="cell" th:text="${user.username}">Username</div>
-                <div class="cell" th:text="${user.email}">Email</div>
-            </div>
-            <!--            <div class="row" th:each="user : ${users}">-->
-            <!--                <div class="cell">-->
-            <!--                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>-->
-            <!--                </div>-->
-            <!--                <div class="cell" th:text="${post.content}">Content</div>-->
-            <!--            </div>-->
-        </div>
-    </div>
 </div>
 </body>
 </html>

@@ -33,6 +33,19 @@ CREATE TABLE admin_phones
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+create table admin_phones
+(
+    id           int auto_increment
+        primary key,
+    phone_number varchar(20) not null,
+    user_id      int         not null,
+    constraint phone_number_unique
+        unique (phone_number),
+    constraint phone_numbers_ibfk_1
+        foreign key (user_id) references users (id)
+            on delete cascade
+);
+
 CREATE TABLE posts
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,

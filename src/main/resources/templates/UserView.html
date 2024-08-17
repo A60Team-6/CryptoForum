@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+
+<div class="body-content">
+    <div class="table">
+
+        <div class="row" th:each="user : ${users}">
+            <div class="cell">
+                <a href="#" th:href="@{/admin/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>
+            </div>
+        </div>
+    </div>
+</div>
+<h2 th:text="${user.username}">Username</h2>
+<div th:style="text-align">
+    <p class="margin12" th:text="#{user.label.profilePhoto} + ': ' +      ${user.profilePhoto}">Photo</p>
+    <p class="margin12" th:text="#{user.label.username}  + ': ' +       ${user.username}">Username</p>
+    <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
+    <p class="margin12" th:text="#{user.label.fullName} + ': ' +      ${user.firstName + ' ' + user.lastName}">Full Name</p>
+    <p class="margin12" th:text="#{user.label.createdAt} + ': ' +      ${user.createdAt}">01.01.1999</p>
+    <p class="margin12" th:text="#{user.label.position} + ': ' +      ${user.position.getName()}">Role</p>
+    <p class="margin12" th:text="#{user.label.isBlocked} + ': ' +      ${user.isBlocked()}">isBlocked</p>
+    <h3 th:if="${(user.position.id == 1) && (!user.adminPhones.isEmpty())}">Phones:</h3>
+    <span th:each="phone : ${user.adminPhones}" style="display: flex; align-items: center;">
+        <span th:text="${phone.phoneNumber}"  style="margin-right: 10px;"></span>
+            <form th:if="${user.position.id == 1}"
+                  th:action="@{/admin/phoneNumber/{id}/delete (id=${phone.phoneId})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+    </span>
+    <br/><br/>
+
+    <form th:if="${user.username.equals(currentUser.username)}" th:action="@{/admin/users/{id}/update(id=${user.id})}" method="get">
+        <button type="submit">Edit User</button>
+    </form>
+
+    <form th:if="${currentUser.username.equals(user.username) || currentUser.position.getId() == 1 && user.position.getId() != 1}" th:action="@{/admin/users/{id}/delete(id=${id})}" method="post">
+        <button type="submit" onclick="return confirm('Are you sure you want to delete this post?')">Delete User</button>
+    </form>
+</div>
+
+<form th:replace="~{PostForm.html :: footer}"></form>
+</body>
+</html>

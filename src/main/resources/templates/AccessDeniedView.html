@@ -2,9 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Access Denied</title>
 </head>
 <body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+    <title>Access Denied</title>
+    <h1>You are not logged in!</h1>
+    <h2>Please log or register to see all our posts!</h2>
 <h2 class="error" th:text="${error}">Error placeholder</h2>
 </body>
 </html>

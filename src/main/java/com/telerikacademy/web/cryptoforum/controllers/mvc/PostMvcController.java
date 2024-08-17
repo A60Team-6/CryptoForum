@@ -5,16 +5,11 @@ import com.telerikacademy.web.cryptoforum.exceptions.*;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptoforum.helpers.MapperHelper;
 import com.telerikacademy.web.cryptoforum.helpers.ModelMapper;
-import com.telerikacademy.web.cryptoforum.models.Comment;
-import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
-import com.telerikacademy.web.cryptoforum.models.Post;
-import com.telerikacademy.web.cryptoforum.models.User;
-import com.telerikacademy.web.cryptoforum.models.dtos.CommentDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.CommentMvcDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.FilterPostDto;
-import com.telerikacademy.web.cryptoforum.models.dtos.PostDto;
+import com.telerikacademy.web.cryptoforum.models.*;
+import com.telerikacademy.web.cryptoforum.models.dtos.*;
 import com.telerikacademy.web.cryptoforum.services.contracts.CommentService;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
+import com.telerikacademy.web.cryptoforum.services.contracts.TagService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -26,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,16 +35,18 @@ public class PostMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final MapperHelper mapperHelper;
     private final CommentService commentService;
+    private final TagService tagService;
 
 
     @Autowired
-    public PostMvcController(PostService postService, ModelMapper modelMapper, UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, CommentService commentService) {
+    public PostMvcController(PostService postService, ModelMapper modelMapper, UserService userService, AuthenticationHelper authenticationHelper, MapperHelper mapperHelper, CommentService commentService, TagService tagService) {
         this.postService = postService;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.mapperHelper = mapperHelper;
         this.commentService = commentService;
+        this.tagService = tagService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -56,8 +54,28 @@ public class PostMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+    @GetMapping("/free")
+    public String showAllPostsBeforeAuth(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
+                               Model model) {
+        FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
+                filterPostDto.getTitle(),
+                filterPostDto.getContent(),
+                filterPostDto.getMinLikes(),
+                filterPostDto.getMaxLikes(),
+                filterPostDto.getCreateBefore(),
+                filterPostDto.getCreateAfter(),
+                filterPostDto.getSortBy(),
+                filterPostDto.getSortOrder());
+        List<Post> posts = postService.getAll(filteredPostsOptions);
+        model.addAttribute("filteredPostsOptions", filterPostDto);
+        model.addAttribute("posts", posts);
+        return "PostsViewFree";
+    }
+
+
     @GetMapping
-    public String showAllPosts(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto, Model model, HttpSession session) {
+    public String showAllPosts(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
+                               Model model, HttpSession session) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
@@ -69,8 +87,8 @@ public class PostMvcController {
                 filterPostDto.getSortOrder());
         List<Post> posts = postService.getAll(filteredPostsOptions);
         User currentUser = authenticationHelper.tryGetUser(session);
-        model.addAttribute("currentUser", currentUser);
 
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("filteredPostsOptions", filterPostDto);
         model.addAttribute("posts", posts);
         return "PostsView";
@@ -80,14 +98,19 @@ public class PostMvcController {
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
         try {
             Post post = postService.getPostById(id);
+            Set<Tag> tags = post.getTagsOfThePost();
+            model.addAttribute("tags", tags);
             model.addAttribute("post", post);
             model.addAttribute("currentUser", authenticationHelper.tryGetUser(session));
             model.addAttribute("comment", new CommentDto());
+            model.addAttribute("tag", new TagDto());
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (AuthenticationFailureException e){
+            return "AccessDeniedView";
         }
     }
 
@@ -98,7 +121,7 @@ public class PostMvcController {
             List<Post> posts = postService.getAllPostsOfUser(user).stream().collect(Collectors.toList());
             model.addAttribute("posts", posts);
         } catch (AuthenticationFailureException e) {
-            return "HomeView";
+            return "HomeViewOld";
         }
 
         return "MyPostsView";
@@ -187,7 +210,7 @@ public class PostMvcController {
         try {
             Post post = modelMapper.fromDto(id, postDto);
             postService.updatePost(user, post);
-            return "HomeView";
+            return "HomeViewOld";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -213,7 +236,7 @@ public class PostMvcController {
         }
         try {
             postService.deletePost(user, postService.getPostById(id));
-            return "HomeView";
+            return "HomeViewOld";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -409,4 +432,87 @@ public class PostMvcController {
             return "AccessDeniedView";
         }
     }
+
+    @GetMapping("{postId}/tags/{id}")
+    public String showSingleTag(@PathVariable int postId, @PathVariable int id, Model model, HttpSession session) {
+        try {
+            Tag tag = tagService.getById(id);
+            Post post = postService.getPostById(postId);
+            model.addAttribute("post", post);
+            model.addAttribute("currentUser", authenticationHelper.tryGetUser(session));
+            model.addAttribute("tag", tag);
+            return "TagView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthenticationFailureException e){
+            return "AccessDeniedView";
+        }
+    }
+
+
+    @PostMapping("/{id}/newTag")
+    public String createTag(@PathVariable int id, @Valid @ModelAttribute("tag") TagDto tagDto,
+                                BindingResult bindingResult, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        Post post;
+        try {
+            post = postService.getPostById(id);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("post", post);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "PostView";
+        }
+
+        try {
+            Tag tag = mapperHelper.createTagFromDto(tagDto);
+            model.addAttribute("tagId", tag.getId());
+            model.addAttribute("tag", tag);
+            tagService.addTagToPost(user, post, tag);
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+
+    @PostMapping("/{id}/tag/{tagId}/delete")
+    public String deleteTag(@PathVariable int id, @PathVariable int tagId, Model model, HttpSession session) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        try {
+            Post post = postService.getPostById(id);
+            Tag tag = tagService.getById(tagId);
+            tagService.removeTagFromPost( user, post, tag);
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "AccessDeniedView";
+        }
+    }
+
 }
