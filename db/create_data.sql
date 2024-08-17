@@ -25,14 +25,6 @@ CREATE TABLE users
 
 );
 
-CREATE TABLE admin_phones
-(
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    user_id      INT UNIQUE         NOT NULL,
-    phone_number VARCHAR(15) UNIQUE DEFAULT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
-
 create table admin_phones
 (
     id           int auto_increment

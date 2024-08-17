@@ -1,19 +1,125 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${title}"></title>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .body-content {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center; /* Центрира по хоризонтала */
+            align-items: center; /* Центрира по вертикала */
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0; /* Премахва външния отстъп на заглавието */
+            font-size: 1.6em; /* Размер на шрифта */
+        }
+
+        .row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .cell {
+            padding: 10px;
+        }
+
+        .post-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .post-title a:hover {
+            text-decoration: underline;
+        }
+
+        .post-content {
+            color: #555;
+            font-size: 1em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            color: #495057;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-<header th:replace="~{PostForm.html :: head('Posts')}"></header>
-<h1 th:text="${title}"></h1>
-<ul>
-  <li th:each="post : ${posts}">
-    <a th:text="${post.title}"></a>
-    <p th:text="${post.content}"></p>
-    <br/>
-  </li>
-</ul>
+<header th:replace="~{PostForm.html :: header}"></header>
+
+<div class="body-content">
+    <div class="header">
+        <h1 th:text="${title}"></h1>
+    </div>
+    <div th:if="${posts.isEmpty()}">
+        <h2>No Posts</h2>
+    </div>
+    <div th:unless="${posts.isEmpty()}">
+        <div class="row" th:each="post : ${posts}">
+            <div class="cell">
+                <a class="post-title" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
+            </div>
+            <div class="post-content" th:text="${post.content}"></div>
+            <div class="post-tags">
+                <div class="tag" th:each="tag : ${post.tagsOfThePost}" th:text="${'#' + tag}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <footer th:replace="~{PostForm.html :: footer}"></footer>
 </body>
 </html>

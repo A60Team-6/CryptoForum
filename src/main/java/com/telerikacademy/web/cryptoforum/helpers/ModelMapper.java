@@ -36,14 +36,14 @@ public class ModelMapper {
         return post;
     }
 
-    public PostDto toDto(Post post){
+    public PostDto toDto(Post post) {
         PostDto postDto = new PostDto();
         postDto.setTitle(post.getTitle());
         postDto.setContent(post.getContent());
         return postDto;
     }
 
-    public PostOutDto toOutDto(Post post){
+    public PostOutDto toOutDto(Post post) {
         PostOutDto postOutDto = new PostOutDto();
         postOutDto.setTitle(post.getTitle());
         postOutDto.setContent(post.getContent());
@@ -91,21 +91,6 @@ public class ModelMapper {
         return post;
     }
 
-    public User fromDto(int id, UserOutDto dto) {
-        User user = new User();
-        user.setId(id);
-        user.setUsername(dto.getUsername());
-        User repository = userService.getByUsername(user.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setLastName(dto.getLastName());
-        user.setPassword(dto.getPassword());
-        user.setCreatedAt(repository.getCreatedAt());
-        user.setPosition(repository.getPosition());
-        user.setProfilePhoto(dto.getProfilePicture());
-        user.setBlocked(repository.isBlocked());
-        return user;
-    }
-
     public User fromDto(int id, UserDto dto) {
         User mockUser = new User();
 
@@ -137,7 +122,7 @@ public class ModelMapper {
         return user;
     }
 
-    public UserDto toDto(User user){
+    public UserDto toDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
@@ -199,7 +184,7 @@ public class ModelMapper {
 //    }
 
 
-    public AdminPhone fromPhoneDto(PhoneNumberDto phoneNumberDto){
+    public AdminPhone fromPhoneDto(PhoneNumberDto phoneNumberDto) {
         AdminPhone adminPhone = new AdminPhone();
         adminPhone.setPhoneNumber(phoneNumberDto.getPhoneNumber());
         return adminPhone;
