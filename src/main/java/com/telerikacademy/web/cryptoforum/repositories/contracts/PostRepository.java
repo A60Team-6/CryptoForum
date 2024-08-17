@@ -23,6 +23,8 @@ public interface PostRepository {
 
     List<Post> getAll(FilteredPostsOptions filteredPostsOptions);
 
+    List<Post> getAll(FilteredPostsOptions filteredPostsOptions, int page, int pageSize);
+
     List<Post> getMostLikedPosts();
 
     List<Post> getMostCommentedPosts();
@@ -34,4 +36,6 @@ public interface PostRepository {
     void deleteTagFromPost(User user, Post post, Tag tag);
 
     List<Post> getPostsWithThisUser(User user);
+
+    int countFilteredPosts(FilteredPostsOptions filteredPosts);
 }

@@ -219,6 +219,49 @@
                 </form>
             </div>
         </div>
+        <div>
+            <ul class="pagination">
+                <li th:if="${currentPage > 1}">
+                    <a th:href="@{/posts(page=${currentPage - 1}, pageSize=${pageSize})}">&laquo; Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i == currentPage} ? 'active'">
+                    <a th:href="@{/posts(page=${i}, pageSize=${pageSize})}" th:text="${i}">1</a>
+                </li>
+                <li th:if="${currentPage < totalPages}">
+                    <a th:href="@{/posts(page=${currentPage + 1}, pageSize=${pageSize})}">Next &raquo;</a>
+                </li>
+            </ul>
+        </div>
+        <style>
+            .pagination {
+                display: flex;
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .pagination li {
+                margin: 0 5px;
+            }
+
+            .pagination li a {
+                text-decoration: none;
+                padding: 10px 15px;
+                color: #007bff;
+                border: 1px solid #dee2e6;
+                border-radius: 5px;
+            }
+
+            .pagination li a:hover {
+                background-color: #f8f9fa;
+                color: #007bff;
+            }
+
+            .pagination .active a {
+                background-color: #007bff;
+                color: #ffffff;
+                border-color: #007bff;
+            }
+        </style>
     </div>
 </div>
 

@@ -75,6 +75,8 @@ public class PostMvcController {
 
     @GetMapping
     public String showAllPosts(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
+                               @RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "4") int pageSize,
                                Model model, HttpSession session) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
@@ -85,12 +87,14 @@ public class PostMvcController {
                 filterPostDto.getCreateAfter(),
                 filterPostDto.getSortBy(),
                 filterPostDto.getSortOrder());
-        List<Post> posts = postService.getAll(filteredPostsOptions);
+        List<Post> posts = postService.getAll(filteredPostsOptions, page, pageSize);
         User currentUser = authenticationHelper.tryGetUser(session);
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("filteredPostsOptions", filterPostDto);
         model.addAttribute("posts", posts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", (int) Math.ceil(postService.countFilteredPosts(filteredPostsOptions) / (double) pageSize));
         return "PostsView";
     }
 

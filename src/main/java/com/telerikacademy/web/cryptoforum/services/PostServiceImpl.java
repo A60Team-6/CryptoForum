@@ -7,9 +7,6 @@ import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.repositories.contracts.PostRepository;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +25,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAll(FilteredPostsOptions options) {
         return repository.getAll(options);
+    }
+
+    @Override
+    public List<Post> getAll(FilteredPostsOptions options, int page, int pageSize) {
+        return repository.getAll(options, page, pageSize);
+    }
+
+    @Override
+    public int countFilteredPosts(FilteredPostsOptions options) {
+        return repository.countFilteredPosts(options);
     }
 
     @Override

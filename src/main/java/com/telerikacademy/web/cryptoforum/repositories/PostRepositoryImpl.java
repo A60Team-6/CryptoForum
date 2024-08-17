@@ -90,16 +90,15 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions){
+    public int countFilteredPosts(FilteredPostsOptions filteredPostsOptions) {
         try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-
             filteredPostsOptions.getTitle().ifPresent(value -> {
                 filters.add("title like :title");
                 params.put("title", String.format("%%%s%%", value));
-                    });
+            });
 
             filteredPostsOptions.getContent().ifPresent(value -> {
                 filters.add("content like :content");
@@ -117,8 +116,6 @@ public class PostRepositoryImpl implements PostRepository {
             });
 
             filteredPostsOptions.getCreateBefore().ifPresent(value -> {
-//                filters.add("createdAt <= :createBefore");
-//                params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
                 if (!value.isBlank()) {
                     filters.add("createdAt <= :createBefore");
                     params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
@@ -126,8 +123,59 @@ public class PostRepositoryImpl implements PostRepository {
             });
 
             filteredPostsOptions.getCreateAfter().ifPresent(value -> {
-//                filters.add("createdAt >= :createAfter");
-//                params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                if (!value.isBlank()) {
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+            StringBuilder queryString = new StringBuilder("select count(*) from Post");
+            if (!filters.isEmpty()) {
+                queryString.append(" where ").append(String.join(" and ", filters));
+            }
+
+            Query<Long> query = session.createQuery(queryString.toString(), Long.class);
+            query.setProperties(params);
+
+            return Math.toIntExact(query.uniqueResult());
+        }
+    }
+
+    @Override
+    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions){
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+
+            filteredPostsOptions.getTitle().ifPresent(value -> {
+                filters.add("title like :title");
+                params.put("title", String.format("%%%s%%", value));
+            });
+
+            filteredPostsOptions.getContent().ifPresent(value -> {
+                filters.add("content like :content");
+                params.put("content", String.format("%%%s%%", value));
+            });
+
+            filteredPostsOptions.getMinLikes().ifPresent(value -> {
+                filters.add("likes >= :minLikes");
+                params.put("minLikes", value);
+            });
+
+            filteredPostsOptions.getMaxLikes().ifPresent(value -> {
+                filters.add("likes <= :maxLikes");
+                params.put("maxLikes", value);
+            });
+
+            filteredPostsOptions.getCreateBefore().ifPresent(value -> {
+                if (!value.isBlank()) {
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+            filteredPostsOptions.getCreateAfter().ifPresent(value -> {
                 if (!value.isBlank()) {
                     filters.add("createdAt >= :createAfter");
                     params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
@@ -147,6 +195,68 @@ public class PostRepositoryImpl implements PostRepository {
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getAll(FilteredPostsOptions filteredPostsOptions, int page, int pageSize){
+        try (Session session = sessionFactory.openSession()) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+
+            filteredPostsOptions.getTitle().ifPresent(value -> {
+                filters.add("title like :title");
+                params.put("title", String.format("%%%s%%", value));
+            });
+
+            filteredPostsOptions.getContent().ifPresent(value -> {
+                filters.add("content like :content");
+                params.put("content", String.format("%%%s%%", value));
+            });
+
+            filteredPostsOptions.getMinLikes().ifPresent(value -> {
+                filters.add("likes >= :minLikes");
+                params.put("minLikes", value);
+            });
+
+            filteredPostsOptions.getMaxLikes().ifPresent(value -> {
+                filters.add("likes <= :maxLikes");
+                params.put("maxLikes", value);
+            });
+
+            filteredPostsOptions.getCreateBefore().ifPresent(value -> {
+                if (!value.isBlank()) {
+                    filters.add("createdAt <= :createBefore");
+                    params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+            filteredPostsOptions.getCreateAfter().ifPresent(value -> {
+                if (!value.isBlank()) {
+                    filters.add("createdAt >= :createAfter");
+                    params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
+                }
+            });
+
+            StringBuilder queryString = new StringBuilder("from Post");
+            if(!filters.isEmpty()){
+                queryString.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            //queryString.append(generateOrderBy(filteredPostsOptions));
+            String orderByClause = generateOrderBy(filteredPostsOptions);
+            if (!orderByClause.isEmpty()) {
+                queryString.append(orderByClause);
+            }
+
+            Query<Post> query = session.createQuery(queryString.toString(), Post.class);
+            query.setProperties(params);
+
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+
             return query.list();
         }
     }
