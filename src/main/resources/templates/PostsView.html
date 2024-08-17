@@ -24,6 +24,23 @@
         margin-top: 20px;
     }
 
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+        background-color: #007bff;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 1.6em;
+    }
+
     form {
         display: flex;
         flex-wrap: wrap; /* Позволява на формата да се разпределя в няколко реда */
@@ -37,6 +54,7 @@
         margin-bottom: 10px;
         font-weight: 600;
     }
+
 
     input[type="text"], input[type="number"], input[type="datetime-local"], select {
         padding: 12px;
@@ -158,63 +176,96 @@
         background-color: #0056b3;
         transform: scale(1.05);
     }
+
+    .pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination li a {
+        text-decoration: none;
+        padding: 10px 15px;
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    }
+
+    .pagination li a:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+    }
+
+    .pagination .active a {
+        background-color: #007bff;
+        color: #ffffff;
+        border-color: #007bff;
+    }
 </style>
 <body>
 <form th:replace="~{PostForm.html :: header}"></form>
 
 <div class="body-content">
-    <form action="#" th:action="@{/posts}" method="get" th:object="${filteredPostsOptions}">
-        <label th:text="#{posts.filter.label}">Filter Post Options</label>
-        <br/><br/>
-        <input type="text" placeholder="Post Title" th:field="*{title}"/>
-        <input type="text" placeholder="Post Content" th:field="*{content}"/>
-        <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
-        <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
+    <div class="header">
+        <h1 th:text="#{users.filter.label}">Filter User Options</h1>
+    </div>
+    <div class="form-section">
+        <form action="#" th:action="@{/posts}" method="get" th:object="${filteredPostsOptions}">
+            <div class="input-row">
+                <input type="text" placeholder="Post Title" th:field="*{title}"/>
+                <input type="text" placeholder="Post Content" th:field="*{content}"/>
+                <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
+                <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
 
-        <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
-        <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
+            </div>
+            <div class="input-row">
 
+                <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
+                <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
 
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="title">Title</option>
-            <option value="content">Content</option>
-        </select>
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-        <br/><br/>
-
-        <input type="submit" value="Search"/>
-    </form>
-
+                <select th:field="*{sortBy}">
+                    <option value="">Sort By</option>
+                    <option value="title">Title</option>
+                    <option value="content">Content</option>
+                </select>
+                <select th:field="*{sortOrder}">
+                    <option value="">Sort Order</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <input type="submit" value="Search"/>
+        </form>
+    </div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
     <div th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
     <div th:unless="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title}">All Posts</h2>
-
         <div class="table">
             <div class="header">
-                <div class="cell" th:text="#{post.label.title}">Title</div>
-                <div class="cell" th:text="#{post.label.content}">Content</div>
+                <h2 th:text="#{posts.title}">All Posts</h2>
             </div>
             <div class="row" th:each="post : ${posts}">
                 <div class="cell">
-                    <a class="post-title" href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
+                    <a class="post-title" href="#" th:href="@{/posts/{id}(id=${post.id})}"
+                       th:text="${post.title}">Post</a>
                 </div>
                 <div class="post-content" th:text="${post.content}">Content</div>
-                <div class="row" th:each="tag : ${post.tagsOfThePost}">
-                    <div class="post-tags" th:text="${'#' + tag}">#Tag</div>
+                <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
+                    <div class="tag" th:text="${'#' + tag}">#Tag</div>
                 </div>
-                <form  th:if="${post.usersWhoLikedPost.contains(currentUser)}" th:action="@{/posts/{id}/removeLike(id=${post.id})}" method="post">
+                <form th:if="${post.usersWhoLikedPost.contains(currentUser)}"
+                      th:action="@{/posts/{id}/removeLike(id=${post.id})}" method="post">
                     <button type="submit" class="like-button">Unlike</button>
                 </form>
-                <form th:if="${!post.usersWhoLikedPost.contains(currentUser)}" th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
+                <form th:if="${!post.usersWhoLikedPost.contains(currentUser)}"
+                      th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
                     <button type="submit" class="like-button">Like</button>
                 </form>
             </div>
@@ -232,36 +283,6 @@
                 </li>
             </ul>
         </div>
-        <style>
-            .pagination {
-                display: flex;
-                list-style-type: none;
-                padding: 0;
-            }
-
-            .pagination li {
-                margin: 0 5px;
-            }
-
-            .pagination li a {
-                text-decoration: none;
-                padding: 10px 15px;
-                color: #007bff;
-                border: 1px solid #dee2e6;
-                border-radius: 5px;
-            }
-
-            .pagination li a:hover {
-                background-color: #f8f9fa;
-                color: #007bff;
-            }
-
-            .pagination .active a {
-                background-color: #007bff;
-                color: #ffffff;
-                border-color: #007bff;
-            }
-        </style>
     </div>
 </div>
 
