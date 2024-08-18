@@ -1,90 +1,158 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
-<!--xmlns="http://www.w3.org/1999/html"/-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
     <style>
         /* Основен стил за тялото на страницата */
         body {
-            font-family: Arial, sans-serif; /* Шрифт на текста */
-            background-color: #f4f4f4; /* Светъл фон на страницата */
-            display: flex; /* Използва Flexbox за подравняване на формата */
-            justify-content: center; /* Центрира формата по хоризонтала */
-            align-items: center; /* Центрира формата по вертикала */
-            height: 100vh; /* Височина на страницата за да запълни целия екран */
-            margin: 0; /* Премахва стандартните маргини на body */
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/img/admin.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Височина на body да покрие целия екран */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Навигацията най-горе и футъра най-долу */
         }
 
-        /* Основен стил за формата */
+        /* Основен стил за хедъра и навигационния бар */
+        .navigation {
+            width: 100%;
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .navigation h3 a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 12px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 0 10px; /* Разстояние между линковете */
+        }
+
+        .navigation h3 a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Прозрачен стил за контейнера на съдържанието */
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.3); /* Прозрачен бял фон */
+            border-radius: 8px; /* Заоблени краища */
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лека сянка */
+            max-width: 400px; /* Максимална ширина на контейнера */
+            max-height: 200px; /* Максимална височина на контейнера */
+            width: 100%; /* Ширина на контейнера */
+            margin: 0 auto; /* Центриране на контейнера */
+            flex-grow: 1; /* Контейнерът расте за да заеме наличното пространство */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Основен стил за логин формата */
         form {
-            background-color: #ffffff; /* Бел фон на формата */
-            border-radius: 8px; /* Заоблени краища на формата */
-            padding: 20px; /* Padding около формата */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
-            max-width: 400px; /* Максимална ширина на формата */
-            width: 100%; /* Ширина на формата за по-добра отзивчивост */
+            width: 100%;
         }
 
-        /* Стил за етикетите */
         form label {
-            display: block; /* Показва етикета на нов ред */
-            margin-bottom: 5px; /* Разстояние под етикетите */
-            color: #333; /* Тъмен цвят на текста */
-            font-weight: bold; /* Дебел шрифт за етикетите */
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
         }
 
-        /* Стил за текстовите полета и паролите */
         form input[type="text"],
         form input[type="password"] {
-            width: calc(100% - 22px); /* Ширина на полето, като се вземе предвид padding */
-            padding: 10px; /* Padding в полето */
-            margin-bottom: 15px; /* Разстояние под полето */
-            border: 1px solid #ddd; /* Лека граница около полето */
-            border-radius: 4px; /* Заоблени краища на полето */
-            box-sizing: border-box; /* Включва padding и border в ширината на полето */
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.5); /* Прозрачен фон на полетата */
         }
 
-        /* Стил за грешките */
+        form input[type="text"]:focus,
+        form input[type="password"]:focus {
+            background-color: rgba(255, 255, 255, 0.7); /* Промяна при фокус */
+            outline: none; /* Премахване на outline */
+        }
+
         form label.error {
-            color: #dc3545; /* Червен цвят за грешките */
-            font-size: 0.9em; /* Размер на шрифта на грешките */
-            margin-bottom: 15px; /* Разстояние под грешките */
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-bottom: 15px;
         }
 
-        /* Стил за бутона за изпращане */
         form input[type="submit"] {
-            background-color: #007bff; /* Син фон на бутона */
-            color: #ffffff; /* Бял текст на бутона */
-            padding: 10px 20px; /* Padding в бутона */
-            border: none; /* Без граница на бутона */
-            border-radius: 4px; /* Заоблени краища на бутона */
-            font-size: 1em; /* Размер на шрифта в бутона */
-            cursor: pointer; /* Курсор при посочване на бутона */
-            transition: background-color 0.3s ease; /* Плавен преход при промяна на цвета */
-            width: 100%; /* Ширина на бутона, за да запълни формата */
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
         }
 
-        /* Стил за бутона при ховър */
         form input[type="submit"]:hover {
-            background-color: #0056b3; /* По-тъмен син цвят при ховър */
+            background-color: #0056b3;
+        }
+
+        /* Основен стил за футъра */
+        footer {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        footer small {
+            color: #ffffff;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-<form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
-    <label th:text="#{user.label.username}">Username</label>
 
-    <input type="text" th:field="*{username}">
-    <label th:errors="*{username}">Username error placeholder.</label>
+<!-- Навигационен бар -->
+<div class="navigation">
+    <h3>
+        <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
+    </h3>
+</div>
 
+<!-- Контейнер за логин формата -->
+<div class="content-container">
+    <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
+        <label th:text="#{user.label.username}">Username</label>
+        <input type="text" th:field="*{username}">
+        <label th:errors="*{username}">Username error placeholder.</label>
 
-    <label th:text="#{user.label.password}">Password</label>
-    <input type="password" th:field="*{password}">
-    <label class="error" th:errors="*{password}">Password error placeholder.</label>
+        <label th:text="#{user.label.password}">Password</label>
+        <input type="password" th:field="*{password}">
+        <label class="error" th:errors="*{password}">Password error placeholder.</label>
 
+        <input type="submit" value="Login">
+    </form>
+</div>
 
-    <input type="submit" value="Login">
-</form>
+<!-- Футър -->
+<footer>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+</footer>
+
 </body>
 </html>
