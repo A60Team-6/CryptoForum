@@ -13,6 +13,8 @@ public interface PostService {
 
     List<Post> getAll(FilteredPostsOptions filteredPostsOptions);
 
+    int countPosts();
+
     List<Post> getAll(FilteredPostsOptions options, int page, int pageSize);
 
     int countFilteredPosts(FilteredPostsOptions options);

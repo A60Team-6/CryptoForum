@@ -109,6 +109,62 @@
         transform: translateY(-2px); /* Лек ефект на подем при ховър */
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* По-силна сянка при ховър */
     }
+
+    /* Нови стилове за броячите на потребители и постове */
+    .count-section {
+        margin-top: 40px; /* Разстояние над секцията */
+        text-align: center; /* Центрира текста */
+    }
+
+    /* Нови стилове за броячите на потребители и постове */
+    .count-section {
+        margin-top: 40px; /* Разстояние над секцията */
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    ./* Нови стилове за броячите на потребители и постове */
+    .count-section {
+        margin-top: 20px; /* По-малко разстояние над секцията */
+        display: flex;
+        justify-content: center; /* Центриране на секцията */
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap; /* Разрешава пренареждането при по-малки екрани */
+    }
+
+    .count-box {
+        background-color: #f1f1f1; /* По-неутрален светлосив фон */
+        padding: 15px; /* По-малък padding за компактност */
+        border-radius: 8px; /* По-малки заоблени краища */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
+        text-align: center;
+        flex: 1;
+        max-width: 250px; /* По-малък размер на кутийките */
+    }
+
+    .count-box h2 {
+        color: #007bff; /* Син цвят на заглавието */
+        font-size: 1.5em; /* По-малък размер на шрифта на заглавието */
+        margin-bottom: 5px; /* По-малко разстояние под заглавието */
+    }
+
+    .count-box p {
+        color: #333; /* Тъмен цвят на текста */
+        font-size: 2em; /* По-малък размер на текста */
+        margin: 0; /* Премахва допълнителното разстояние около текста */
+        font-weight: bold; /* Прави текста по-жив */
+    }
+
+    /* Анимиран ефект при ховър */
+    .count-box:hover {
+        transform: translateY(-3px); /* По-малка промяна при ховър */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* По-бърз преход */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }/* По-силна сянка при ховър *//* Прави текста по-жив */
 </style>
 <header th:fragment="header">
     <div>
@@ -144,7 +200,19 @@
     <a th:href="@{/mostRecentlyCreatedPosts}" class="button">Most Recently Created Posts</a>
 </div>
 
+<div class="count-box">
+    <h2>
+        Count Of All Users:
+    </h2>
+    <p th:text="${countOfUsers}"></p>
 
+
+
+    <h2>
+        Count Of All Posts:
+    </h2>
+    <p th:text="${countOfPosts}"></p>
+</div>
 <!--<style>-->
 <!--    .button-group {-->
 <!--        display: flex;-->

@@ -4,11 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class RegisterDto extends LoginDto{
 
-    @Size(max = 256, message = "This Profile Picture is too big!")
-    private String profilePhoto;
+//    @Size(max = 256, message = "This Profile Picture is too big!")
+//    private String profilePhoto;
+
+    private MultipartFile profilePhoto;
 
     @Size(min = 8, max = 32, message = "Password should be between 8 and 32 symbols!")
     @NotNull(message = "Password can not be empty!")
@@ -25,6 +28,14 @@ public class RegisterDto extends LoginDto{
     @NotEmpty
     @Email(message = "Email is invalid!")
     private String email;
+
+    public MultipartFile getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(MultipartFile profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
     public String getPasswordConfirm() {
         return passwordConfirm;
@@ -58,11 +69,11 @@ public class RegisterDto extends LoginDto{
         this.email = email;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
+//    public String getProfilePhoto() {
+//        return profilePhoto;
+//    }
+//
+//    public void setProfilePhoto(String profilePhoto) {
+//        this.profilePhoto = profilePhoto;
+//    }
 }

@@ -29,12 +29,14 @@ public class HomeMvcController {
     private static final int MODERATOR = 2;
 
     private final AuthenticationHelper authenticationHelper;
-    private PostService postService;
+    private final PostService postService;
+    private final UserService userService;
 
     @Autowired
-    public HomeMvcController(AuthenticationHelper authenticationHelper, PostService postService) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper, PostService postService, UserService userService) {
         this.authenticationHelper = authenticationHelper;
         this.postService = postService;
+        this.userService = userService;
     }
 
     @ModelAttribute("requestURI")
@@ -49,7 +51,8 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage(Model model) {
-
+        model.addAttribute("countOfUsers", userService.countUsers());
+        model.addAttribute("countOfPosts", postService.countPosts());
         return "HomeViewOld";
     }
 

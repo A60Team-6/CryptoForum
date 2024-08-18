@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface UserService {
 
+    int countUsers();
+
     List<User> getAll(FilteredUserOptions filteredUserOptions, User user);
 
     List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize);

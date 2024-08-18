@@ -241,8 +241,9 @@
                         th:text="${user.firstName}">First Name</span>
                 </div>
                 <div class="cell">
-                    <span th:text="#{user.label.createdAt} + ': '"></span><span
-                        th:text="${user.createdAt}">Created At</span>
+<!--                    <span th:text="#{user.label.createdAt} + ': '"></span><span-->
+<!--                        th:text="${user.createdAt}">Created At</span>-->
+                    <span th:text="${#temporals.format(user.getCreatedAt(), 'dd-MM-yyyy')}">December 28, 2048</span>
                 </div>
                 <div class="cell">
                     <form th:if="${(!user.isBlocked() && currentUser.position.getId() == 1 && user.position.getId() != 1) || (!user.isBlocked() && currentUser.position.getId() == 2 && user.position.getId() != 1 && user.position.getId() != 2) }"

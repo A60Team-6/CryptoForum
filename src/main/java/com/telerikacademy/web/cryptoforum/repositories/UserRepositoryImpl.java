@@ -86,6 +86,14 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public List<User> getAll(){
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("from User", User.class).list();
+
+        }
+    }
+
 
     @Override
     public List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize) {

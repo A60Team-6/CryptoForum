@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
+
+    @Override
+    public int countUsers(){
+        return repository.getAll().size();
+    }
+
     @Override
     public List<User> getAll(FilteredUserOptions filteredUserOptions, User user) {
         PermissionHelper.isAdminOrModerator(user, ERROR_MESSAGE);

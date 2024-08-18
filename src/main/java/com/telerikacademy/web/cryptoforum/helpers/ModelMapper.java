@@ -75,6 +75,7 @@ public class ModelMapper {
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
         user.setEmail(registerDto.getEmail());
+        user.setCreatedAt(LocalDateTime.now());
         user.setPosition(new Position(3, "user"));
 
         return user;

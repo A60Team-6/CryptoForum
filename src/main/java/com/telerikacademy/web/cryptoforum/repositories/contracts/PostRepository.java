@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface PostRepository {
 
+    List<Post> getAll();
+
     Post getPostById(int id);
 
     Post getPostByTitle(String title);

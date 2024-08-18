@@ -28,6 +28,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public int countPosts(){
+        return repository.getAll().size();
+    }
+
+    @Override
     public List<Post> getAll(FilteredPostsOptions options, int page, int pageSize) {
         return repository.getAll(options, page, pageSize);
     }

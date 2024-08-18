@@ -18,6 +18,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -97,13 +105,40 @@ public class AuthenticationController {
 
         try {
             User user = modelMapper.fromDto(registerDto);
+
+            if (!registerDto.getProfilePhoto().isEmpty()) {
+                String profilePhotoFilename = saveProfilePhoto(registerDto.getProfilePhoto());
+                user.setProfilePhoto(profilePhotoFilename);
+            } else {
+                user.setProfilePhoto("default-avatar.png");
+            }
+
             userService.createUser(user);
             return "redirect:/auth/login";
-        }catch (DuplicateEntityException e){
+        }catch (DuplicateEntityException | IOException e){
             bindingResult.rejectValue("username", "username_error", e.getMessage());
             return "Register";
         }
 
+    }
+
+    private String saveProfilePhoto(MultipartFile profilePhoto) throws IOException {
+        String uploadDir = "static/assets/img";
+        String filename = UUID.randomUUID() + "-" + profilePhoto.getOriginalFilename();
+        Path uploadPath =  Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = profilePhoto.getInputStream()) {
+            Path filePath = uploadPath.resolve(filename);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new IOException("Could not save profile photo: " + filename, e);
+        }
+
+        return filename;
     }
 
 }

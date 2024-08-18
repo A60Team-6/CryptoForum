@@ -10,6 +10,8 @@ public interface UserRepository {
 
     int countFilteredUsers(FilteredUserOptions filteredUserOptions);
 
+    List<User> getAll();
+
     List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize);
 
     List<User> getAll(FilteredUserOptions filteredUserOptions);
