@@ -18,13 +18,13 @@
 
         .body-content {
             width: 100%;
-            max-width: 500px; /* Стесняваме максималната ширина на полето */
-            padding: 15px; /* Намаляваме padding-а */
+            max-width: 500px;
+            padding: 15px;
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
-            text-align: center; /* Центрира съдържанието по хоризонтала */
+            text-align: center;
         }
 
         .header {
@@ -51,7 +51,7 @@
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 10px; /* Разстояние между бутоните */
+            gap: 10px;
             margin-top: 20px;
         }
 
@@ -81,37 +81,35 @@
         }
 
         .profile-photo {
-            width: 150px; /* Ширина на кръга */
-            height: 150px; /* Височина на кръга */
-            border-radius: 50%; /* Прави изображението кръгло */
-            overflow: hidden; /* Скрива част от изображението, което излиза извън кръга */
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
             display: flex;
-            justify-content: center; /* Центрира изображението хоризонтално */
-            align-items: center; /* Центрира изображението вертикално */
-            background-color: #f0f2f5; /* Фонов цвят, ако няма изображение */
-            border: 2px solid #007bff; /* Опционален бордер около кръга (можете да го премахнете или промените цвета) */
-            margin: 0 auto; /* Центрира контейнера хоризонтално в родителския контейнер */
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            border: 2px solid #007bff;
+            margin: 0 auto;
         }
 
         .profile-photo img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Съкращава изображението, за да се запълни целия кръг */
+            object-fit: cover;
         }
 
         .phone-section {
-            text-align: center; /* Центрира текстовото съдържание и бутоните */
+            text-align: center;
         }
 
-        .phone-section span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px; /* Разстояние между телефоните */
+        .phone-section div {
+            display: block; /* Всеки телефонен номер е на отделен ред */
+            margin-bottom: 10px;
         }
 
         .phone-section button {
-            margin-left: 10px; /* Разстояние между телефонния номер и бутона */
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -139,12 +137,12 @@
 
         <h3 th:if="${user.position.id == 1 && !user.adminPhones.isEmpty()}" class="phone-section">Phones:</h3>
         <div th:if="${user.position.id == 1}" class="phone-section">
-            <span th:each="phone : ${user.adminPhones}">
+            <div th:each="phone : ${user.adminPhones}">
                 <span th:text="${phone.phoneNumber}"></span>
                 <form th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}" method="post" style="display: inline;">
                     <button type="submit" class="delete">Delete</button>
                 </form>
-            </span>
+            </div>
         </div>
         <br/><br/>
 
@@ -167,3 +165,4 @@
 <footer th:replace="~{PostForm.html :: footer}"></footer>
 </body>
 </html>
+
