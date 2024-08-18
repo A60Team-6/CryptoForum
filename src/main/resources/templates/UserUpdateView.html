@@ -201,13 +201,15 @@
 
             <input type="submit" value="Save User"/>
         </form>
-
-        <form th:action="@{/admin/addPhone/{id}(id=${id})}" th:object="${phone}" method="post">
-            <label th:if="${userToUpdatePosition == 1}" th:text="#{admin.label.phoneNumber}">Phone Number</label>
-            <input type="text" th:field="*{phoneNumber}"/>
-            <label class="error" th:errors="*{phoneNumber}">Phone error placeholder</label>
-            <input type="submit" value="Save Phone"/>
-        </form>
+        <br/>
+        <div th:if="${user.position.id == 1}">
+            <form th:action="@{/admin/addPhone/{id}(id=${id})}" th:object="${phone}" method="post">
+                <label th:if="${userToUpdatePosition == 1}" th:text="#{admin.label.phoneNumber}">Phone Number</label>
+                <input type="text" th:field="*{phoneNumber}"/>
+                <label class="error" th:errors="*{phoneNumber}">Phone error placeholder</label>
+                <input type="submit" value="Save Phone"/>
+            </form>
+        </div>
     </div>
 </div>
 </body>
