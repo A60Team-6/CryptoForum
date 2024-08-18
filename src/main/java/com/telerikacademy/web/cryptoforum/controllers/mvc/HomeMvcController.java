@@ -2,10 +2,6 @@ package com.telerikacademy.web.cryptoforum.controllers.mvc;
 
 import com.telerikacademy.web.cryptoforum.exceptions.AuthorizationException;
 import com.telerikacademy.web.cryptoforum.helpers.AuthenticationHelper;
-import com.telerikacademy.web.cryptoforum.helpers.PermissionHelper;
-import com.telerikacademy.web.cryptoforum.models.FilteredPostsOptions;
-import com.telerikacademy.web.cryptoforum.models.FilteredUserOptions;
-import com.telerikacademy.web.cryptoforum.models.Post;
 import com.telerikacademy.web.cryptoforum.models.User;
 import com.telerikacademy.web.cryptoforum.services.contracts.PostService;
 import com.telerikacademy.web.cryptoforum.services.contracts.UserService;
@@ -18,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -53,7 +47,7 @@ public class HomeMvcController {
     public String showHomePage(Model model) {
         model.addAttribute("countOfUsers", userService.countUsers());
         model.addAttribute("countOfPosts", postService.countPosts());
-        return "HomeViewOld";
+        return "HomeView";
     }
 
     @GetMapping("/mostLikedPosts")

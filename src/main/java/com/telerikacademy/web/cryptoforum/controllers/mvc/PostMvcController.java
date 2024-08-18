@@ -137,7 +137,7 @@ public class PostMvcController {
             List<Post> posts = postService.getAllPostsOfUser(user).stream().collect(Collectors.toList());
             model.addAttribute("posts", posts);
         } catch (AuthenticationFailureException e) {
-            return "HomeViewOld";
+            return "HomeView";
         }
 
         return "MyPostsView";
@@ -252,7 +252,7 @@ public class PostMvcController {
         }
         try {
             postService.deletePost(user, postService.getPostById(id));
-            return "HomeViewOld";
+            return "HomeView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
