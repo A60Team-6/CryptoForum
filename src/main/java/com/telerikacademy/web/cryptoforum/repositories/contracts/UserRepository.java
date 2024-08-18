@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface UserRepository {
 
+    boolean existsByEmail(String email);
+
+    boolean existsByUsername(String username);
+
     int countFilteredUsers(FilteredUserOptions filteredUserOptions);
 
     List<User> getAll();

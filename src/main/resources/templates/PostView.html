@@ -169,6 +169,13 @@
             color: #495057;
             font-size: 0.9em;
         }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
     </style>
     <script>
         function toggleForm(formId) {
@@ -220,6 +227,8 @@
         <div id="commentForm" class="form-container">
             <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${comment}" method="post">
                 <textarea th:field="*{content}" placeholder="Write your comment here..."></textarea>
+                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error-message"></div>
+
                 <button type="submit" class="btn">Save</button>
             </form>
         </div>
@@ -236,6 +245,7 @@
         <div id="tagForm" class="form-container">
             <form th:action="@{/posts/{id}/newTag(id=${post.id})}" th:object="${tag}" method="post">
                 <textarea th:field="*{name}" placeholder="Add a new tag here..."></textarea>
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></div>
                 <button type="submit" class="btn">Save</button>
             </form>
         </div>

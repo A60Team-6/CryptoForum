@@ -122,9 +122,17 @@
     </div>
 
     <div>
+<!--        <div class="profile-photo">-->
+<!--            <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/assets/img/' + user.profilePhoto : 'static/DefaultAvatar.jpg'}"-->
+<!--                 src="/DefaultAvatar.jpg"-->
+<!--                 alt="Profile Photo"/>-->
+<!--        </div>-->
         <div class="profile-photo">
-            <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/assets/img/' + user.profilePhoto : 'static/DefaultAvatar.jpg'}"
-                 src="/DefaultAvatar.jpg"
+            <!--        <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/static/assets/img/' + user.profilePhoto : '/static/assets/img/bitAvatar1.png'}"-->
+            <!--             src="/static/assets/img/bitAvatar1.png"-->
+            <!--             alt="Profile Photo"/>-->
+            <img class="img-fluid" th:src="@{${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? user.profilePhoto : '/assets/img/bitAvatar1.png'}}"
+                 src="/static/assets/img/bitAvatar1.png"
                  alt="Profile Photo"/>
         </div>
         <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>

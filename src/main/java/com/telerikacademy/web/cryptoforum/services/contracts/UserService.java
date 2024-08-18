@@ -10,6 +10,10 @@ public interface UserService {
 
     int countUsers();
 
+    boolean existsByEmail(String email);
+
+    boolean existsByUsername(String username);
+
     List<User> getAll(FilteredUserOptions filteredUserOptions, User user);
 
     List<User> getAll(FilteredUserOptions filteredUserOptions, int page, int pageSize);

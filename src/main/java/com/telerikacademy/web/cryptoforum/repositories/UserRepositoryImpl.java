@@ -28,6 +28,24 @@ public class UserRepositoryImpl implements UserRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    @Override
+    public boolean existsByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query query = session.createQuery("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email");
+            query.setParameter("email", email);  // Задаваме стойността на параметъра email
+            return (boolean) query.getSingleResult();  // Получаваме резултата директно
+        }
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        try (Session session = sessionFactory.openSession()) {
+            Query query = session.createQuery("SELECT COUNT(u) > 0 FROM User u WHERE u.username = :username");
+            query.setParameter("username", username);  // Задаваме стойността на параметъра email
+            return (boolean) query.getSingleResult();  // Получаваме резултата директно
+        }
+    }
+
 
     @Override
     public int countFilteredUsers(FilteredUserOptions filteredUserOptions) {
@@ -51,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateBefore().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt <= :createBefore");
                     params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -59,7 +77,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateAfter().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt >= :createAfter");
                     params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -76,7 +94,7 @@ public class UserRepositoryImpl implements UserRepository {
                         .append(String.join(" and ", filters));
             }
             String orderedByClause = generateOrderBy(filteredUserOptions);
-            if(!orderedByClause.isEmpty()) {
+            if (!orderedByClause.isEmpty()) {
                 queryString.append(orderedByClause);
             }
 
@@ -87,8 +105,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll(){
-        try (Session session = sessionFactory.openSession()){
+    public List<User> getAll() {
+        try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from User", User.class).list();
 
         }
@@ -117,7 +135,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateBefore().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt <= :createBefore");
                     params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -125,7 +143,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateAfter().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt >= :createAfter");
                     params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -137,7 +155,7 @@ public class UserRepositoryImpl implements UserRepository {
                         .append(String.join(" and ", filters));
             }
             String orderedByClause = generateOrderBy(filteredUserOptions);
-            if(!orderedByClause.isEmpty()) {
+            if (!orderedByClause.isEmpty()) {
                 queryString.append(orderedByClause);
             }
 
@@ -174,7 +192,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateBefore().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt <= :createBefore");
                     params.put("createBefore", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -182,7 +200,7 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filteredUserOptions.getCreateAfter().ifPresent(value -> {
-                if(!value.isBlank()){
+                if (!value.isBlank()) {
                     filters.add("createdAt >= :createAfter");
                     params.put("createAfter", LocalDateTime.parse(value, FORMATTER));
                 }
@@ -194,7 +212,7 @@ public class UserRepositoryImpl implements UserRepository {
                         .append(String.join(" and ", filters));
             }
             String orderedByClause = generateOrderBy(filteredUserOptions);
-            if(!orderedByClause.isEmpty()) {
+            if (!orderedByClause.isEmpty()) {
                 queryString.append(" ").append(orderedByClause);
             }
 
@@ -313,7 +331,6 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
-
 
 
     private String generateOrderBy(FilteredUserOptions filteredUserOptions) {

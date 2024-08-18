@@ -19,9 +19,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -165,6 +173,7 @@ public class AdminMvcController {
         }
     }
 
+
     @PostMapping("/users/{id}/delete")
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
 
@@ -175,8 +184,14 @@ public class AdminMvcController {
             return "redirect:/auth/login";
         }
         try {
+            String redirect;
+            if(user.getUsername().equals(userService.getById(user, id).getUsername())){
+                redirect = "redirect:/auth/logout";
+            }else {
+                redirect = "redirect:/admin/users";
+            }
             userService.deleteUser(user, id);
-            return "redirect:/admin/users";
+            return redirect;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

@@ -15,7 +15,7 @@ CREATE TABLE users
     username      VARCHAR(32) UNIQUE NOT NULL,
     password      VARCHAR(256)       NOT NULL,
     email         VARCHAR(64) UNIQUE NOT NULL,
-    profile_photo VARCHAR(256) DEFAULT NULL,
+    profile_photo VARCHAR(256) DEFAULT '/assets/img/bitAvatar1.png',
     position_id   INT                NOT NULL,
     is_blocked    BOOLEAN      DEFAULT FALSE,
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,

@@ -3,6 +3,7 @@ package com.telerikacademy.web.cryptoforum.models.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserDto {
 

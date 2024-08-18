@@ -45,7 +45,6 @@ public class AuthenticationController {
     }
 
 
-
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -71,10 +70,10 @@ public class AuthenticationController {
             session.setAttribute("isAdmin", user.getPosition().getId() == ADMIN_POSITION);
             session.setAttribute("isModerator", user.getPosition().getId() == MODERATOR_POSITION);
             return "redirect:/";
-        }catch (AuthenticationFailureException e){
+        } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "Login";
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "Login";
         }
@@ -99,12 +98,21 @@ public class AuthenticationController {
             bindingResult.rejectValue("passwordConfirm", "password_error", "Password confirmation should match password");
         }
 
-        if(bindingResult.hasErrors()) {
+        if (userService.existsByEmail(registerDto.getEmail())) {
+            bindingResult.rejectValue("email", "email_error", "Email is already in use");
+        }
+
+        if(userService.existsByUsername(registerDto.getUsername())){
+            bindingResult.rejectValue("username", "username_error", "Username is already in use");
+        }
+
+        if (bindingResult.hasErrors()) {
             return "Register";
         }
 
         try {
             User user = modelMapper.fromDto(registerDto);
+            model.addAttribute("user", user);
 
             if (!registerDto.getProfilePhoto().isEmpty()) {
                 String profilePhotoFilename = saveProfilePhoto(registerDto.getProfilePhoto());
@@ -115,8 +123,12 @@ public class AuthenticationController {
 
             userService.createUser(user);
             return "redirect:/auth/login";
-        }catch (DuplicateEntityException | IOException e){
-            bindingResult.rejectValue("username", "username_error", e.getMessage());
+        } catch (DuplicateEntityException | IOException e) {
+//            if (e.getMessage().contains("username")) {
+                bindingResult.rejectValue("username", "username_error", e.getMessage());
+//            } else {
+//                bindingResult.rejectValue("email", "email_error", e.getMessage());
+//            }
             return "Register";
         }
 
@@ -125,7 +137,7 @@ public class AuthenticationController {
     private String saveProfilePhoto(MultipartFile profilePhoto) throws IOException {
         String uploadDir = "static/assets/img";
         String filename = UUID.randomUUID() + "-" + profilePhoto.getOriginalFilename();
-        Path uploadPath =  Paths.get(uploadDir);
+        Path uploadPath = Paths.get(uploadDir);
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

@@ -33,6 +33,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
+    }
+
+    @Override
     public List<User> getAll(FilteredUserOptions filteredUserOptions, User user) {
         PermissionHelper.isAdminOrModerator(user, ERROR_MESSAGE);
         return repository.getAll(filteredUserOptions);

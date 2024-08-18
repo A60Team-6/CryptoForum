@@ -164,6 +164,12 @@ public class ModelMapper {
         return commentDto;
     }
 
+    public CommentMvcDto toMvcDto(Comment comment) {
+        CommentMvcDto commentDto = new CommentMvcDto();
+        commentDto.setContent(comment.getContent());
+        return commentDto;
+    }
+
     public Comment fromDto(CommentDto commentDto) {
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());

@@ -126,10 +126,18 @@
     </div>
 
     <div class="profile-photo">
-        <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/assets/img/' + user.profilePhoto : 'static/DefaultAvatar.jpg'}"
-             src="/DefaultAvatar.jpg"
+<!--        <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/static/assets/img/' + user.profilePhoto : '/static/assets/img/bitAvatar1.png'}"-->
+<!--             src="/static/assets/img/bitAvatar1.png"-->
+<!--             alt="Profile Photo"/>-->
+        <img class="img-fluid" th:src="@{${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? user.profilePhoto : '/assets/img/bitAvatar1.png'}}"
+             src="/static/assets/img/bitAvatar1.png"
              alt="Profile Photo"/>
     </div>
+    <label class="custom-file-upload">
+        <input type="file" th:field="*{user.profilePhoto}" accept="image/jpeg" onchange="previewProfilePhoto(event)"/>
+        Change profile photo
+    </label>
+    <label class="error" th:errors="*{user.profilePhoto}">Profile photo error placeholder</label>
 
     <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>
     <p class="margin12" th:text="#{user.label.email} + ': ' + ${user.email}">Email</p>

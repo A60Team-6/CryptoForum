@@ -64,7 +64,7 @@ public class PostMvcController {
     public String showAllPostsBeforeAuth(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "4") int pageSize,
-                               Model model) {
+                                         Model model) {
         FilteredPostsOptions filteredPostsOptions = new FilteredPostsOptions(
                 filterPostDto.getTitle(),
                 filterPostDto.getContent(),
@@ -125,7 +125,7 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (AuthenticationFailureException e){
+        } catch (AuthenticationFailureException e) {
             return "AccessDeniedView";
         }
     }
@@ -318,11 +318,15 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
+
         Post post;
         try {
             post = postService.getPostById(id);
             model.addAttribute("currentUser", user);
             model.addAttribute("post", post);
+            Set<Tag> tags = post.getTagsOfThePost();
+            model.addAttribute("tags", tags);
+            model.addAttribute("tag", new TagDto());
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -372,7 +376,7 @@ public class PostMvcController {
         try {
             Post post = postService.getPostById(id);
             Comment comment = commentService.getCommentById(commentId);
-            CommentDto commentDto = modelMapper.toDto(comment);
+            CommentMvcDto commentDto = modelMapper.toMvcDto(comment);
             model.addAttribute("currentUser", user);
             model.addAttribute("post", post);
             model.addAttribute("commentId", comment.getId());
@@ -386,8 +390,8 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/comment/{commentId}/update")
-    public String updateComment(@PathVariable int id, @PathVariable int commentId, @Valid @ModelAttribute("comment") CommentDto commentDto,
-                             BindingResult bindingResult, Model model, HttpSession session
+    public String updateComment(@PathVariable int id, @PathVariable int commentId, @Valid @ModelAttribute("comment") CommentMvcDto commentDto,
+                                BindingResult bindingResult, Model model, HttpSession session
     ) {
 
         User user;
@@ -398,12 +402,17 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("post", postService.getPostById(id));
             return "CommentUpdateView";
         }
 
+        if (commentDto.getContent() == null || commentDto.getContent().isEmpty() ||  commentDto.getContent().length() > 500 || commentDto.getContent().length() < 5) {
+            bindingResult.rejectValue("comment", "comment_error", "Comment content should be between 5 and 500 characters!");
+        }
         try {
             Post post = postService.getPostById(id);
-            Comment comment = modelMapper.fromDto(commentId, commentDto);
+            //Comment comment = modelMapper.fromDto(commentId, commentMvcDto);
+            Comment comment = mapperHelper.createCommentFromMvcDto(commentDto, post, user);
             model.addAttribute("currentUser", user);
             model.addAttribute("id", id);
             model.addAttribute("post", post);
@@ -462,7 +471,7 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (AuthenticationFailureException e){
+        } catch (AuthenticationFailureException e) {
             return "AccessDeniedView";
         }
     }
@@ -470,7 +479,7 @@ public class PostMvcController {
 
     @PostMapping("/{id}/newTag")
     public String createTag(@PathVariable int id, @Valid @ModelAttribute("tag") TagDto tagDto,
-                                BindingResult bindingResult, Model model, HttpSession session) {
+                            BindingResult bindingResult, Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
@@ -483,6 +492,13 @@ public class PostMvcController {
             post = postService.getPostById(id);
             model.addAttribute("currentUser", user);
             model.addAttribute("post", post);
+
+            List<Comment> comments = post.getComments();
+            model.addAttribute("comments", comments);
+            model.addAttribute("comment", new CommentDto());
+            Set<Tag> tags = post.getTagsOfThePost();
+            model.addAttribute("tags", tags);
+            model.addAttribute("tag", new TagDto());
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -490,6 +506,7 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
+            // model.addAttribute("tag", mapperHelper.createTagFromDto(tagDto));
             return "PostView";
         }
 
@@ -497,6 +514,7 @@ public class PostMvcController {
             Tag tag = mapperHelper.createTagFromDto(tagDto);
             model.addAttribute("tagId", tag.getId());
             model.addAttribute("tag", tag);
+
             tagService.addTagToPost(user, post, tag);
             return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
@@ -519,7 +537,7 @@ public class PostMvcController {
         try {
             Post post = postService.getPostById(id);
             Tag tag = tagService.getById(tagId);
-            tagService.removeTagFromPost( user, post, tag);
+            tagService.removeTagFromPost(user, post, tag);
             return "redirect:/posts/" + id;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

@@ -159,6 +159,7 @@
             <label th:text="#{comment.label.content}">Content</label>
             <textarea th:field="*{content}" placeholder="Write your content here..." rows="6"></textarea>
             <label class="error" th:errors="*{content}">Content error placeholder</label>
+<!--            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error-message"></div>-->
             <input type="submit" value="Save"/>
         </form>
     </div>
