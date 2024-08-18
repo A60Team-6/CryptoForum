@@ -1,50 +1,224 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<form th:replace="~{PostForm.html :: header}"></form>-->
+
+
+<!--<div class="body-content">-->
+<!--    <div class="table">-->
+
+<!--        <div class="row" th:each="user : ${users}">-->
+<!--            <div class="cell">-->
+<!--                <a href="#" th:href="@{/admin/currentUser/Me}" th:text="${user.username}">User</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<h2 th:text="${user.username}">Username</h2>-->
+<!--<div th:style="text-align">-->
+<!--    <p class="margin12" th:text="#{user.label.profilePhoto} + ': ' +      ${user.profilePhoto}">Photo</p>-->
+<!--    <p class="margin12" th:text="#{user.label.username}  + ': ' +       ${user.username}">Username</p>-->
+<!--    <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>-->
+<!--    <p class="margin12" th:text="#{user.label.fullName} + ': ' +      ${user.firstName + ' ' + user.lastName}">Full Name</p>-->
+<!--    <p class="margin12" th:text="#{user.label.createdAt} + ': ' +      ${user.createdAt}">01.01.1999</p>-->
+<!--    <p class="margin12" th:text="#{user.label.position} + ': ' +      ${user.position.getName()}">Role</p>-->
+<!--    <p class="margin12" th:text="#{user.label.isBlocked} + ': ' +      ${user.isBlocked()}">isBlocked</p>-->
+<!--    &lt;!&ndash;    <p class="margin12" th:text="#{admin.label.phoneNumber} + ': ' +      ${user.position}">01.01.1999</p>&ndash;&gt;-->
+<!--    <h3 th:if="${(user.position.id == 1) && (!user.adminPhones.isEmpty())}">Phones:</h3>-->
+<!--    <span th:each="phone : ${user.adminPhones}" style="display: flex; align-items: center;">-->
+<!--        <span th:text="${phone.phoneNumber}"  style="margin-right: 10px;"></span>-->
+<!--            <form th:if="${user.position.id == 1}"-->
+<!--                  th:action="@{/admin/phoneNumber/{id}/delete (id=${phone.phoneId})}" method="post">-->
+<!--                <button type="submit">Delete</button>-->
+<!--            </form>-->
+<!--    </span>-->
+<!--    <br/><br/>-->
+<!--    <form th:action="@{/admin/users/{id}/update(id=${user.id})}" method="get">-->
+<!--        <button type="submit">Edit User</button>-->
+<!--    </form>-->
+
+<!--    <form th:action="@{/admin/users/{id}/delete(id=${id})}" method="post">-->
+<!--        <button type="submit" onclick="return confirm('Are you sure you want to delete this post?')">Delete User</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<form th:replace="~{PostForm.html :: footer}"></form>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .body-content {
+            width: 100%;
+            max-width: 500px; /* Стесняваме максималната ширина на полето */
+            padding: 15px; /* Намаляваме padding-а */
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center; /* Центрира съдържанието по хоризонтала */
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6em;
+        }
+
+        .margin12 {
+            margin: 12px 0;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Разстояние между бутоните */
+            margin-top: 20px;
+        }
+
+        .body-content button {
+            padding: 6px 12px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .body-content button.delete {
+            background-color: #dc3545;
+        }
+
+        .body-content button.delete:hover {
+            background-color: #c82333;
+        }
+
+        .body-content button.edit {
+            background-color: #007bff;
+        }
+
+        .body-content button.edit:hover {
+            background-color: #0056b3;
+        }
+
+        .profile-photo {
+            width: 150px; /* Ширина на кръга */
+            height: 150px; /* Височина на кръга */
+            border-radius: 50%; /* Прави изображението кръгло */
+            overflow: hidden; /* Скрива част от изображението, което излиза извън кръга */
+            display: flex;
+            justify-content: center; /* Центрира изображението хоризонтално */
+            align-items: center; /* Центрира изображението вертикално */
+            background-color: #f0f2f5; /* Фонов цвят, ако няма изображение */
+            border: 2px solid #007bff; /* Опционален бордер около кръга (можете да го премахнете или промените цвета) */
+            margin: 0 auto; /* Центрира контейнера хоризонтално в родителския контейнер */
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Съкращава изображението, за да се запълни целия кръг */
+        }
+
+        .table {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .row {
+            display: flex;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cell {
+            flex: 1;
+            text-align: center;
+        }
+
+        .cell a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .cell a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <form th:replace="~{PostForm.html :: header}"></form>
 
-
 <div class="body-content">
-    <div class="table">
-
-        <div class="row" th:each="user : ${users}">
-            <div class="cell">
-                <a href="#" th:href="@{/admin/currentUser/Me}" th:text="${user.username}">User</a>
-            </div>
-        </div>
+    <div class="header">
+        <h1 th:text="#{my.profile}">My Profile</h1>
     </div>
-</div>
-<h2 th:text="${user.username}">Username</h2>
-<div th:style="text-align">
-    <p class="margin12" th:text="#{user.label.profilePhoto} + ': ' +      ${user.profilePhoto}">Photo</p>
-    <p class="margin12" th:text="#{user.label.username}  + ': ' +       ${user.username}">Username</p>
-    <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
-    <p class="margin12" th:text="#{user.label.fullName} + ': ' +      ${user.firstName + ' ' + user.lastName}">Full Name</p>
-    <p class="margin12" th:text="#{user.label.createdAt} + ': ' +      ${user.createdAt}">01.01.1999</p>
-    <p class="margin12" th:text="#{user.label.position} + ': ' +      ${user.position.getName()}">Role</p>
-    <p class="margin12" th:text="#{user.label.isBlocked} + ': ' +      ${user.isBlocked()}">isBlocked</p>
-    <!--    <p class="margin12" th:text="#{admin.label.phoneNumber} + ': ' +      ${user.position}">01.01.1999</p>-->
-    <h3 th:if="${(user.position.id == 1) && (!user.adminPhones.isEmpty())}">Phones:</h3>
-    <span th:each="phone : ${user.adminPhones}" style="display: flex; align-items: center;">
-        <span th:text="${phone.phoneNumber}"  style="margin-right: 10px;"></span>
-            <form th:if="${user.position.id == 1}"
-                  th:action="@{/admin/phoneNumber/{id}/delete (id=${phone.phoneId})}" method="post">
-                <button type="submit">Delete</button>
-            </form>
-    </span>
-    <br/><br/>
-    <form th:action="@{/admin/users/{id}/update(id=${user.id})}" method="get">
-        <button type="submit">Edit User</button>
-    </form>
 
-    <form th:action="@{/admin/users/{id}/delete(id=${id})}" method="post">
-        <button type="submit" onclick="return confirm('Are you sure you want to delete this post?')">Delete User</button>
-    </form>
-</div>
+    <div class="profile-photo">
+        <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/assets/img/' + user.profilePhoto : 'static/DefaultAvatar.jpg'}"
+             src="/DefaultAvatar.jpg"
+             alt="Profile Photo"/>
+    </div>
+
+    <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>
+    <p class="margin12" th:text="#{user.label.email} + ': ' + ${user.email}">Email</p>
+    <p class="margin12" th:text="#{user.label.fullName} + ': ' + ${user.firstName + ' ' + user.lastName}">Full Name</p>
+    <p class="margin12" th:text="#{user.label.createdAt} + ': ' + ${user.createdAt}">01.01.1999</p>
+    <p class="margin12" th:text="#{user.label.position} + ': ' + ${user.position.getName()}">Role</p>
+    <p class="margin12" th:text="#{user.label.isBlocked} + ': ' + ${user.isBlocked()}">isBlocked</p>
+
+    <h3 th:if="${user.position.id == 1 && !user.adminPhones.isEmpty()}">Phones:</h3>
+    <span th:each="phone : ${user.adminPhones}" style="display: flex; align-items: center;">
+            <span th:text="${phone.phoneNumber}" style="margin-right: 10px;"></span>
+            <form th:if="${user.position.id == 1}" th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}" method="post">
+                <button type="submit" class="delete">Delete</button>
+            </form>
+        </span>
+    <br/><br/>
+
+    <div class="button-container">
+        <form th:action="@{/admin/users/{id}/update(id=${user.id})}" method="get">
+            <button type="submit" class="edit">Edit User</button>
+        </form>
+
+        <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post">
+            <button type="submit" class="delete" onclick="return confirm('Are you sure you want to delete this user?')">Delete User</button>
+        </form>
+    </div>
 </div>
 
 <form th:replace="~{PostForm.html :: footer}"></form>

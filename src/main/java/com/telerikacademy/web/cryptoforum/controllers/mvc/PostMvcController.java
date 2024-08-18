@@ -226,7 +226,7 @@ public class PostMvcController {
         try {
             Post post = modelMapper.fromDto(id, postDto);
             postService.updatePost(user, post);
-            return "HomeViewOld";
+            return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

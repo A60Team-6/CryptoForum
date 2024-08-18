@@ -98,6 +98,21 @@
             height: 100%;
             object-fit: cover; /* Съкращава изображението, за да се запълни целия кръг */
         }
+
+        .phone-section {
+            text-align: center; /* Центрира текстовото съдържание и бутоните */
+        }
+
+        .phone-section span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px; /* Разстояние между телефоните */
+        }
+
+        .phone-section button {
+            margin-left: 10px; /* Разстояние между телефонния номер и бутона */
+        }
     </style>
 </head>
 <body>
@@ -113,25 +128,24 @@
             <img class="img-fluid" th:src="${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? '/assets/img/' + user.profilePhoto : 'static/DefaultAvatar.jpg'}"
                  src="/DefaultAvatar.jpg"
                  alt="Profile Photo"/>
-
         </div>
         <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>
         <p class="margin12" th:text="#{user.label.email} + ': ' + ${user.email}">Email</p>
         <p class="margin12" th:text="#{user.label.fullName} + ': ' + ${user.firstName + ' ' + user.lastName}">Full
             Name</p>
-<!--        <p class="margin12" th:text="#{user.label.createdAt} + ': ' + ${user.createdAt}">Created At</p>-->
         <span th:text="${#temporals.format(user.getCreatedAt(), 'dd-MM-yyyy')}">December 28, 2048</span>
         <p class="margin12" th:text="#{user.label.position} + ': ' + ${user.position.getName()}">Role</p>
         <p class="margin12" th:text="#{user.label.isBlocked} + ': ' + ${user.isBlocked()}">isBlocked</p>
 
-        <h3 th:if="${user.position.id == 1 && !user.adminPhones.isEmpty()}">Phones:</h3>
-        <span th:each="phone : ${user.adminPhones}" style="display: flex; align-items: center;">
-            <span th:text="${phone.phoneNumber}" style="margin-right: 10px;"></span>
-            <form th:if="${user.position.id == 1}" th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}"
-                  method="post">
-                <button type="submit" class="delete">Delete</button>
-            </form>
-        </span>
+        <h3 th:if="${user.position.id == 1 && !user.adminPhones.isEmpty()}" class="phone-section">Phones:</h3>
+        <div th:if="${user.position.id == 1}" class="phone-section">
+            <span th:each="phone : ${user.adminPhones}">
+                <span th:text="${phone.phoneNumber}"></span>
+                <form th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}" method="post" style="display: inline;">
+                    <button type="submit" class="delete">Delete</button>
+                </form>
+            </span>
+        </div>
         <br/><br/>
 
         <div class="button-container">
