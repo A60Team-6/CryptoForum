@@ -134,7 +134,7 @@
     <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>
     <p class="margin12" th:text="#{user.label.email} + ': ' + ${user.email}">Email</p>
     <p class="margin12" th:text="#{user.label.fullName} + ': ' + ${user.firstName + ' ' + user.lastName}">Full Name</p>
-    <p class="margin12" th:text="#{user.label.createdAt} + ': ' + ${user.createdAt}">01.01.1999</p>
+    <span th:text="#{comment.label.createdAt} + ': ' +  ${#temporals.format(user.getCreatedAt(), 'dd-MM-yyyy')}">December 28, 2048</span>
     <p class="margin12" th:text="#{user.label.position} + ': ' + ${user.position.getName()}">Role</p>
     <p class="margin12" th:text="#{user.label.isBlocked} + ': ' + ${user.isBlocked()}">isBlocked</p>
 

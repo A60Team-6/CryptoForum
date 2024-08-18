@@ -111,8 +111,12 @@
            th:text="#{comment.label.creator}  + ': ' + ${comment.user.firstName + ' ' + comment.user.lastName}">
             Creator</p>
         <p class="margin12" th:text="#{comment.label.content}  + ': ' + ${comment.content}">Content</p>
-        <p class="margin12" th:text="#{comment.label.createdAt} + ': ' + ${comment.createdAt}">01.01.1999</p>
-        <p class="margin12" th:text="#{comment.label.updatedAt}  + ': ' + ${comment.updatedAt}">01.01.1999</p>
+<!--        <p class="margin12" th:text="#{comment.label.createdAt} + ': ' + ${comment.createdAt}">01.01.1999</p>-->
+        <span th:text="#{comment.label.createdAt} + ': ' +  ${#temporals.format(comment.getCreatedAt(), 'dd-MM-yyyy')}">December 28, 2048</span>
+
+<!--        <p class="margin12" th:text="#{comment.label.updatedAt}  + ': ' + ${comment.updatedAt}">01.01.1999</p>-->
+        <span th:text="#{comment.label.updatedAt} + ': ' +  ${#temporals.format(comment.getCreatedAt(), 'dd-MM-yyyy')}">December 28, 2048</span>
+
 
         <div class="button-container">
             <!-- Back to Post Button -->

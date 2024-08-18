@@ -136,12 +136,14 @@ public class AdminMvcController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("phone", new PhoneNumberDto());
-            model.addAttribute("user", user);
+            model.addAttribute("currentUser", user);
+            model.addAttribute("user", userService.getById(user, id));
             return "UserUpdateView";
         }
 
         try {
             User user1 = modelMapper.fromDto(id, userDto);
+            model.addAttribute("user", userService.getById(user, id));
             model.addAttribute("id", id);
             model.addAttribute("userToUpdate", user1);
             model.addAttribute("userToUpdatePosition", user1.getPosition().getId());
@@ -335,7 +337,7 @@ public class AdminMvcController {
             return "UserUpdateView";
         }
 
-
+        model.addAttribute("user", userService.getById(admin, id));
         model.addAttribute("userId", id);
         model.addAttribute("phone", phoneNumberDto);
         UserDto userDto = null;
