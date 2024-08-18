@@ -5,93 +5,94 @@
     <title th:text="'CryptoForum | ' + ${title}">Title</title>
 </head>
 <header th:fragment="header">
-  <div>
+    <div>
 
-    <h3>
-      <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}" >Login</a>
-      <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}" >Admin Panel</a>
-      <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" >Register</a>
-      <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" >Logout</a>
-      <a href="#" th:href="@{/}" th:text="#{navigation.home} + '  '">Home</a>
-      <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts} + '  '">Browse all posts</a>
-      <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post} + '  '">Create Post | </a>
-      <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}" >My Posts</a>
-      <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}" >Me</a>
+        <h3>
+            <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
+            <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Panel</a>
+            <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+            <a href="#" th:href="@{/}" th:text="#{navigation.home} + '  '">Home</a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts} + '  '">Browse
+                all posts</a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post} + '  '">Create
+                Post | </a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}">My Posts</a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">Me</a>
 
-    </h3>
-  </div>
+        </h3>
+    </div>
 </header>
 
 
-
 <div th:fragment="post-form(title)">
-  <h2 th:text="${title}">Title</h2>
+    <h2 th:text="${title}">Title</h2>
 
-  <form action="#" th:action="@{__${requestURI}__}" th:object="${post}" method="post">
-    <label th:text="#{post.label.title}">Post</label>
-    <br/>
+    <form action="#" th:action="@{__${requestURI}__}" th:object="${post}" method="post">
+        <label th:text="#{post.label.title}">Post</label>
+        <br/>
 
-    <label>
-      <input type="text" th:field="*{title}"/>
-    </label>
-    <label class="error" th:errors="*{title}">Title error placeholder</label>
-    <br/><br/>
+        <label>
+            <input type="text" th:field="*{title}"/>
+        </label>
+        <label class="error" th:errors="*{title}">Title error placeholder</label>
+        <br/><br/>
 
-    <label th:text="#{post.label.content}">Content</label>
-    <br/>
+        <label th:text="#{post.label.content}">Content</label>
+        <br/>
 
-    <label>
-      <input type="text" th:field="*{content}">
-    </label>
-    <label class="error" th:errors="*{content}">Content error placeholder</label>
+        <label>
+            <input type="text" th:field="*{content}">
+        </label>
+        <label class="error" th:errors="*{content}">Content error placeholder</label>
 
-    <input type="submit" value="Save"/>
-  </form>
+        <input type="submit" value="Save"/>
+    </form>
 </div>
 
 <style>
-  header {
-    background-color: #007bff; /* Син фон на хедъра */
-    color: #ffffff; /* Бял текст на хедъра */
-    padding: 15px 30px; /* Padding около хедъра */
-    display: flex; /* Използва Flexbox за подредба на съдържанието */
-    justify-content: space-between; /* Разпределя елементите равномерно */
-    align-items: center; /* Центрира елементите вертикално */
-  }
+    header {
+        background-color: #007bff; /* Син фон на хедъра */
+        color: #ffffff; /* Бял текст на хедъра */
+        padding: 15px 30px; /* Padding около хедъра */
+        display: flex; /* Използва Flexbox за подредба на съдържанието */
+        justify-content: space-between; /* Разпределя елементите равномерно */
+        align-items: center; /* Центрира елементите вертикално */
+    }
 
-  /* Стил за заглавието в хедъра */
-  header h3 {
-    margin: 0; /* Премахва маргините на заглавието */
-    font-size: 1.2em; /* Размер на шрифта на заглавието */
-  }
+    /* Стил за заглавието в хедъра */
+    header h3 {
+        margin: 0; /* Премахва маргините на заглавието */
+        font-size: 1.2em; /* Размер на шрифта на заглавието */
+    }
 
-  /* Стил за линковете в хедъра */
-  header a {
-    color: #ffffff; /* Бял текст на линковете */
-    text-decoration: none; /* Премахва подчертаването на линковете */
-    margin-right: 15px; /* Разстояние между линковете */
-    font-size: 1em; /* Размер на шрифта на линковете */
-  }
+    /* Стил за линковете в хедъра */
+    header a {
+        color: #ffffff; /* Бял текст на линковете */
+        text-decoration: none; /* Премахва подчертаването на линковете */
+        margin-right: 15px; /* Разстояние между линковете */
+        font-size: 1em; /* Размер на шрифта на линковете */
+    }
 
-  /* Стил за линковете при ховър */
-  header a:hover {
-    text-decoration: underline; /* Подчертаване на линковете при ховър */
-    color: #f0f0f0; /* Светъл цвят на текста при ховър */
-  }
+    /* Стил за линковете при ховър */
+    header a:hover {
+        text-decoration: underline; /* Подчертаване на линковете при ховър */
+        color: #f0f0f0; /* Светъл цвят на текста при ховър */
+    }
 
-  /* Стил за активните линкове */
-  header a.active {
-    font-weight: bold; /* Дебел шрифт за активния линк */
-  }
+    /* Стил за активните линкове */
+    header a.active {
+        font-weight: bold; /* Дебел шрифт за активния линк */
+    }
 
-  /* За да премахнем последното разстояние след последния линк */
-  header a:last-child {
-    margin-right: 0; /* Премахва разстоянието след последния линк */
-  }
+    /* За да премахнем последното разстояние след последния линк */
+    header a:last-child {
+        margin-right: 0; /* Премахва разстоянието след последния линк */
+    }
 </style>
 
 <footer th:fragment="footer">
-  <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
 </footer>
 
 <body>
