@@ -159,7 +159,7 @@
 
         /* Стил за бутоните */
         .button-group .button {
-            background-color: rgba(0, 123, 255, 0.6); /* Прозрачен син фон */
+            background-color: rgba(0, 123, 255, 0.8); /* Прозрачен син фон */
             color: #ffffff; /* Бял текст */
             text-decoration: none; /* Премахва подчертаването на линковете */
             padding: 12px 24px; /* Padding около бутоните */
@@ -171,9 +171,22 @@
         }
 
         .button-group .button:hover {
-            background-color: rgba(0, 123, 255, 0.6); /* По-тъмен прозрачен син фон при ховър */
+            background-color: rgba(0, 123, 255, 0.8); /* По-тъмен прозрачен син фон при ховър */
             transform: translateY(-2px); /* Лек ефект на подем при ховър */
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.20); /* По-силна сянка при ховър */
+        }
+        /* Основен стил за футъра */
+        footer {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+            text-align: center;
+            margin-top: auto; /* Премества футъра на дъното на страницата */
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        footer small {
+            color: #ffffff;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -193,7 +206,7 @@
         <span th:if="${isAuthenticated}">
             <a href="#" th:if="${session.isModerator}" th:href="@{/admin}">Moderator Panel</a>
         </span>
-        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">Me</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">My Profile</a>
         <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
     </h3>
 </div>
