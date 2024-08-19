@@ -147,6 +147,7 @@
         .phone-section button {
             margin-left: 10px; /* Разстояние между телефонния номер и бутона */
         }
+
         footer {
             background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
             text-align: center;
@@ -186,17 +187,17 @@
         <!--             src="/static/assets/img/bitAvatar1.png"-->
         <!--             alt="Profile Photo"/>-->
 
-<!--             th:src="@{${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? user.profilePhoto : '/assets/img/bitAvatar1.png'}}"-->
+        <!--             th:src="@{${(user.profilePhoto != null and !user.profilePhoto.isEmpty()) ? user.profilePhoto : '/assets/img/bitAvatar1.png'}}"-->
 
         <img class="img-fluid" th:object="${avatarUrl}" th:src="${avatarUrl}"
              src="/static/assets/img/bitAvatar1.png"
              alt="Profile Photo"/>
     </div>
-<!--    <label class="custom-file-upload">-->
-<!--        <input type="file" th:field="*{user.profilePhoto}" accept="image/jpeg" onchange="previewProfilePhoto(event)"/>-->
-<!--        Change profile photo-->
-<!--    </label>-->
-<!--    <label class="error" th:errors="*{user.profilePhoto}">Profile photo error placeholder</label>-->
+    <!--    <label class="custom-file-upload">-->
+    <!--        <input type="file" th:field="*{user.profilePhoto}" accept="image/jpeg" onchange="previewProfilePhoto(event)"/>-->
+    <!--        Change profile photo-->
+    <!--    </label>-->
+    <!--    <label class="error" th:errors="*{user.profilePhoto}">Profile photo error placeholder</label>-->
 
     <p class="margin12" th:text="#{user.label.username} + ': ' + ${user.username}">Username</p>
     <p class="margin12" th:text="#{user.label.email} + ': ' + ${user.email}">Email</p>
@@ -232,5 +233,6 @@
 
 <footer>
     <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
-</footer></body>
+</footer>
+</body>
 </html>
