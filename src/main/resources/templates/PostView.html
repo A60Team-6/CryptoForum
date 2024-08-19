@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Post Details</title>
@@ -195,6 +195,10 @@
             color: #ffffff;
             font-size: 0.9em;
         }
+        .likes-count {
+            color: #101010; /* Цветът, съответстващ на съдържанието */
+            font-size: 1em; /* По желание: задайте размер на шрифта */
+        }
     </style>
     <script>
         function toggleForm(formId) {
@@ -236,6 +240,7 @@
             <span th:text="'Likes: ' + ${post.likes}">Likes</span>
         </div>
         <p th:text="${post.content}">Post content goes here...</p>
+        <span class="likes-count" th:text="'Likes: ' + ${post.likes}">Likes</span>
     </div>
 
     <div class="actions">
@@ -254,6 +259,7 @@
                 <a th:href="@{/posts/{postId}/comment/{commentId}(postId=${post.id}, commentId=${comment.id})}" th:text="${comment.content}">Comment content</a>
             </li>
         </ul>
+        <br></br>
         <button type="button" class="btn" onclick="toggleForm('commentForm')">Add Comment</button>
         <div id="commentForm" class="form-container">
             <form th:action="@{/posts/{id}(id=${post.id})}" th:object="${comment}" method="post">
@@ -272,6 +278,7 @@
                 <a th:href="@{/posts/{postId}/tags/{id}(postId=${post.id}, id=${tag.id})}" th:text="${'#' + tag.name}">#tag</a>
             </div>
         </div>
+        <br></br>
         <button th:if="${currentUser.username.equals(post.user.username)}" type="button" class="btn" onclick="toggleForm('tagForm')">Add Tag</button>
         <div id="tagForm" class="form-container">
             <form th:action="@{/posts/{id}/newTag(id=${post.id})}" th:object="${tag}" method="post">

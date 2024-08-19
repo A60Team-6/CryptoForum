@@ -100,6 +100,16 @@
             text-decoration: none;
         }
 
+        .likes-count {
+            color: #f1f1f1; /* Цветът, съответстващ на съдържанието */
+            font-size: 1em; /* По желание: задайте размер на шрифта */
+        }
+
+        .likes-count {
+            color: #f1f1f1; /* Цветът, съответстващ на съдържанието */
+            font-size: 1em; /* По желание: задайте размер на шрифта */
+        }
+
         .post-title a:hover {
             text-decoration: underline;
         }
@@ -171,10 +181,13 @@
     <div th:unless="${posts.isEmpty()}">
         <div class="row" th:each="post : ${posts}">
             <div class="cell">
-                <a class="post-title" th:if="${isAuthenticated}" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
-                <a class="post-title" th:unless="${isAuthenticated}" th:href="@{/auth/login}" th:text="${post.title}"></a>
+                <a class="post-title" th:if="${isAuthenticated}" th:href="@{/posts/{id}(id=${post.id})}"
+                   th:text="${post.title}"></a>
+                <a class="post-title" th:unless="${isAuthenticated}" th:href="@{/auth/login}"
+                   th:text="${post.title}"></a>
             </div>
             <div class="post-content" th:text="${post.content}"></div>
+            <span class="likes-count" th:text="'Likes: ' + ${post.likes}">Likes</span>
             <div class="post-tags">
                 <div class="tag" th:each="tag : ${post.tagsOfThePost}" th:text="${'#' + tag}"></div>
             </div>

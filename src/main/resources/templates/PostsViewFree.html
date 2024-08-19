@@ -193,6 +193,11 @@
             margin-bottom: 10px;
         }
 
+        .likes-count {
+            color: #f1f1f1; /* Цветът, съответстващ на съдържанието */
+            font-size: 1em; /* По желание: задайте размер на шрифта */
+        }
+
         .post-tags {
             display: flex;
             flex-wrap: wrap; /* Позволява на таговете да се увиват на нов ред, ако няма достатъчно място */
@@ -333,10 +338,11 @@
                        th:text="${post.title}">Post</a>
                 </div>
                 <div class="post-content" th:text="${post.content}">Content</div>
+                <span class="likes-count" th:text="'Likes: ' + ${post.likes}">Likes</span>
                 <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
                     <div class="tag" th:text="${'#' + tag}">#Tag</div>
                 </div>
-                           </div>
+            </div>
         </div>
         <div>
             <ul class="pagination">

@@ -28,6 +28,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
+
         /* Стил за навигационния бар */
         .navigation {
             width: 100%;
@@ -130,6 +131,7 @@
             color: #495057;
             font-size: 0.9em;
         }
+
         footer {
             background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
             text-align: center;
@@ -141,6 +143,11 @@
         footer small {
             color: #ffffff;
             font-size: 0.9em;
+        }
+
+        .likes-count {
+            color: #101010; /* Цветът, съответстващ на съдържанието */
+            font-size: 1em; /* По желание: задайте размер на шрифта */
         }
     </style>
 </head>
@@ -177,6 +184,7 @@
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
                 </div>
                 <div class="cell post-content" th:text="${post.content}">Content</div>
+                <span class="likes-count" th:text="'Likes: ' + ${post.likes}">Likes</span>
 
                 <!-- Показване на таговете към поста -->
                 <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
@@ -188,5 +196,7 @@
 </div>
 <footer>
     <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
-</footer></body></body>
+</footer>
+</body>
+</body>
 </html>
