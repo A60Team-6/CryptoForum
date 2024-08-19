@@ -118,7 +118,7 @@ public class AuthenticationController {
                 String profilePhotoFilename = saveProfilePhoto(registerDto.getProfilePhoto());
                 user.setProfilePhoto(profilePhotoFilename);
             } else {
-                user.setProfilePhoto("default-avatar.png");
+                user.setProfilePhoto("/assets/img/bitAvatar1.png");
             }
 
             userService.createUser(user);
@@ -135,22 +135,25 @@ public class AuthenticationController {
     }
 
     private String saveProfilePhoto(MultipartFile profilePhoto) throws IOException {
-        String uploadDir = "static/assets/img";
-        String filename = UUID.randomUUID() + "-" + profilePhoto.getOriginalFilename();
+        String uploadDir = "/assets/img";
+       // String filename = UUID.randomUUID() + "-" + profilePhoto.getOriginalFilename();
+        String filename =  profilePhoto.getOriginalFilename();
+
         Path uploadPath = Paths.get(uploadDir);
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-
+        Path filePath;
         try (InputStream inputStream = profilePhoto.getInputStream()) {
-            Path filePath = uploadPath.resolve(filename);
+            assert filename != null;
+            filePath = uploadPath.resolve(filename);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new IOException("Could not save profile photo: " + filename, e);
         }
 
-        return filename;
+        return filePath.toString();
     }
 
 }

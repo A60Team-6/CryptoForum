@@ -96,6 +96,7 @@ public class AdminMvcController {
         try {
             User admin = authenticationHelper.tryGetUser(session);
             User user = userService.getById(admin, id);
+
             model.addAttribute("user", user);
             model.addAttribute("currentUser", admin);
             return "UserView";
@@ -325,6 +326,8 @@ public class AdminMvcController {
         try {
             User admin = authenticationHelper.tryGetUser(session);
             User user = userService.getById(admin, admin.getId());
+            String avatarUrl = (user.getProfilePhoto() != null && !user.getProfilePhoto().isEmpty()) ? user.getProfilePhoto() : "/assets/img/bitAvatar1.png";
+            model.addAttribute("avatarUrl", avatarUrl);
             model.addAttribute("user", user);
             return "MeView";
         } catch (EntityNotFoundException e) {

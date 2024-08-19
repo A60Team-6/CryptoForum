@@ -339,7 +339,8 @@
                        th:text="${post.title}">Post</a>
                 </div>
                 <div class="post-content" th:text="${post.content}">Content</div>
-                <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
+                <span th:text="'Likes: ' + ${post.likes}">Likes</span>
+                <div class="post-content" th:each="tag : ${post.tagsOfThePost}">
                     <div class="tag" th:text="${'#' + tag}">#Tag</div>
                 </div>
                 <form th:if="${post.usersWhoLikedPost.contains(currentUser)}"
