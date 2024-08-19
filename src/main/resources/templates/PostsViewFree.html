@@ -336,15 +336,7 @@
                 <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
                     <div class="tag" th:text="${'#' + tag}">#Tag</div>
                 </div>
-                <form th:if="${post.usersWhoLikedPost.contains(currentUser)}"
-                      th:action="@{/posts/{id}/removeLike(id=${post.id})}" method="post">
-                    <button type="submit" class="like-button">Unlike</button>
-                </form>
-                <form th:if="${!post.usersWhoLikedPost.contains(currentUser)}"
-                      th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
-                    <button type="submit" class="like-button">Like</button>
-                </form>
-            </div>
+                           </div>
         </div>
         <div>
             <ul class="pagination">
