@@ -4,9 +4,41 @@
     <meta charset="UTF-8">
     <title th:text="${title}"></title>
     <style>
+        .navigation {
+            width: 100%;
+            max-width: none; /* Премахване на ограничението в ширината */
+            display: flex;
+            justify-content: center; /* Центриране на бутоните */
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            padding: 8px 0; /* Намаляване на padding-а */
+            border-radius: 6px 6px 0 0;
+            margin-bottom: 15px; /* Намаляване на margin-а */
+            gap: 10px; /* Малко разстояние между бутоните */
+        }
+
+        /* Стил за линковете в навигацията */
+        .navigation a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 12px; /* Намаляване на padding-а */
+            font-size: 0.9em; /* Намаляване на размера на шрифта */
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Стил за линковете при ховър */
+        .navigation a:hover {
+            background-color: #0056b3;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/img/pngtree-bitcoin.jpg'); /* Фонова снимка */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
             display: flex;
@@ -94,11 +126,41 @@
             color: #495057;
             font-size: 0.9em;
         }
+
+        footer {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+            text-align: center;
+            margin-top: auto; /* Премества футъра на дъното на страницата */
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        footer small {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-<header th:replace="~{PostForm.html :: header}"></header>
-
+<div class="navigation">
+    <h3>
+        <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/posts/free}" th:text="#{navigation.all-posts-free}">All
+            Posts free</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts}">All posts</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post}">Create
+            Post</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}">My Posts</a>
+        <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Panel</a>
+        <span th:if="${isAuthenticated}">
+            <a href="#" th:if="${session.isModerator}" th:href="@{/admin}">Moderator Panel</a>
+        </span>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">My Profile</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+    </h3>
+</div>
 <div class="body-content">
     <div class="header">
         <h1 th:text="${title}"></h1>
@@ -109,7 +171,8 @@
     <div th:unless="${posts.isEmpty()}">
         <div class="row" th:each="post : ${posts}">
             <div class="cell">
-                <a class="post-title" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
+                <a class="post-title" th:if="${isAuthenticated}" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
+                <a class="post-title" th:unless="${isAuthenticated}" th:href="@{/auth/login}" th:text="${post.title}"></a>
             </div>
             <div class="post-content" th:text="${post.content}"></div>
             <div class="post-tags">
@@ -118,8 +181,8 @@
         </div>
     </div>
 </div>
-
-
-<footer th:replace="~{PostForm.html :: footer}"></footer>
+<footer>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+</footer>
 </body>
 </html>

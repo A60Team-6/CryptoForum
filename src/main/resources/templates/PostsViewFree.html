@@ -1,60 +1,351 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('All Posts')}"></form>
+<head>
+    <meta charset="UTF-8">
+    <title>All Posts Free View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/img/about-bg.jpg'); /* Указва пътя към изображението */
+            background-size: cover; /* Изображението покрива целия екран */
+            background-position: center; /* Центрира изображението */
+            background-repeat: no-repeat; /* Избягва повторението на изображението */
+            background-attachment: fixed; /* Изображението остава фиксирано при скролване */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Стил за навигационния бар */
+        .navigation {
+            width: 100%;
+            max-width: none; /* Премахване на ограничението в ширината */
+            display: flex;
+            justify-content: center; /* Центриране на бутоните */
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            padding: 8px 0; /* Намаляване на padding-а */
+            border-radius: 6px 6px 0 0;
+            margin-bottom: 15px; /* Намаляване на margin-а */
+            gap: 10px; /* Малко разстояние между бутоните */
+        }
+
+        /* Стил за линковете в навигацията */
+        .navigation a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 12px; /* Намаляване на padding-а */
+            font-size: 0.9em; /* Намаляване на размера на шрифта */
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Стил за линковете при ховър */
+        .navigation a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стил за навигационните линкове */
+        header a {
+            color: #ffffff; /* Бял цвят на текста на линковете */
+            text-decoration: none; /* Премахва подчертаването на линковете */
+            font-weight: 500; /* Полужирен шрифт */
+            padding: 8px 15px; /* Padding около текста на линковете */
+            border-radius: 4px; /* Заоблени краища на линковете */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавни преходи за фона и сянката при ховър */
+        }
+
+        /* Стил за линковете при ховър */
+        header a:hover {
+            background-color: #ffffff; /* Бял фон при ховър */
+            color: #007bff; /* Син цвят на текста при ховър */
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); /* Светеща сянка при ховър */
+        }
+
+        .body-content {
+            width: 100%;
+            max-width: 900px; /* Намаляване на максималната ширина */
+            background-color: rgba(152, 152, 152, 0.2); /* заден фон фон */
+            padding: 30px; /* Увеличен падинг */
+            border-radius: 12px; /* По-големи заоблени краища */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* По-осезаема сянка */
+            margin-top: 20px;
+        }
+
+        /* Основен стил за хедъра */
+        header {
+            background-color: #007bff; /* Син фон за хедъра */
+            padding: 15px 20px; /* Padding около хедъра */
+            color: #ffffff; /* Бял цвят на текста */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лека сянка под хедъра */
+            display: flex; /* Flexbox за подредба на съдържанието */
+            justify-content: center; /* Центрира съдържанието хоризонтално */
+            align-items: center; /* Подравнява съдържанието вертикално */
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6em;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap; /* Позволява на формата да се разпределя в няколко реда */
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
 
 
+        input[type="text"], input[type="number"], input[type="datetime-local"], select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            background-color: #f8f9fa;
+            flex: 1 1 150px; /* Гъвкаво оформление с минимална ширина */
+        }
+
+        input[type="submit"] {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            flex: 0 1 auto; /* Не позволява на бутона да се разтяга */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.02);
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header {
+            display: flex;
+            padding: 12px;
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(0, 123, 255, 0.1); /* заден фон фон */
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .cell {
+            padding: 10px;
+        }
+
+        .post-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .post-title a:hover {
+            text-decoration: underline;
+        }
+
+        .post-content {
+            color: #f1f1f1;
+            font-size: 1em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap; /* Позволява на таговете да се увиват на нов ред, ако няма достатъчно място */
+            gap: 8px; /* Пространство между таговете */
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            color: #495057;
+            font-size: 0.9em;
+        }
+
+
+        .like-button {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            margin-left: auto;
+        }
+
+        .like-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .pagination {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 10px 15px;
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .pagination li a:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+
+        .pagination .active a {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #007bff;
+        }
+
+        footer {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+            text-align: center;
+            margin-top: auto; /* Премества футъра на дъното на страницата */
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        footer small {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
-
+<div class="navigation">
+    <h3>
+        <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/posts/free}" th:text="#{navigation.all-posts-free}">All
+            Posts free</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a>
+        <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post}">Create
+            Post</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}">My Posts</a>
+        <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Panel</a>
+        <span th:if="${isAuthenticated}">
+            <a href="#" th:if="${session.isModerator}" th:href="@{/admin}">Moderator Panel</a>
+        </span>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">My Profile</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+    </h3>
+</div>
 <div class="body-content">
-    <form action="#" th:action="@{/posts/free}" method="get" th:object="${filteredPostsOptions}">
-        <label th:text="#{posts.filter.label}">Filter Post Options</label>
-        <br/><br/>
-        <input type="text" placeholder="Post Title" th:field="*{title}"/>
-        <input type="text" placeholder="Post Content" th:field="*{content}"/>
-        <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
-        <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
+    <div class="header">
+        <h1 th:text="#{posts.filter.label}">Filter Post Options</h1>
+    </div>
+    <div class="form-section">
+        <form action="#" th:action="@{/posts/free}" method="get" th:object="${filteredPostsOptions}">
+            <div class="input-row">
+                <input type="text" placeholder="Post Title" th:field="*{title}"/>
+                <input type="text" placeholder="Post Content" th:field="*{content}"/>
+                <input type="number" min="0" max="100000" placeholder="minLikes" th:field="*{minLikes}"/>
+                <input type="number" min="0" max="100000" placeholder="maxLikes" th:field="*{maxLikes}"/>
 
-        <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
-        <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
+            </div>
+            <div class="input-row">
 
+                <input type="datetime-local" placeholder="Date" th:field="*{createBefore}">
+                <input type="datetime-local" placeholder="Date" th:field="*{createAfter}">
 
-        <select th:field="*{sortBy}">
-            <option value="">Sort By</option>
-            <option value="title">Title</option>
-            <option value="content">Content</option>
-        </select>
-        <select th:field="*{sortOrder}">
-            <option value="">Sort Order</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-        <br/><br/>
-
-        <input type="submit" value="Search"/>
-    </form>
-
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-    <div th:if="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title.empty}">No Posts</h2>
+                <select th:field="*{sortBy}">
+                    <option value="">Sort By</option>
+                    <option value="title">Title</option>
+                    <option value="content">Content</option>
+                </select>
+                <select th:field="*{sortOrder}">
+                    <option value="">Sort Order</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <input type="submit" value="Search"/>
+        </form>
     </div>
     <div th:unless="${posts.isEmpty()}">
-        <h2 th:text="#{posts.title}">All Posts</h2>
-
         <div class="table">
+            <div class="header">
+                <h2 th:text="#{posts.title}">All Posts</h2>
+            </div>
             <div class="row" th:each="post : ${posts}">
-                <div class="cell post-title">
-                    <a th:text="${post.title}">Post</a>
+                <div class="cell">
+                    <a class="post-title" href="#" th:href="@{/auth/login}"
+                       th:text="${post.title}">Post</a>
                 </div>
-                <div class="cell post-content" th:text="${post.content}">Content</div>
-                <div class="cell post-tags">
-                    <div th:each="tag : ${post.tagsOfThePost}" class="tag" th:text="${'#' + tag}">#Tag</div>
+                <div class="post-content" th:text="${post.content}">Content</div>
+                <div class="post-tags" th:each="tag : ${post.tagsOfThePost}">
+                    <div class="tag" th:text="${'#' + tag}">#Tag</div>
                 </div>
-                <br/><br/>
+                <form th:if="${post.usersWhoLikedPost.contains(currentUser)}"
+                      th:action="@{/posts/{id}/removeLike(id=${post.id})}" method="post">
+                    <button type="submit" class="like-button">Unlike</button>
+                </form>
+                <form th:if="${!post.usersWhoLikedPost.contains(currentUser)}"
+                      th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
+                    <button type="submit" class="like-button">Like</button>
+                </form>
             </div>
         </div>
-
         <div>
             <ul class="pagination">
                 <li th:if="${currentPage > 1}">
@@ -93,175 +384,10 @@
             </ul>
         </div>
     </div>
+
 </div>
-<style>
-    form {
-        background-color: #ffffff; /* Бел фон на формата */
-        border-radius: 8px; /* Заоблени краища на формата */
-        padding: 20px; /* Padding около формата */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
-        max-width: 1000px; /* Максимална ширина на формата */
-        margin: 0 auto; /* Центрира формата на страницата */
-    }
-
-    /* Стил за контейнера на филтрите */
-    .form-group {
-        display: flex; /* Използва Flexbox за подредба на полетата в редица */
-        flex-wrap: wrap; /* Позволява на полетата да се прехвърлят на нов ред при нужда */
-        gap: 15px; /* Разстояние между полетата */
-        margin-bottom: 15px; /* Разстояние между групите от полета */
-    }
-
-    /* Стил за етикетите */
-    form label {
-        display: block; /* Показва етикета на нов ред */
-        font-weight: bold; /* Дебел шрифт за етикетите */
-        margin-bottom: 5px; /* Разстояние под етикетите */
-        color: #333; /* Тъмен цвят на текста */
-    }
-
-    /* Стил за текстовите полета и селектори */
-    form input[type="text"],
-    form input[type="number"],
-    form input[type="datetime-local"],
-    form select {
-        flex: 1; /* Полето да заема наличното пространство */
-        min-width: 150px; /* Минимална ширина на полето */
-        padding: 10px; /* Padding в полето */
-        border: 1px solid #ddd; /* Лека граница около полето */
-        border-radius: 4px; /* Заоблени краища на полето */
-        font-size: 1em; /* Размер на шрифта в полето */
-        box-sizing: border-box; /* Включва padding и border в ширината на полето */
-    }
-
-    /* Стил за бутона за изпращане */
-    form input[type="submit"] {
-        background-color: #007bff; /* Син фон на бутона */
-        color: #ffffff; /* Бял текст на бутона */
-        padding: 10px 20px; /* Padding в бутона */
-        border: none; /* Без граница на бутона */
-        border-radius: 4px; /* Заоблени краища на бутона */
-        font-size: 1em; /* Размер на шрифта в бутона */
-        cursor: pointer; /* Курсор при посочване на бутона */
-        transition: background-color 0.3s ease; /* Плавен преход при промяна на цвета */
-        margin-top: 15px; /* Разстояние отгоре на бутона */
-    }
-
-    /* Стил за бутона при ховър */
-    form input[type="submit"]:hover {
-        background-color: #0056b3; /* По-тъмен син цвят при ховър */
-    }
-
-    /* Стил за предупрежденията */
-    .alert {
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        color: #fff;
-    }
-
-    .alert-danger {
-        background-color: #dc3545; /* Червен фон за опасност */
-    }
-
-    /* Стил за съобщенията за празни постове */
-    h2 {
-        color: #555; /* Тъмен цвят на заглавията */
-        text-align: center; /* Центрира текста */
-        margin-top: 20px; /* Разстояние отгоре */
-    }
-
-
-
-
-
-
-    .table {
-        width: 100%;
-        padding: 20px; /* Padding около таблицата */
-        background-color: #f9f9f9; /* Лек фон за цялата таблица */
-    }
-
-    /* Стил за редовете */
-    .row {
-        display: flex; /* Използва Flexbox за подредба на клетките в реда */
-        margin-bottom: 15px; /* Разстояние между редовете */
-        padding: 15px; /* Padding на реда */
-        background-color: #fff; /* Бел фон на реда */
-        border-radius: 8px; /* Заоблени краища на реда */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
-    }
-
-    /* Стил за клетките */
-    .cell {
-        flex: 1; /* Всяка клетка да заема равно пространство */
-        padding: 10px;
-    }
-
-    /* Стил за заглавията на постовете */
-    .post-title a {
-        color: #007bff; /* Цвят на заглавието (син) */
-        text-decoration: none; /* Премахва подчертаването на линка */
-        font-size: 1.4em; /* Размер на шрифта на заглавието */
-        display: block; /* Слага заглавието на нов ред */
-        margin-bottom: 8px; /* Разстояние под заглавието */
-        font-weight: bold; /* Дебел шрифт за заглавието */
-    }
-
-    /* Стил за съдържанието на постовете */
-    .post-content {
-        color: #555; /* По-тъмен цвят за съдържанието */
-        font-size: 1em; /* Размер на шрифта на съдържанието */
-        margin-bottom: 8px; /* Разстояние под съдържанието */
-    }
-
-    /* Стил за таговете на постовете */
-    .post-tags {
-        display: flex; /* Подрежда таговете в редица */
-        flex-wrap: wrap; /* Позволява таговете да се прехвърлят на нов ред при нужда */
-        gap: 5px; /* Разстояние между таговете */
-    }
-
-    /* Стил за индивидуалните тагове */
-    .tag {
-        background-color: #e9ecef; /* Светъл фон на таговете (сив) */
-        color: #007bff; /* Цветен текст на таговете */
-        padding: 5px 10px;
-        border-radius: 20px; /* Заоблени краища на таговете (кръгли) */
-        font-size: 0.9em; /* Размер на шрифта на таговете */
-        font-weight: 500; /* Полудебел шрифт за таговете */
-    }
-
-
-    .pagination {
-        display: flex;
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .pagination li {
-        margin: 0 5px;
-    }
-
-    .pagination li a {
-        text-decoration: none;
-        padding: 10px 15px;
-        color: #007bff;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-    }
-
-    .pagination li a:hover {
-        background-color: #f8f9fa;
-        color: #007bff;
-    }
-
-    .pagination .active a {
-        background-color: #007bff;
-        color: #ffffff;
-        border-color: #007bff;
-    }
-</style>
-
+<footer>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+</footer>
 </body>
 </html>
