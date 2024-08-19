@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Portal</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
     <style>
+
+        /* Стил за навигационния бар */
+        .navigation {
+            width: 100%;
+            max-width: none; /* Премахване на ограничението в ширината */
+            display: flex;
+            justify-content: center; /* Центриране на бутоните */
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+            padding: 8px 0; /* Намаляване на padding-а */
+            border-radius: 6px 6px 0 0;
+            margin-bottom: 15px; /* Намаляване на margin-а */
+            gap: 10px; /* Малко разстояние между бутоните */
+        }
+
+        /* Стил за линковете в навигацията */
+        .navigation a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 12px; /* Намаляване на padding-а */
+            font-size: 0.9em; /* Намаляване на размера на шрифта */
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Стил за линковете при ховър */
+        .navigation a:hover {
+            background-color: #0056b3;
+        }
+
         /* Основен стил за хедъра */
         header {
             background-color: #007bff;
@@ -53,21 +82,21 @@
         }
 
         .body-content {
-            text-align: center;
-            padding: 30px 15px; /* Намален padding */
-            max-width: 800px; /* Намалена ширина */
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 15px; /* Намален margin */
+            text-align: center; /* Центрира текста */
+            padding: 40px 20px; /* Padding около съдържанието */
+            max-width: 1000px; /* Увеличаване на максималната ширина на съдържанието */
+            background-color: rgba(255, 255, 255, 0.6); /* Прозрачен бял фон */
+            border-radius: 8px; /* Заоблени краища на съдържанието */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лека сянка за 3D ефект */
+            margin-top: 20px; /* Разстояние от хедъра */
         }
 
         .body-content h2 {
-            color: #333;
-            font-size: 2em; /* Намален размер на шрифта */
-            margin: 0 0 15px; /* Намален margin */
-            padding-bottom: 8px; /* Намален padding */
-            border-bottom: 2px solid #007bff;
+            color: #007bff; /* Син цвят на заглавието */
+            font-size: 3em; /* По-голям размер на шрифта на заглавието */
+            margin: 0 0 20px; /* Разстояние под заглавието */
+            padding-bottom: 10px; /* Разстояние под заглавието */
+            border-bottom: 2px solid #007bff; /* Долна граница под заглавието */
         }
 
         .button {
@@ -87,11 +116,36 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
+
+        footer {
+            background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+            text-align: center;
+            margin-top: auto; /* Премества футъра на дъното на страницата */
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        footer small {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-<div th:replace="~{PostForm.html :: header}"></div>
-
+<div class="navigation">
+    <h3>
+        <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts}" th:text="#{navigation.all-posts}">All posts</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}" th:text="#{navigation.create-post}">Create
+            Post</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/postsOfUser}">My Posts</a>
+        <span th:if="${isAuthenticated}">
+            <a href="#" th:if="${session.isModerator}" th:href="@{/admin}">Moderator Panel</a>
+        </span>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">My Profile</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
+    </h3>
+</div>
 <div class="body-content">
     <h2 th:text="#{admin.welcome}">Welcome to the Portal</h2>
     <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
@@ -102,7 +156,8 @@
         </form>
     </div>
 </div>
-
-<div th:replace="~{PostForm.html :: footer}"></div>
+<footer>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+</footer>
 </body>
 </html>
