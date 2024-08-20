@@ -66,6 +66,12 @@ public class AdminMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+//    @ModelAttribute("isBlocked")
+//    public boolean populateIsBlocked(HttpSession session) {
+//        User currentUser = (User) session.getAttribute("currentUser");
+//        return currentUser != null && currentUser.isBlocked();
+//    }
+
     @GetMapping("/users")
     public String showAllUsers(@ModelAttribute("filteredUserOptions") FilterUserDto filterUserDto,
                                @RequestParam(defaultValue = "0") int page,
@@ -116,6 +122,10 @@ public class AdminMvcController {
            user1 = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         try {
@@ -141,6 +151,10 @@ public class AdminMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/Login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         if (bindingResult.hasErrors()) {
@@ -171,6 +185,10 @@ public class AdminMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -211,6 +229,10 @@ public class AdminMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         try {
@@ -227,7 +249,8 @@ public class AdminMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
-        }catch (BlockedException e){
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
         }
@@ -243,6 +266,10 @@ public class AdminMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         try {
@@ -259,9 +286,10 @@ public class AdminMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
-        }catch (BlockedException e){
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "AccessDeniedView";
+            return "BlockedView";
         }
 
     }

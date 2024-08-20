@@ -203,7 +203,7 @@
         <div th:if="${user.position.id == 1}" class="phone-section">
             <div th:each="phone : ${user.adminPhones}">
                 <span th:text="${phone.phoneNumber}"></span>
-                <form th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}" method="post" style="display: inline;">
+                <form th:if="user.id == currentUser.id" th:action="@{/admin/phoneNumber/{id}/delete(id=${phone.phoneId})}" method="post" style="display: inline;">
                     <button type="submit" class="delete">Delete</button>
                 </form>
             </div>

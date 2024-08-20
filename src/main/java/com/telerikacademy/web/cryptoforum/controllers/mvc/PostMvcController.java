@@ -60,6 +60,12 @@ public class PostMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+//    @ModelAttribute("isBlocked")
+//    public boolean populateIsBlocked(HttpSession session) {
+//        User currentUser = (User) session.getAttribute("currentUser");
+//        return currentUser != null && currentUser.isBlocked();
+//    }
+
     @GetMapping("/free")
     public String showAllPostsBeforeAuth(@ModelAttribute("filteredPostsOptions") FilterPostDto filterPostDto,
                                          @RequestParam(defaultValue = "0") int page,
@@ -149,6 +155,10 @@ public class PostMvcController {
             authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/Login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         model.addAttribute("post", new PostDto());
@@ -183,6 +193,10 @@ public class PostMvcController {
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("name", "duplicate_post", e.getMessage());
             return "PostCreateView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -204,6 +218,10 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -237,6 +255,10 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -282,6 +304,10 @@ public class PostMvcController {
         } catch (UnsupportedOperationException е) {
             model.addAttribute("error", "You can not like this post twice!");
             return "redirect:/posts";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -304,6 +330,10 @@ public class PostMvcController {
         } catch (UnsupportedOperationException е) {
             model.addAttribute("error", "You can not like this post twice!");
             return "redirect:/posts";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -316,6 +346,10 @@ public class PostMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
 
@@ -345,6 +379,10 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -386,6 +424,10 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -399,6 +441,10 @@ public class PostMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "redirect:/Login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         if (bindingResult.hasErrors()) {
@@ -430,6 +476,10 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             model.addAttribute("error", e.getMessage());
             return "AccessDeniedView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 
@@ -485,6 +535,10 @@ public class PostMvcController {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
 
         Post post;
@@ -521,6 +575,10 @@ public class PostMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }catch (UnauthorizedOperationException e){
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "BlockedView";
         }
     }
 

@@ -43,6 +43,12 @@ public class HomeMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+//    @ModelAttribute("isBlocked")
+//    public boolean populateIsBlocked(HttpSession session) {
+//        User currentUser = (User) session.getAttribute("currentUser");
+//        return currentUser != null && currentUser.isBlocked();
+//    }
+
     @GetMapping
     public String showHomePage(Model model) {
         model.addAttribute("countOfUsers", userService.countUsers());

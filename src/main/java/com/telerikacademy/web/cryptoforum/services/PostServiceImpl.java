@@ -81,6 +81,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void likePost(Post post, User user) {
+        PermissionHelper.isBlocked(user, "You are blocked.");
         Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
 
         if (userWhoLikedThePost.contains(user)) {
@@ -95,6 +96,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void removeLike(Post post, User user) {
+        PermissionHelper.isBlocked(user, "You are blocked.");
+
         Set<User> userWhoLikedThePost = post.getUsersWhoLikedPost();
 
         if (!userWhoLikedThePost.contains(user)) {

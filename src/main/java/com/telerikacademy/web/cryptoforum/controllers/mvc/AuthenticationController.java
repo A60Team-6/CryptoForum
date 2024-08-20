@@ -50,6 +50,12 @@ public class AuthenticationController {
         return session.getAttribute("currentUser") != null;
     }
 
+//    @ModelAttribute("isBlocked")
+//    public boolean populateIsBlocked(HttpSession session) {
+//        String currentUser = (String) session.getAttribute("currentUser");
+//        User user = userService.getByUsername(currentUser);
+//        return user != null && user.isBlocked();
+//    }
 
     @GetMapping("/login")
     public String showLoginPage(Model model) {
