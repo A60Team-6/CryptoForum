@@ -1,0 +1,143 @@
+@charset "UTF-8";
+
+.navigation {
+    width: 100%;
+    max-width: none; /* Премахване на ограничението в ширината */
+    display: flex;
+    justify-content: center; /* Центриране на бутоните */
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+    padding: 8px 0; /* Намаляване на padding-а */
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 15px; /* Намаляване на margin-а */
+    gap: 10px; /* Малко разстояние между бутоните */
+}
+
+/* Стил за линковете в навигацията */
+.navigation a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 12px; /* Намаляване на padding-а */
+    font-size: 0.9em; /* Намаляване на размера на шрифта */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Стил за линковете при ховър */
+.navigation a:hover {
+    background-color: #0056b3;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/assets/img/pngtree-bitcoin.jpg'); /* Фонова снимка */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.body-content {
+    width: 100%;
+    max-width: 900px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: center; /* Центрира по хоризонтала */
+    align-items: center; /* Центрира по вертикала */
+    padding: 12px;
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    margin: 0; /* Премахва външния отстъп на заглавието */
+    font-size: 1.6em; /* Размер на шрифта */
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.cell {
+    padding: 10px;
+}
+
+.post-title {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.post-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.likes-count {
+    color: #151414; /* Цветът, съответстващ на съдържанието */
+    font-size: 1em; /* По желание: задайте размер на шрифта */
+}
+
+.post-title a:hover {
+    text-decoration: underline;
+}
+
+.post-content {
+    color: #555;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    color: #495057;
+    font-size: 0.9em;
+}
+
+footer {
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+    text-align: center;
+    margin-top: auto; /* Премества футъра на дъното на страницата */
+    padding: 10px 0;
+    width: 100%;
+}
+
+footer small {
+    color: #ffffff;
+    font-size: 0.9em;
+}

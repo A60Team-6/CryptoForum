@@ -2,125 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update User</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .navigation {
-            width: 100%;
-            max-width: 700px; /* Намаляване на ширината */
-            display: flex;
-            justify-content: center;
-            background-color: #007bff;
-            padding: 8px 0; /* Намаляване на padding-а */
-            border-radius: 6px 6px 0 0;
-            margin-bottom: 15px; /* Намаляване на margin-а */
-        }
-
-        .navigation a {
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 15px; /* Намаляване на padding-а */
-            font-size: 0.9em; /* Намаляване на размера на шрифта */
-            font-weight: bold;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .navigation a:hover {
-            background-color: #0056b3;
-        }
-
-        .body-content {
-            width: 100%;
-            max-width: 700px; /* Намаляване на ширината */
-            padding: 20px; /* Намаляване на padding-а */
-            background-color: #ffffff;
-            border-radius: 10px; /* Намаляване на радиуса на бордера */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Намаляване на сянката */
-        }
-
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px; /* Намаляване на padding-а */
-            background-color: #007bff;
-            color: #ffffff;
-            font-weight: bold;
-            border-radius: 5px; /* Намаляване на радиуса на бордера */
-            margin-bottom: 15px; /* Намаляване на margin-а */
-        }
-
-        .header h2 {
-            margin: 0;
-            font-size: 1.4em; /* Намаляване на размера на шрифта */
-        }
-
-        .form-container {
-            margin-bottom: 15px; /* Намаляване на margin-а */
-        }
-
-        .form-container label {
-            display: block;
-            margin-bottom: 6px; /* Намаляване на margin-а */
-            font-weight: bold;
-        }
-
-        .form-container input[type="text"],
-        .form-container textarea {
-            width: 100%;
-            padding: 8px; /* Намаляване на padding-а */
-            border-radius: 4px; /* Намаляване на радиуса на бордера */
-            border: 1px solid #bdc3c7;
-            margin-bottom: 8px; /* Намаляване на margin-а */
-            box-sizing: border-box;
-        }
-
-        .form-container input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 15px; /* Намаляване на padding-а */
-            border-radius: 4px; /* Намаляване на радиуса на бордера */
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 0.9em; /* Намаляване на размера на шрифта */
-        }
-
-        .form-container input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        .error {
-            color: #dc3545;
-            font-size: 0.8em; /* Намаляване на размера на шрифта */
-        }
-    </style>
+    <link href="../static/css/UserUpdateView.css" th:href="@{/css/UserUpdateView.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="navigation">
-    <a href="#" th:href="@{/}">Home</a>
-    <a href="#" th:href="@{/posts}">Browse all posts</a>
-    <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}">Create Post</a>
+    <h3>
+        <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+        <a href="#" th:if="${isAuthenticated}" th:href="@{/admin/currentUser/Me}">My Profile</a>
+    </h3>
 </div>
 
-<div class="body-content">
+<div class="content-container">
     <header class="header">
         <h2 th:text="#{subtitle4}">Update User</h2>
     </header>
 
     <div class="form-container">
         <form action="#" th:action="@{/admin/users/{id}/update(id=${id})}" th:object="${userDto}" method="post">
+
             <label th:text="#{user.label.firstName}">First Name</label>
             <input type="text" th:field="*{firstName}"/>
             <label class="error" th:errors="*{firstName}">First name error placeholder</label>
@@ -139,10 +40,12 @@
 
             <input type="submit" value="Save User"/>
         </form>
+
         <br/>
+
         <div th:if="${user.position.id == 1}">
             <form th:action="@{/admin/addPhone/{id}(id=${id})}" th:object="${phone}" method="post">
-                <label th:if="${userToUpdatePosition == 1}" th:text="#{admin.label.phoneNumber}">Phone Number</label>
+                <label th:text="#{admin.label.phoneNumber}">Phone Number</label>
                 <input type="text" th:field="*{phoneNumber}"/>
                 <label class="error" th:errors="*{phoneNumber}">Phone error placeholder</label>
                 <input type="submit" value="Save Phone"/>
@@ -150,5 +53,10 @@
         </div>
     </div>
 </div>
+
+<footer>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' CryptoForum'}">CryptoForum</small>
+</footer>
 </body>
 </html>
+

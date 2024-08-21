@@ -1,0 +1,226 @@
+@charset "UTF-8";
+
+/* Стил за навигационния бар */
+.navigation {
+    width: 100%;
+    max-width: none; /* Премахване на ограничението в ширината */
+    display: flex;
+    justify-content: center; /* Центриране на бутоните */
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+    padding: 8px 0; /* Намаляване на padding-а */
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 15px; /* Намаляване на margin-а */
+    gap: 10px; /* Малко разстояние между бутоните */
+}
+
+/* Стил за линковете в навигацията */
+.navigation a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 12px; /* Намаляване на padding-а */
+    font-size: 0.9em; /* Намаляване на размера на шрифта */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Стил за линковете при ховър */
+.navigation a:hover {
+    background-color: #0056b3;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/assets/img/GettyImages.jpg'); /* Фонова снимка */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.body-content {
+    width: 100%;
+    max-width: 900px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.6em;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.input-row input,
+.input-row select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.input-row input[type="datetime-local"] {
+    width: calc(50% - 10px);
+}
+
+.form-section input,
+.form-section select {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: calc(100% - 22px);
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.form-section input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.form-section input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table .header {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.table .header .cell,
+.table .row .cell {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.table .row {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.table .row .cell {
+    flex: 1 1 100%;
+    margin-bottom: 10px;
+}
+
+.table .row .block-button,
+.table .row .unblock-button {
+    padding: 6px 12px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.table .row .block-button {
+    background-color: #dc3545;
+}
+
+.table .row .unblock-button {
+    background-color: #28a745;
+}
+
+.table .row .block-button:hover {
+    background-color: #c82333;
+}
+
+.table .row .unblock-button:hover {
+    background-color: #218838;
+}
+
+.pagination {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    text-decoration: none;
+    padding: 10px 15px;
+    color: #007bff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+.pagination li a:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.pagination .active a {
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #007bff;
+}
+
+footer {
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+    text-align: center;
+    margin-top: auto; /* Премества футъра на дъното на страницата */
+    padding: 10px 0;
+    width: 100%;
+}
+
+footer small {
+    color: #ffffff;
+    font-size: 0.9em;
+}

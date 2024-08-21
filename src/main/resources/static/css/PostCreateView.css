@@ -1,0 +1,131 @@
+@charset "UTF-8";
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/assets/img/postCV.jpg'); /* Указва пътя към изображението */
+    background-size: cover; /* Изображението покрива целия екран */
+    background-position: center; /* Центрира изображението */
+    background-repeat: no-repeat; /* Избягва повторението на изображението */
+    background-attachment: fixed; /* Изображението остава фиксирано при скролване */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Стил за навигационния бар */
+.navigation {
+    width: 100%;
+    max-width: none; /* Премахване на ограничението в ширината */
+    display: flex;
+    justify-content: center; /* Центриране на бутоните */
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен син фон */
+    padding: 8px 0; /* Намаляване на padding-а */
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 15px; /* Намаляване на margin-а */
+    gap: 10px; /* Малко разстояние между бутоните */
+}
+
+/* Стил за линковете в навигацията */
+.navigation a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 12px; /* Намаляване на padding-а */
+    font-size: 0.9em; /* Намаляване на размера на шрифта */
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Стил за линковете при ховър */
+.navigation a:hover {
+    background-color: #0056b3;
+}
+
+.body-content {
+    width: 100%;
+    max-width: 900px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.6em;
+}
+
+.post-form {
+    margin-bottom: 20px;
+}
+
+.post-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.post-form input[type="text"],
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.post-form input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+}
+
+.post-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    display: none;
+    margin-top: 15px;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+footer {
+    background-color: rgba(0, 123, 255, 0.3); /* Прозрачен фон */
+    text-align: center;
+    margin-top: auto; /* Премества футъра на дъното на страницата */
+    padding: 10px 0;
+    width: 100%;
+}
+
+footer small {
+    color: #ffffff;
+    font-size: 0.9em;
+}
