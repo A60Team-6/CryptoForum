@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -458,7 +459,10 @@ public class PostMvcController {
         try {
             Post post = postService.getPostById(id);
             //Comment comment = modelMapper.fromDto(commentId, commentMvcDto);
-            Comment comment = mapperHelper.createCommentFromMvcDto(commentDto, post, user);
+//            Comment comment = mapperHelper.createCommentFromMvcDto(commentDto, post, user);
+            Comment comment = commentService.getCommentById(commentId);
+            comment.setContent(commentDto.getContent());
+            comment.setUpdatedAt(LocalDateTime.now());
             model.addAttribute("currentUser", user);
             model.addAttribute("id", id);
             model.addAttribute("post", post);
